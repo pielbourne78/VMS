@@ -5,8 +5,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\NewPasswordController;
 use Illuminate\Support\Facades\Mail;
 
 Route::get('/test-email', function () {
@@ -20,18 +18,6 @@ Route::get('/test-email', function () {
     }
 });
 
-Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
-    ->name('password.request');
-
-Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
-    ->name('password.email');
-
-Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-    ->name('password.reset');
-
-Route::post('reset-password', [NewPasswordController::class, 'store'])
-    ->name('password.update');
-
 Route::post('/validate-fields', function (Request $request) {
     $validator = Validator::make($request->all(), [
         'email' => 'required|email|unique:users,email',
@@ -42,7 +28,7 @@ Route::post('/validate-fields', function (Request $request) {
                 ->mixedCase()
                 ->numbers()
                 ->symbols()
-                ->uncompromised(), // Checks if password has appeared in data leaks
+                ->uncompromised(),
         ],
     ], [
         'password.min' => 'Password must be at least 8 characters long.',

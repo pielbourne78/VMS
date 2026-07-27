@@ -43,18 +43,44 @@
 
             <!-- Email -->
             <div style="margin-bottom: 15px;">
-                <input type="email" name="email" placeholder="Email Address" required 
-                       style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; box-sizing: border-box;">
+                <input type="email" name="email" placeholder="Email Address"  value= "{{ old('email') }}" required autofocus
+                    required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; box-sizing: border-box;">
 
                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
 
             </div>
 
             <!-- Password -->
-            <div style="margin-bottom: 15px;">
-                <input type="password" name="password" placeholder="Password" required 
+            <div style="margin-bottom: 15px; position: relative;">
+                <input type="password" name="password" id="password" placeholder="Password" required 
                        style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; box-sizing: border-box;">
+                <span onclick="togglePasswordVisibility()" 
+                      style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; color: #6b7280;">
+                    <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px; height: 20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.274.837-.684 1.613-1.208 2.297M15.536 15.536A9.953 9.953 0 0112 17c-4.477 0-8.268-2.943-9.542-7a9.953 9.953 0 013.042-4.536M9.88 9.88a3 3 0 014.24 4.24" />
+                    </svg>
+                </span>
             </div>
+
+            <script>
+                function togglePasswordVisibility() {
+                    const passwordInput = document.getElementById('password');
+                    const eyeIcon = document.getElementById('eye-icon');
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        eyeIcon.innerHTML = `
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.953 9.953 0 013.042-4.536M15.536 15.536A9.953 9.953 0 0112 17c-4.477 0-8.268-2.943-9.542-7a9.953 9.953 0 013.042-4.536M9.88 9.88a3 3 0 014.24 4.24" />
+                        `;
+                    } else {
+                        passwordInput.type = 'password';
+                        eyeIcon.innerHTML = `
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.274.837-.684 1.613-1.208 2.297" />
+                        `;
+                    }
+                }
+            </script>
 
             <!-- Remember Me -->
             <div style="display: flex; align-items: center; margin-bottom: 20px;">

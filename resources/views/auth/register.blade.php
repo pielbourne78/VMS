@@ -71,39 +71,68 @@ style="background-image: linear-gradient(rgba(235, 15, 15, 0.65), rgba(186, 114,
             <!-- Course Input -->
             <input type="text" name="course" placeholder="Course" required style="padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb;">
         </div>
-                        
-                <input type="text" name="section" placeholder="Section" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb;">
-                <!-- Password -->
-                <div class="mt-4">
-                <input type="password" name="password" x-model="form.password" 
-                        @input.debounce.500ms="fetch('/validate-fields', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                            body: JSON.stringify(form)
-                        }).then(r => r.json()).then(d => errors = d.errors || {})"
-                        placeholder="Password" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb;">
-                    <span style="color: red; font-size: 12px;" x-text="errors.password ? errors.password[0] : ''"></span>
+                
+            <input type="text" name="section" placeholder="Section" required style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb;">
+            <!-- Password -->
+            <div class="mt-4" x-data="{ showPassword: false }">
+                <div style="position: relative;">
+                <input :type="showPassword ? 'text' : 'password'" 
+                       name="password" 
+                       x-model="form.password" 
+                       @input.debounce.500ms="fetch('/validate-fields', {
+                       method: 'POST',
+                       headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+                       body: JSON.stringify(form)
+                       }).then(r => r.json()).then(d => errors = d.errors || {})"
+                       placeholder="Password" 
+                       required 
+                       style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb;">
+                
+                       <span @click="showPassword = !showPassword" 
+                        style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; color: #6b7280;">
+                        <svg x-show="!showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px; height: 20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.274.837-.684 1.613-1.208 2.297M15.536 15.536A9.953 9.953 0 0112 17c-4.477 0-8.268-2.943-9.542-7a9.953 9.953 0 013.042-4.536M9.88 9.88a3 3 0 014.24 4.24" />
+                        </svg>
+                        <svg x-show="showPassword" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px; height: 20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.94 17.94A10.97 10.97 0 0112 19c-4.97 0-9.21-3.13-10.94-7.5A10.97 10.97 0 0112 5c4.97 0 9.21 3.13 10.94 7.5a10.97 10.97 0 01-4.06 5.44M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </span>
                 </div>
+                <span style="color: red; font-size: 12px;" x-text="errors.password ? errors.password[0] : ''"></span>
+            </div>
 
-                <!-- Confirm Password -->
-            <div class="mt-4">
-                    <input type="password" 
-                        name="password_confirmation" 
-                        x-model="form.password_confirmation" 
-                        placeholder="Confirm Password" 
-                        required 
-                        style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb;">
-                    
-                    <!-- Real-time local match check -->
-                    <span style="color: red; font-size: 12px; margin-top: 5px; display: block;" 
-                        x-show="form.password_confirmation.length > 0 && form.password !== form.password_confirmation">
-                        Passwords do not match
-                    </span>
-                    
-                    <!-- Keep your server-side error display for other validation rules -->
-                    <span style="color: red; font-size: 12px; margin-top: 5px; display: block;" 
-                        x-text="errors.password_confirmation ? errors.password_confirmation[0] : ''">
-                    </span>
+            <!-- Confirm Password -->
+            <div class="mt-4" x-data="{ showPasswordConfirmation: false }">
+            <div style="position: relative;">
+                <input :type="showPasswordConfirmation ? 'text' : 'password'" 
+                name="password_confirmation" 
+                x-model="form.password_confirmation" 
+                placeholder="Confirm Password" 
+                required 
+                style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb;">
+                
+                <span @click="showPasswordConfirmation = !showPasswordConfirmation" 
+                  style="position: absolute; top: 50%; right: 12px; transform: translateY(-50%); cursor: pointer; color: #6b7280;">
+                <svg x-show="!showPasswordConfirmation" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px; height: 20px;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-.274.837-.684 1.613-1.208 2.297M15.536 15.536A9.953 9.953 0 0112 17c-4.477 0-8.268-2.943-9.542-7a9.953 9.953 0 013.042-4.536M9.88 9.88a3 3 0 014.24 4.24" />
+                </svg>
+                <svg x-show="showPasswordConfirmation" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px; height: 20px;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.94 17.94A10.97 10.97 0 0112 19c-4.97 0-9.21-3.13-10.94-7.5A10.97 10.97 0 0112 5c4.97 0 9.21 3.13 10.94 7.5a10.97 10.97 0 01-4.06 5.44M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </span>
+                </div>
+                <!-- Real-time local match check -->
+                <span style="color: red; font-size: 12px; margin-top: 5px; display: block;" 
+                    x-show="form.password_confirmation.length > 0 && form.password !== form.password_confirmation">
+                    Passwords do not match
+                </span>
+                
+                <!-- Keep your server-side error display for other validation rules -->
+                <span style="color: red; font-size: 12px; margin-top: 5px; display: block;" 
+                    x-text="errors.password_confirmation ? errors.password_confirmation[0] : ''">
+                </span>
             </div>
 
             <!-- Submit Button -->
@@ -111,7 +140,7 @@ style="background-image: linear-gradient(rgba(235, 15, 15, 0.65), rgba(186, 114,
                     style="display: block; width: 100%; margin-top: 20px; background-color: #dc2626; color: #ffffff; font-weight: 700; padding: 12px; border: none; border-radius: 9999px; cursor: pointer; transition: background-color 0.2s;"
                     onmouseover="this.style.backgroundColor='#b91c1c'" 
                     onmouseout="this.style.backgroundColor='#dc2626'">
-                REGISTER
+                REGISTER <a href="{{ route('login') }}"></a>
             </button>
         </form>
 
