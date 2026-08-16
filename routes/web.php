@@ -53,6 +53,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+// 👉 Added Code of Discipline Route
+Route::view('/code-of-discipline', 'code-of-discipline')
+    ->middleware(['auth', 'verified'])
+    ->name('code.of.discipline');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
