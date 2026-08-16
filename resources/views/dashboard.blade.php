@@ -8,112 +8,138 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --grc-red: #BF1E2E;
+            --grc-red-dark: #A01A28;
+            --grc-red-soft: #FCE8EB;
+            --grc-text: #1F2937;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f8f8f8 0%, #f1f5f9 100%);
+            color: var(--grc-text);
         }
 
         .grc-red {
-            background-color: #BF1E2E;
+            background-color: var(--grc-red);
         }
 
         .text-grc-red {
-            color: #BF1E2E;
+            color: var(--grc-red);
         }
 
         .border-grc-red {
-            border-color: #BF1E2E;
+            border-color: var(--grc-red);
         }
 
         .header-gradient {
-            background: linear-gradient(90deg, #BF1E2E 0%, #A01A28 100%);
+            background: linear-gradient(90deg, var(--grc-red) 0%, var(--grc-red-dark) 100%);
         }
 
         .stat-btn-gradient {
-            background: linear-gradient(90deg, #BF1E2E 0%, #E32B3E 100%);
+            background: linear-gradient(90deg, var(--grc-red) 0%, #E32B3E 100%);
         }
 
         .penalty-btn-gradient {
             background: linear-gradient(90deg, #D91C2D 0%, #FC4558 100%);
         }
+
+        .soft-glow {
+            box-shadow: 0 14px 30px rgba(191, 30, 46, 0.12);
+        }
+
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-shell {
+                flex-direction: column;
+            }
+
+            .sidebar-panel {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-nav {
+                gap: 0.75rem;
+                flex-wrap: wrap;
+            }
+
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-grid > section {
+                grid-column: span 12;
+            }
+        }
     </style>
 </head>
 
-<body class="bg-gray-100 antialiased flex min-h-screen overflow-x-hidden">
+<body class="antialiased min-h-screen overflow-x-hidden">
 
-    <!-- ================= Sidebar ================= -->
-    <aside id="sidebar" class="grc-red text-white w-80 flex flex-col py-6 shadow-xl z-10 flex-shrink-0 transition-all duration-300">
-        <!-- College Logo & Name -->
-        <div class="px-6 flex items-center gap-3 border-b border-red-700 pb-6 mb-6">
-            <img src="/images/logo.jpg" alt="GRC Logo" class="h-12 w-12 object-contain bg-white rounded-full p-1 shadow" onerror="this.src='https://raw.githubusercontent.com/carlvilla/resources/main/grc-logo.png'">
-            <div>
-                <h1 class="text-lg font-bold leading-tight">Global<br>Reciprocal<br>Colleges</h1>
+    <div class="dashboard-shell flex min-h-screen">
+        <aside id="sidebar" class="sidebar-panel grc-red text-white w-80 flex flex-col py-6 shadow-2xl z-10 flex-shrink-0 transition-all duration-300">
+            <div class="px-6 flex items-center gap-3 border-b border-red-700 pb-6 mb-6">
+                <img src="/images/logo.jpg" alt="GRC Logo" class="h-12 w-12 object-contain bg-white rounded-full p-1 shadow-md" onerror="this.src='https://raw.githubusercontent.com/carlvilla/resources/main/grc-logo.png'">
+                <div>
+                    <h1 class="text-lg font-black leading-tight tracking-tight">Global<br>Reciprocal<br>Colleges</h1>
+                </div>
             </div>
-        </div>
 
-        <!-- Student Profile Section -->
-        <div class="px-6 flex flex-col items-center mb-8">
-            <div class="relative mb-4">
-                <img src="https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png"
-                    alt="Student Avatar" class="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover">
-                <div class="absolute bottom-1 right-1 bg-green-500 w-6 h-6 rounded-full border-4 border-white"></div>
+            <div class="px-6 flex flex-col items-center mb-8">
+                <div class="relative mb-4">
+                    <img src="https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png"
+                        alt="Student Avatar" class="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover ring-4 ring-white/20">
+                    <div class="absolute bottom-1 right-1 bg-green-500 w-6 h-6 rounded-full border-4 border-white"></div>
+                </div>
+                <h2 class="text-2xl font-extrabold uppercase tracking-wide text-center">{{ Auth::user()->name }}</h2>
+                <p class="text-sm opacity-90 font-medium mt-1">STUDENT</p>
             </div>
-            <h2 class="text-2xl font-extrabold uppercase tracking-wide text-center">{{ Auth::user()->name }}</h2>
-<<<<<<< HEAD
-            <p class="text-sm opacity-90 font-medium mt-1">STUDENT</p>
-=======
-            <p class="text-sm opacity-90 font-medium">STUDENT</p>
->>>>>>> 328288bdfcf9ef93a4c2ad2541539b39b4431c07
-        </div>
 
-        <!-- Student Info List -->
-        <div class="px-6 space-y-3.5 text-sm font-semibold">
-            <div class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
-                <span>📚</span>
-                <p class="truncate">{{ Auth::user()->course ?? 'Bachelor of Science in Information Technology' }}</p>
+            <div class="px-6 space-y-3.5 text-sm font-semibold">
+                <div class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
+                    <span class="text-lg">📚</span>
+                    <p class="truncate">{{ Auth::user()->course ?? 'Bachelor of Science in Information Technology' }}</p>
+                </div>
+                <div class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
+                    <span class="text-lg">🏫</span>
+                    <p class="truncate">{{ Auth::user()->section ?? 'Section 4A' }}</p>
+                </div>
+                <div class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
+                    <span class="text-lg">🎓</span>
+                    <p class="truncate">{{ Auth::user()->year_level ?? '3rd Year' }}</p>
+                </div>
+                <a href="{{ Route::has('code.of.discipline') ? route('code.of.discipline') : '#' }}"
+                   class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner hover:bg-red-800/70 transition group">
+                    <span class="text-lg">📜</span>
+                    <p class="truncate text-xs underline underline-offset-4 group-hover:opacity-90">ARTICLES VI CODE OF DISCIPLINE</p>
+                </a>
             </div>
-            <div class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
-                <span>🏫</span>
-                <p class="truncate">{{ Auth::user()->section ?? 'Section 4A' }}</p>
-            </div>
-<<<<<<< HEAD
-            <div class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
-                <span>🎓</span>
-                <p class="truncate">{{ Auth::user()->year_level ?? '3rd Year' }}</p>
-=======
-            <div class="flex items-start gap-3">
-            <span class="mt-1.5 text-lg">•</span>
-            <p>{{ Auth::user()->year_level }}</p>
-            </div>
-            <div class="flex items-start gap-3">
-            <span class="mt-1.5 text-lg">•</span>
-            <a href="{{ route('code.of.discipline') }}" class="border-b border-white pb-1 cursor-pointer hover:opacity-80 transition-opacity">
-                ARTICLES VI CODE OF DISCIPLINE
-            </a>
->>>>>>> 328288bdfcf9ef93a4c2ad2541539b39b4431c07
-            </div>
-            <a href="{{ Route::has('code.of.discipline') ? route('code.of.discipline') : '#' }}" 
-               class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner hover:bg-red-800/70 transition group">
-                <span>📜</span>
-                <p class="truncate text-xs underline underline-offset-4 group-hover:opacity-90">ARTICLES VI CODE OF DISCIPLINE</p>
-            </a>
-        </div>
 
-        <!-- Logout Button -->
-        <div class="mt-auto px-6 pt-6">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit"
-                    class="w-full bg-white text-grc-red font-bold text-center py-3 rounded-full shadow-md hover:bg-gray-100 transition duration-150 text-base tracking-wider">
-                    LOG OUT
-                </button>
-            </form>
-        </div>
-    </aside>
+            <div class="mt-auto px-6 pt-6">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit"
+                        class="w-full bg-white text-grc-red font-bold text-center py-3 rounded-full shadow-md hover:bg-gray-100 transition duration-150 text-base tracking-wider">
+                        LOG OUT
+                    </button>
+                </form>
+            </div>
+        </aside>
 
     <!-- ================= Main Content ================= -->
     <div class="flex-1 flex flex-col bg-white">
         <!-- Header Navigation -->
-<<<<<<< HEAD
         <header class="header-gradient text-white px-8 py-5 shadow-lg flex items-center justify-between border-b-4 border-grc-red flex-shrink-0">
             <nav class="flex items-center gap-6 text-base font-semibold tracking-tight">
                 <button onclick="toggleSidebar()" class="text-white text-2xl focus:outline-none hover:opacity-80 transition cursor-pointer pr-2">
@@ -122,17 +148,6 @@
                 <a href="{{ route('dashboard') }}" class="stat-btn-gradient text-white px-6 py-2.5 rounded-full shadow-inner tracking-wide">DASHBOARD</a>
                 <a href="#" class="hover:text-red-200 transition tracking-wide">VIOLATION MONITORING</a>
                 <a href="#" class="hover:text-red-200 transition tracking-wide">REPORT</a>
-=======
-        <header class="header-gradient text-white px-8 py-6 shadow-lg flex items-center justify-between border-b-4 border-grc-red flex-shrink-0">
-            <nav class="flex items-center gap-6 text-lg font-semibold tracking-tight">
-                <!-- Hamburger Toggle Button -->
-                <button onclick="toggleSidebar()" class="text-white text-2xl focus:outline-none hover:opacity-80 transition cursor-pointer pr-2">
-                    ☰
-                </button>
-                <a href="#" class="stat-btn-gradient text-white px-6 py-2 rounded-full shadow-inner">DASHBOARD</a>
-                <a href="#" class="hover:text-red-200 transition">VIOLATION MONITORING</a>
-                <a href="#" class="hover:text-red-200 transition">REPORT</a>
->>>>>>> 328288bdfcf9ef93a4c2ad2541539b39b4431c07
             </nav>
             <div class="flex items-center gap-5">
                 <!-- Notification Bell -->
