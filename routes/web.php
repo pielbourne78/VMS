@@ -3,17 +3,22 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ViolationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
+Route::get('/violation-monitoring', [ViolationController::class, 'index'])
+    ->name('violation.monitoring');
+
 Route::get('/test-email', function () {
     try {
         Mail::raw('Testing connection', function ($message) {
             $message->to('YOUR_EMAIL@example.com')->subject('Test Email');
         });
+
         return 'Email sent successfully!';
     } catch (\Exception $e) {
         return 'Error: ' . $e->getMessage();
@@ -51,25 +56,20 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-// Regular User Dashboard
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Code of Discipline Route
 Route::view('/code-of-discipline', 'code-of-discipline')
     ->middleware(['auth', 'verified'])
     ->name('code.of.discipline');
 
-// Admin Login Route
 Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])->name('admin.login');
 
-// Admin Protected Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 });
 
-// User Profile Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
