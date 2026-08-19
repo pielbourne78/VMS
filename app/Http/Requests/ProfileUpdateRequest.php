@@ -16,16 +16,26 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
+            'full_name' => ['nullable', 'string', 'max:255'],
             'email' => [
-                'required',
+                'nullable',
                 'string',
                 'lowercase',
                 'email',
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'student_id' => ['nullable', 'string', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'section' => ['nullable', 'string', 'max:255'],
+            'course' => ['nullable', 'string', 'max:255'],
         ];
+
+        if (!$this->user()->is_admin) {
+            $rules['year_level'] = ['nullable', 'string', 'max:255'];
+        }
+
+        return $rules;
     }
 }
