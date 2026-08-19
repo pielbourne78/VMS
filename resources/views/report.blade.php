@@ -100,13 +100,13 @@
 
         <!-- Content Body -->
         <main class="flex-1 p-8 flex justify-center items-start overflow-y-auto">
-            <div class="w-full max-w-6xl bg-white rounded-3xl p-10 shadow-2xl relative">
+            <div class="w-full max-w-6xl bg-white rounded-3xl p-10 shadow-2xl relative min-h-[400px] flex flex-col">
 
                 <!-- Section Title -->
                 <h2 class="text-grc-red text-2xl font-black mb-8 tracking-wide">Violation history:</h2>
 
                 <!-- Violation Rows -->
-                <div class="space-y-6">
+                <div class="space-y-6 flex-1 flex flex-col justify-center">
                     @forelse($violations ?? [] as $violation)
                         <div class="flex items-center justify-between border-b border-gray-100 pb-6">
                             <span class="text-grc-red font-extrabold text-lg tracking-wide uppercase">
@@ -129,52 +129,8 @@
                             </div>
                         </div>
                     @empty
-                        <!-- Row 1: Resolved -->
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-6">
-                            <span class="text-grc-red font-extrabold text-lg tracking-wide">NOT WEARING PROPER UNIFORM</span>
-                            <span class="flex items-center gap-2 text-green-600 font-bold text-sm tracking-wide">
-                                <span class="w-5 h-5 rounded-full bg-green-600 text-white flex items-center justify-center text-xs">✓</span> RESOLVED CASE
-                            </span>
-                        </div>
-
-                        <!-- Row 2: Active Case -->
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-6">
-                            <span class="text-grc-red font-extrabold text-lg tracking-wide">VANDALISM</span>
-                            <span class="flex items-center gap-2 text-red-600 font-bold text-sm tracking-wide">
-                                <span class="w-5 h-5 rounded-full bg-red-600 text-white flex items-center justify-center text-xs font-bold">!</span> ACTIVE CASE
-                            </span>
-                        </div>
-
-                        <!-- Row 3: Active Case -->
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-6">
-                            <span class="text-grc-red font-extrabold text-lg tracking-wide">BULLYING</span>
-                            <span class="flex items-center gap-2 text-red-600 font-bold text-sm tracking-wide">
-                                <span class="w-5 h-5 rounded-full bg-red-600 text-white flex items-center justify-center text-xs font-bold">!</span> ACTIVE CASE
-                            </span>
-                        </div>
-
-                        <!-- Row 4: Active Case (Yellow Minor) -->
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-6">
-                            <span class="text-grc-red font-extrabold text-lg tracking-wide">COLORED HAIR</span>
-                            <span class="flex items-center gap-2 text-amber-500 font-bold text-sm tracking-wide">
-                                <span class="w-5 h-5 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold">!</span> ACTIVE CASE
-                            </span>
-                        </div>
-
-                        <!-- Row 5: Active Case -->
-                        <div class="flex items-center justify-between border-b border-gray-100 pb-6">
-                            <span class="text-grc-red font-extrabold text-lg tracking-wide">THIEF</span>
-                            <span class="flex items-center gap-2 text-red-600 font-bold text-sm tracking-wide">
-                                <span class="w-5 h-5 rounded-full bg-red-600 text-white flex items-center justify-center text-xs font-bold">!</span> ACTIVE CASE
-                            </span>
-                        </div>
-
-                        <!-- Row 6: Smoking -->
-                        <div class="flex items-center justify-between pb-2">
-                            <span class="text-grc-red font-extrabold text-lg tracking-wide">SMOKING</span>
-                            <span class="flex items-center gap-2 text-red-600 font-bold text-sm tracking-wide">
-                                <span class="w-5 h-5 rounded-full bg-red-600 text-white flex items-center justify-center text-xs font-bold">!</span> ACTIVE CASE
-                            </span>
+                        <div class="text-center py-12">
+                            <p class="text-gray-400 font-bold text-xl tracking-wide">No violations yet</p>
                         </div>
                     @endforelse
                 </div>
