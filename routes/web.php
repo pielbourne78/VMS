@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ViolationController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -53,10 +54,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// 👉 Added Code of Discipline Route
+// Code of Discipline Route
 Route::view('/code-of-discipline', 'code-of-discipline')
     ->middleware(['auth', 'verified'])
     ->name('code.of.discipline');
+
+// 👉 Report Route using ViolationController
+Route::get('/report', [ViolationController::class, 'reportIndex'])
+    ->middleware(['auth', 'verified'])
+    ->name('report');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

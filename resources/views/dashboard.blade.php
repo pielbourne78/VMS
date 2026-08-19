@@ -15,7 +15,6 @@
         /* Gradient for header and main buttons */
         .header-gradient { background: linear-gradient(90deg, #BF1E2E 0%, #A01A28 100%); }
         .stat-btn-gradient { background: linear-gradient(90deg, #BF1E2E 0%, #E32B3E 100%); }
-        .penalty-btn-gradient { background: linear-gradient(90deg, #D91C2D 0%, #FC4558 100%); }
     </style>
 </head>
 <body class="bg-gray-100 antialiased flex min-h-screen overflow-x-hidden">
@@ -82,9 +81,9 @@
                 <button onclick="toggleSidebar()" class="text-white text-2xl focus:outline-none hover:opacity-80 transition cursor-pointer pr-2">
                     ☰
                 </button>
-                <a href="#" class="stat-btn-gradient text-white px-6 py-2 rounded-full shadow-inner">DASHBOARD</a>
+                <a href="{{ route('dashboard') }}" class="stat-btn-gradient text-white px-6 py-2 rounded-full shadow-inner">DASHBOARD</a>
                 <a href="#" class="hover:text-red-200 transition">VIOLATION MONITORING</a>
-                <a href="#" class="hover:text-red-200 transition">REPORT</a>
+                <a href="{{ route('report') }}" class="hover:text-red-200 transition">REPORT</a>
             </nav>
             <div class="flex items-center gap-6">
                 <!-- Notification Bell -->
@@ -113,7 +112,7 @@
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <span class="text-grc-red text-sm tracking-tight">PENALTY 1</span>
-                        <button class="penalty-btn-gradient text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
+                        <button class="bg-grc-red text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
                     </div>
                 </div>
 
@@ -127,7 +126,7 @@
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <span class="text-grc-red text-sm tracking-tight">PENALTY 2</span>
-                        <button class="penalty-btn-gradient text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
+                        <button class="bg-grc-red text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
                     </div>
                 </div>
 
@@ -141,7 +140,7 @@
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <span class="text-grc-red text-sm tracking-tight">PENALTY 3</span>
-                        <button class="penalty-btn-gradient text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
+                        <button class="bg-grc-red text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
                     </div>
                 </div>
 
@@ -155,7 +154,7 @@
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <span class="text-grc-red text-sm tracking-tight">PENALTY 4</span>
-                        <button class="penalty-btn-gradient text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
+                        <button class="bg-grc-red text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
                     </div>
                 </div>
 
@@ -169,7 +168,7 @@
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <span class="text-grc-red text-sm tracking-tight">PENALTY 5</span>
-                        <button class="penalty-btn-gradient text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
+                        <button class="bg-grc-red text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
                     </div>
                 </div>
 
@@ -183,7 +182,7 @@
                     </div>
                     <div class="flex flex-col items-center gap-1">
                         <span class="text-grc-red text-sm tracking-tight">PENALTY 6</span>
-                        <button class="bg-grc-red text-white text-xs px-4 py-1 rounded-full font-semibold shadow hover:bg-red-700">PENDING</button>
+                        <span class="bg-grc-red text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENDING</span>
                     </div>
                 </div>
             </section>
