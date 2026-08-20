@@ -43,7 +43,9 @@
             </div>
             <!-- Profile Pill -->
             <div class="flex items-center gap-3 bg-white text-grc-red px-4 py-1.5 rounded-full font-bold cursor-pointer shadow-md hover:bg-gray-50 transition">
-                <img src="https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png" alt="Profile" class="w-7 h-7 rounded-full border-2 border-grc-red object-cover">
+                <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile"
+                    class="w-7 h-7 rounded-full border-2 border-grc-red object-cover"
+                    onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png';">
                 <span class="tracking-tight text-xs">PROFILE</span>
             </div>
         </div>
