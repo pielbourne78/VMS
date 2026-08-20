@@ -151,13 +151,44 @@
             </nav>
             <div class="flex items-center gap-5">
                 <!-- Notification Bell -->
-                <div class="bg-red-900/40 p-2.5 rounded-full cursor-pointer hover:bg-red-900/70 transition shadow-inner">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                        </path>
-                    </svg>
-                </div>
+                <!-- Notification Bell Wrapper -->
+                <div class="relative">
+                    <button id="notifBellButton" type="button" class="bg-red-900/40 p-2.5 rounded-full cursor-pointer hover:bg-red-900/70 transition shadow-inner focus:outline-none flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                            </path>
+                        </svg>
+                        {{-- May pulang tuldok kapag may mga bagong violaton o notification --}}
+                        @if(isset($violations) && count($violations) > 0)
+                            <span class="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-white"></span>
+                        @endif
+                    </button>
+
+                    <!-- Notification Dropdown Menu -->
+                    <div id="notifDropdown" class="hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-gray-200 z-50 text-gray-800 overflow-hidden">
+                        <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                            <h4 class="text-sm font-extrabold text-grc-red uppercase tracking-wider">Notifications</h4>
+                            <span class="text-xs bg-red-100 text-grc-red font-bold px-2 py-0.5 rounded-full">
+                                {{ isset($violations) ? count($violations) : 0 }}
+                            </span>
+                        </div>
+                        <div class="max-h-64 overflow-y-auto divide-y divide-gray-100">
+                            @if(isset($violations) && count($violations) > 0)
+                                @foreach($violations as $violation)
+                                    <div class="p-3.5 hover:bg-gray-50 transition cursor-pointer">
+                                        <p class="text-xs font-bold text-gray-800 uppercase">{{ $violation->title ?? $violation['title'] }}</p>
+                                        <p class="text-[11px] text-gray-500 mt-0.5">Please address your penalty accordingly.</p>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="p-6 text-center text-gray-400 text-xs">
+                                    🔔 No new notifications available.
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+</div>
                 <!-- Profile Pill -->
                 <div class="flex items-center gap-3 bg-white text-grc-red px-4 py-1.5 rounded-full font-bold cursor-pointer shadow-md hover:bg-gray-50 transition">
                     <img src="https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png"
@@ -277,6 +308,26 @@
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('hidden');
         }
+
+        // JavaScript para sa Notification Bell Dropdown
+        document.addEventListener('DOMContentLoaded', function () {
+            const bellBtn = document.getElementById('notifBellButton');
+            const dropdown = document.getElementById('notifDropdown');
+
+            if (bellBtn && dropdown) {
+                bellBtn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdown.classList.toggle('hidden');
+                });
+
+                // Isara ang dropdown kapag nag-click sa alinmang bahagi ng screen
+                document.addEventListener('click', function (e) {
+                    if (!dropdown.contains(e.target) && !bellBtn.contains(e.target)) {
+                        dropdown.classList.add('hidden');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 
