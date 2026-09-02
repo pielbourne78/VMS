@@ -78,7 +78,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .main-grid > section {
+            .main-grid>section {
                 grid-column: span 12;
             }
         }
@@ -88,9 +88,12 @@
 <body class="antialiased min-h-screen overflow-x-hidden">
 
     <div class="dashboard-shell flex min-h-screen">
-        <aside id="sidebar" class="sidebar-panel grc-red text-white w-80 flex flex-col py-6 shadow-2xl z-10 flex-shrink-0 transition-all duration-300">
+        <aside id="sidebar"
+            class="sidebar-panel grc-red text-white w-80 flex flex-col py-6 shadow-2xl z-10 flex-shrink-0 transition-all duration-300">
             <div class="px-6 flex items-center gap-3 border-b border-red-700 pb-6 mb-6">
-                <img src="/images/logo.jpg" alt="GRC Logo" class="h-12 w-12 object-contain bg-white rounded-full p-1 shadow-md" onerror="this.src='https://raw.githubusercontent.com/carlvilla/resources/main/grc-logo.png'">
+                <img src="/images/logo.jpg" alt="GRC Logo"
+                    class="h-12 w-12 object-contain bg-white rounded-full p-1 shadow-md"
+                    onerror="this.src='https://raw.githubusercontent.com/carlvilla/resources/main/grc-logo.png'">
                 <div>
                     <h1 class="text-lg font-black leading-tight tracking-tight">Global<br>Reciprocal<br>Colleges</h1>
                 </div>
@@ -98,31 +101,38 @@
 
             <div class="px-6 flex flex-col items-center mb-8">
                 <div class="relative mb-4">
-                    <img src="https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png"
-                        alt="Student Avatar" class="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover ring-4 ring-white/20">
-                    <div class="absolute bottom-1 right-1 bg-green-500 w-6 h-6 rounded-full border-4 border-white"></div>
+                    <img src="{{ Auth::user()->profile_photo_url }}" alt="Student Avatar"
+                        class="w-28 h-28 rounded-full border-4 border-white shadow-lg object-cover ring-4 ring-white/20"
+                        onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png';">
+                    <div class="absolute bottom-1 right-1 bg-green-500 w-6 h-6 rounded-full border-4 border-white">
+                    </div>
                 </div>
                 <h2 class="text-2xl font-extrabold uppercase tracking-wide text-center">{{ Auth::user()->name }}</h2>
                 <p class="text-sm opacity-90 font-medium mt-1">STUDENT</p>
             </div>
 
             <div class="px-6 space-y-3.5 text-sm font-semibold">
-                <div class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
+                <div
+                    class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
                     <span class="text-lg">📚</span>
-                    <p class="truncate">{{ Auth::user()->course ?? 'Bachelor of Science in Information Technology' }}</p>
+                    <p class="truncate">{{ Auth::user()->course ?? 'Bachelor of Science in Information Technology' }}
+                    </p>
                 </div>
-                <div class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
+                <div
+                    class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
                     <span class="text-lg">🏫</span>
                     <p class="truncate">{{ Auth::user()->section ?? 'Section 4A' }}</p>
                 </div>
-                <div class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
+                <div
+                    class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner">
                     <span class="text-lg">🎓</span>
                     <p class="truncate">{{ Auth::user()->year_level ?? '3rd Year' }}</p>
                 </div>
                 <a href="{{ Route::has('code.of.discipline') ? route('code.of.discipline') : '#' }}"
-                   class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner hover:bg-red-800/70 transition group">
+                    class="flex items-center gap-3 bg-red-800/40 px-4 py-2.5 rounded-xl border border-red-700/50 shadow-inner hover:bg-red-800/70 transition group">
                     <span class="text-lg">📜</span>
-                    <p class="truncate text-xs underline underline-offset-4 group-hover:opacity-90">ARTICLES VI CODE OF DISCIPLINE</p>
+                    <p class="truncate text-xs underline underline-offset-4 group-hover:opacity-90">ARTICLES VI CODE OF
+                        DISCIPLINE</p>
                 </a>
             </div>
 
@@ -154,6 +164,27 @@
                 <!-- Notification Bell Wrapper -->
                 <div class="relative">
                     <button id="notifBellButton" type="button" class="bg-red-900/40 p-2.5 rounded-full cursor-pointer hover:bg-red-900/70 transition shadow-inner focus:outline-none flex items-center justify-center">
+
+        <!-- ================= Main Content ================= -->
+        <div class="flex-1 flex flex-col bg-white">
+            <!-- Header Navigation -->
+            <header
+                class="header-gradient text-white px-8 py-5 shadow-lg flex items-center justify-between border-b-4 border-grc-red flex-shrink-0">
+                <nav class="flex items-center gap-6 text-base font-semibold tracking-tight">
+                    <button onclick="toggleSidebar()"
+                        class="text-white text-2xl focus:outline-none hover:opacity-80 transition cursor-pointer pr-2">
+                        ☰
+                    </button>
+                    <a href="{{ route('dashboard') }}"
+                        class="stat-btn-gradient text-white px-6 py-2.5 rounded-full shadow-inner tracking-wide">DASHBOARD</a>
+                    <a href="{{ route('violation.monitoring') }}"
+                        class="hover:text-red-200 transition tracking-wide">VIOLATION MONITORING</a>
+                    <a href="#" class="hover:text-red-200 transition tracking-wide">REPORT</a>
+                </nav>
+                <div class="flex items-center gap-5">
+                    <!-- Notification Bell -->
+                    <div
+                        class="bg-red-900/40 p-2.5 rounded-full cursor-pointer hover:bg-red-900/70 transition shadow-inner">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
@@ -197,110 +228,143 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                     </svg>
+
+                    </div>
+                    <!-- Profile Pill -->
+                    <a href="{{ route('profile.edit') }}"
+                        class="flex items-center gap-3 bg-white text-grc-red px-4 py-1.5 rounded-full font-bold cursor-pointer shadow-md hover:bg-gray-50 transition">
+                        <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile"
+                            class="w-8 h-8 rounded-full border-2 border-grc-red object-cover"
+                            onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png';">
+                        <span class="tracking-tight text-sm">PROFILE</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </a>
                 </div>
-            </div>
-        </header>
+            </header>
 
-        <!-- Content Body (Grid Layout) -->
-        <main class="flex-1 p-8 grid grid-cols-12 gap-8 overflow-y-auto bg-gray-50/50">
+            <!-- Content Body (Grid Layout) -->
+            <main class="flex-1 p-8 grid grid-cols-12 gap-8 overflow-y-auto bg-gray-50/50">
 
-            @if(isset($violations) && count($violations) > 0)
-                <!-- ** Left Column: Active Violation List ** -->
-                <section class="col-span-7 space-y-4">
-                    @foreach($violations as $index => $violation)
-                        <div class="grid grid-cols-5 items-center bg-white border border-gray-200/80 rounded-xl p-3 text-center font-bold shadow-sm">
-                            <div class="col-span-3 text-left text-grc-red text-base pl-2 uppercase">
-                                {{ $violation->title ?? $violation['title'] }}
+                @if(isset($violations) && count($violations) > 0)
+                    <!-- ** Left Column: Active Violation List ** -->
+                    <section class="col-span-7 space-y-4">
+                        @foreach($violations as $index => $violation)
+                            <div
+                                class="grid grid-cols-5 items-center bg-white border border-gray-200/80 rounded-xl p-3 text-center font-bold shadow-sm">
+                                <div class="col-span-3 text-left text-grc-red text-base pl-2 uppercase">
+                                    {{ $violation->title ?? $violation['title'] }}
+                                </div>
+                                <div class="flex justify-center">
+                                    @if(($violation->severity ?? $violation['severity']) === 'major')
+                                        <img src="https://raw.githubusercontent.com/carlvilla/resources/main/alert-red.png"
+                                            alt="Major" class="h-8 w-8">
+                                    @else
+                                        <img src="https://raw.githubusercontent.com/carlvilla/resources/main/alert-yellow.png"
+                                            alt="Minor" class="h-8 w-8">
+                                    @endif
+                                </div>
+                                <div class="flex flex-col items-center gap-1">
+                                    <span class="text-grc-red text-xs tracking-tight">PENALTY {{ $index + 1 }}</span>
+                                    @if(($violation->status ?? $violation['status']) === 'pending')
+                                        <button
+                                            class="bg-grc-red text-white text-xs px-4 py-1 rounded-full font-semibold shadow hover:bg-red-700">PENDING</button>
+                                    @else
+                                        <button
+                                            class="penalty-btn-gradient text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY
+                                            QUIZ</button>
+                                    @endif
+                                </div>
                             </div>
-                            <div class="flex justify-center">
-                                @if(($violation->severity ?? $violation['severity']) === 'major')
-                                    <img src="https://raw.githubusercontent.com/carlvilla/resources/main/alert-red.png" alt="Major" class="h-8 w-8">
-                                @else
-                                    <img src="https://raw.githubusercontent.com/carlvilla/resources/main/alert-yellow.png" alt="Minor" class="h-8 w-8">
-                                @endif
-                            </div>
-                            <div class="flex flex-col items-center gap-1">
-                                <span class="text-grc-red text-xs tracking-tight">PENALTY {{ $index + 1 }}</span>
-                                @if(($violation->status ?? $violation['status']) === 'pending')
-                                    <button class="bg-grc-red text-white text-xs px-4 py-1 rounded-full font-semibold shadow hover:bg-red-700">PENDING</button>
-                                @else
-                                    <button class="penalty-btn-gradient text-white text-xs px-4 py-1 rounded-full font-semibold shadow">PENALTY QUIZ</button>
-                                @endif
+                        @endforeach
+                    </section>
+
+                    <!-- ** Right Column: Violation Breakdown Cards ** -->
+                    <section class="col-span-5 space-y-6">
+                        <div class="flex items-center gap-6 bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80">
+                            <img src="https://raw.githubusercontent.com/carlvilla/resources/main/alert-yellow.png"
+                                alt="Total" class="w-16 h-16">
+                            <div>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">TOTAL VIOLATIONS
+                                </h3>
+                                <p class="text-grc-red text-5xl font-black tracking-tighter">{{ count($violations) }}</p>
                             </div>
                         </div>
-                    @endforeach
-                </section>
 
-                <!-- ** Right Column: Violation Breakdown Cards ** -->
-                <section class="col-span-5 space-y-6">
-                    <div class="flex items-center gap-6 bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80">
-                        <img src="https://raw.githubusercontent.com/carlvilla/resources/main/alert-yellow.png" alt="Total" class="w-16 h-16">
-                        <div>
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">TOTAL VIOLATIONS</h3>
-                            <p class="text-grc-red text-5xl font-black tracking-tighter">{{ count($violations) }}</p>
+                        <div class="flex gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80">
+                            <img src="https://raw.githubusercontent.com/carlvilla/resources/main/alert-yellow.png"
+                                alt="Minor" class="w-12 h-12 flex-shrink-0 mt-1">
+                            <div>
+                                <h3 class="text-grc-red text-xl font-extrabold tracking-tight mb-2">MINOR OFFENSE</h3>
+                                <p class="text-gray-600 text-xs leading-relaxed font-medium">
+                                    Small-scale infractions that disrupt order but do not cause significant harm or safety
+                                    risks. Often treated as correctable behaviors.
+                                </p>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="flex gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80">
-                        <img src="https://raw.githubusercontent.com/carlvilla/resources/main/alert-yellow.png" alt="Minor" class="w-12 h-12 flex-shrink-0 mt-1">
-                        <div>
-                            <h3 class="text-grc-red text-xl font-extrabold tracking-tight mb-2">MINOR OFFENSE</h3>
-                            <p class="text-gray-600 text-xs leading-relaxed font-medium">
-                                Small-scale infractions that disrupt order but do not cause significant harm or safety risks. Often treated as correctable behaviors.
+                        <div class="flex gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80">
+                            <img src="https://raw.githubusercontent.com/carlvilla/resources/main/alert-red.png" alt="Major"
+                                class="w-12 h-12 flex-shrink-0 mt-1">
+                            <div>
+                                <h3 class="text-grc-red text-xl font-extrabold tracking-tight mb-2">MAJOR OFFENSE</h3>
+                                <p class="text-gray-600 text-xs leading-relaxed font-medium">
+                                    Serious violations threatening the integrity, safety, or legal standing of the
+                                    institution involving breaches of trust, ethics, or law.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+                @else
+                    <!-- ** Left Column: Empty Clean Record State ** -->
+                    <section class="col-span-7 flex flex-col">
+                        <div
+                            class="bg-white rounded-2xl shadow-sm border border-gray-200/80 p-8 flex-1 flex flex-col items-center justify-center text-center">
+                            <div
+                                class="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center text-4xl mb-4 shadow-inner">
+                                🎉
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">No Violations Recorded</h3>
+                            <p class="text-gray-500 text-sm max-w-md leading-relaxed">
+                                Fantastic job! Your record is currently clean with zero reported violations. Keep up the
+                                great conduct and discipline inside the campus.
                             </p>
                         </div>
-                    </div>
+                    </section>
 
-                    <div class="flex gap-4 bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80">
-                        <img src="https://raw.githubusercontent.com/carlvilla/resources/main/alert-red.png" alt="Major" class="w-12 h-12 flex-shrink-0 mt-1">
-                        <div>
-                            <h3 class="text-grc-red text-xl font-extrabold tracking-tight mb-2">MAJOR OFFENSE</h3>
-                            <p class="text-gray-600 text-xs leading-relaxed font-medium">
-                                Serious violations threatening the integrity, safety, or legal standing of the institution involving breaches of trust, ethics, or law.
+                    <!-- ** Right Column: Clean Record Statistics & Reminder ** -->
+                    <section class="col-span-5 space-y-6">
+                        <div
+                            class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">TOTAL VIOLATIONS
+                                </h3>
+                                <p class="text-grc-red text-5xl font-black tracking-tighter">0</p>
+                            </div>
+                            <div
+                                class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center text-grc-red shadow-inner font-bold text-xl">
+                                🛡️
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-red-50 to-white p-6 rounded-2xl shadow-sm border border-red-100">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-2xl">💡</span>
+                                <h3 class="text-grc-red text-lg font-bold tracking-tight">Student Code Reminder</h3>
+                            </div>
+                            <p class="text-gray-600 text-sm leading-relaxed font-medium">
+                                Global Reciprocal Colleges values a safe, orderly, and respectful learning environment.
+                                Always wear your complete school uniform, maintain proper grooming, and respect fellow
+                                students and faculty members.
                             </p>
                         </div>
-                    </div>
-                </section>
-            @else
-                <!-- ** Left Column: Empty Clean Record State ** -->
-                <section class="col-span-7 flex flex-col">
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-200/80 p-8 flex-1 flex flex-col items-center justify-center text-center">
-                        <div class="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center text-4xl mb-4 shadow-inner">
-                            🎉
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">No Violations Recorded</h3>
-                        <p class="text-gray-500 text-sm max-w-md leading-relaxed">
-                            Fantastic job! Your record is currently clean with zero reported violations. Keep up the great conduct and discipline inside the campus.
-                        </p>
-                    </div>
-                </section>
+                    </section>
+                @endif
 
-                <!-- ** Right Column: Clean Record Statistics & Reminder ** -->
-                <section class="col-span-5 space-y-6">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80 flex items-center justify-between">
-                        <div>
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-1">TOTAL VIOLATIONS</h3>
-                            <p class="text-grc-red text-5xl font-black tracking-tighter">0</p>
-                        </div>
-                        <div class="w-14 h-14 bg-red-50 rounded-2xl flex items-center justify-center text-grc-red shadow-inner font-bold text-xl">
-                            🛡️
-                        </div>
-                    </div>
-
-                    <div class="bg-gradient-to-br from-red-50 to-white p-6 rounded-2xl shadow-sm border border-red-100">
-                        <div class="flex items-center gap-3 mb-3">
-                            <span class="text-2xl">💡</span>
-                            <h3 class="text-grc-red text-lg font-bold tracking-tight">Student Code Reminder</h3>
-                        </div>
-                        <p class="text-gray-600 text-sm leading-relaxed font-medium">
-                            Global Reciprocal Colleges values a safe, orderly, and respectful learning environment. Always wear your complete school uniform, maintain proper grooming, and respect fellow students and faculty members.
-                        </p>
-                    </div>
-                </section>
-            @endif
-
-        </main>
-    </div>
+            </main>
+        </div>
 
     <!-- JavaScript for Sidebar Toggle -->
     <script>
@@ -329,6 +393,13 @@
             }
         });
     </script>
+        <!-- JavaScript for Sidebar Toggle -->
+        <script>
+            function toggleSidebar() {
+                const sidebar = document.getElementById('sidebar');
+                sidebar.classList.toggle('hidden');
+            }
+        </script>
 </body>
 
 </html>

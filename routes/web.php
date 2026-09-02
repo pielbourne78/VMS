@@ -7,8 +7,10 @@ use App\Http\Controllers\ViolationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
+
 
 Route::get('/violation-monitoring', [ViolationController::class, 'index'])
     ->name('violation.monitoring');
@@ -60,6 +62,14 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/user-photo/{path}', function (string $path) {
+    $fullPath = Storage::disk('public')->path($path);
+
+    abort_unless(Storage::disk('public')->exists($path) && is_file($fullPath), 404);
+
+    return response()->file($fullPath);
+})->where('path', '.*')->name('user.photo');
+
 Route::view('/code-of-discipline', 'code-of-discipline')
     ->middleware(['auth', 'verified'])
     ->name('code.of.discipline');
@@ -74,6 +84,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Profile Picture Routes
+    Route::post('/profile/picture', [ProfileController::class, 'updateProfilePicture'])->name('profile.picture.update');
+    Route::delete('/profile/picture', [ProfileController::class, 'destroyProfilePicture'])->name('profile.picture.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
+
 class ProfileController extends Controller
 {
     public function edit(Request $request): View
@@ -38,21 +39,24 @@ class ProfileController extends Controller
     public function updateProfilePicture(Request $request): RedirectResponse
     {
         $request->validate([
-            'profile_picture' => ['nullable', 'image', 'max:2048', 'mimes:jpeg,png,jpg,gif,svg'],
+            'profile_picture' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ]);
 
-        $user = $request->user();
-
         if ($request->hasFile('profile_picture')) {
-            if ($user->profile_picture) {
+            $user = $request->user();
+
+            if ($user->profile_picture && Storage::disk('public')->exists($user->profile_picture)) {
                 Storage::disk('public')->delete($user->profile_picture);
             }
 
-            $user->profile_picture = $request->file('profile_picture')->store('profile-pictures', 'public');
-            $user->save();
+            $path = $request->file('profile_picture')->store('profile-pictures', 'public');
+
+            $user->update([
+                'profile_picture' => $path,
+            ]);
         }
 
-        return Redirect::route('profile.edit')->with('status', 'profile-picture-updated');
+        return back()->with('status', 'profile-picture-updated');
     }
 
     public function destroy(Request $request): RedirectResponse
