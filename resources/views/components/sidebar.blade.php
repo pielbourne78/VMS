@@ -27,9 +27,11 @@
             0% {
                 box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15), 0 0 0 0 rgba(191, 30, 46, 0.6);
             }
+
             70% {
                 box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15), 0 0 0 20px rgba(191, 30, 46, 0);
             }
+
             100% {
                 box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15), 0 0 0 0 rgba(191, 30, 46, 0);
             }
@@ -46,7 +48,8 @@
 
     <!-- College Logo & Name -->
     <div class="px-6 flex items-center gap-3 border-b border-red-700 pb-6 mb-6">
-        <img src="{{ asset('images/logo.jpg') }}" alt="GRC Logo" class="h-12 w-12 rounded-full object-cover bg-white p-1 shadow-md">
+        <img src="{{ asset('images/logo.jpg') }}" alt="GRC Logo"
+            class="h-12 w-12 rounded-full object-cover bg-white p-1 shadow-md">
         <div>
             <h1 class="text-lg font-bold leading-tight">Global<br>Reciprocal<br>Colleges</h1>
         </div>
@@ -80,7 +83,8 @@
         </div>
         <div class="flex items-start gap-3">
             <span class="mt-1.5 text-lg">•</span>
-            <a href="{{ route('code.of.discipline') }}" class="border-b border-white pb-1 cursor-pointer hover:opacity-80 transition-opacity">
+            <a href="{{ route('code.of.discipline') }}"
+                class="border-b border-white pb-1 cursor-pointer hover:opacity-80 transition-opacity">
                 ARTICLES VI CODE OF DISCIPLINE
             </a>
         </div>
@@ -90,7 +94,9 @@
     <div class="mt-auto px-6">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="w-full bg-white text-grc-red font-bold text-center py-3 rounded-full shadow-md hover:bg-gray-100 transition duration-150 text-lg tracking-wider">
+            <input type="hidden" name="login_as" value="student">
+            <button type="submit"
+                class="w-full bg-white text-grc-red font-bold text-center py-3 rounded-full shadow-md hover:bg-gray-100 transition duration-150 text-lg tracking-wider">
                 LOG OUT
             </button>
         </form>

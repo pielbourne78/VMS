@@ -28,13 +28,14 @@
             </a>
         </div>
 
-        <h2 style="text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 20px;">Login to your account
+        <h2 style="text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 10px;">Student Portal Login</h2>
         </h2>
+        <p style="text-align: center; font-size: 13px; color: #6b7280; margin-bottom: 20px;">Sign in with your
+            student credentials</p>
 
         <!-- ERROR MESSAGE -->
         @if (session('status'))
-            <div
-                style="background-color: #d1fae5; color: #065f46; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 14px;">
+            <div style="background-color: #d1fae5; color: #065f46; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 14px;">
                 {{ session('status') }}
             </div>
         @endif
@@ -49,12 +50,12 @@
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
-            <input type="hidden" name="login_as" value="{{ $login_as ?? 'student' }}">
+            <input type="hidden" name="login_as" value="student">
 
             <!-- Email -->
             <div style="margin-bottom: 15px;">
                 <input type="email" name="email" placeholder="Email Address" value="{{ old('email') }}" required
-                    autofocus required
+                    autofocus
                     style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; box-sizing: border-box;">
 
                 <x-input-error :messages="$errors->get('email')" class="mt-2" />

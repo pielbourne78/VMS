@@ -15,9 +15,16 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
-        return view('auth.login');
+        $login_as = $request->routeIs('admin.login') ? 'admin' : 'student';
+
+        if ($login_as === 'admin') {
+            return view('auth.admin-login', compact('login_as'));
+        }
+
+        // Use the root login view for students (resources/views/login.blade.php)
+        return view('login', compact('login_as'));
     }
 
     /**
@@ -33,7 +40,7 @@ class AuthenticatedSessionController extends Controller
         $user = $request->user();
 
         // 1. BLOCK ADMINS: If an admin tries to log in via the Student Login page
-        if (url()->previous() === route('login') && $user->is_admin) {
+        if ($request->input('login_as') === 'student' && $user->is_admin) {
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -44,7 +51,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         // 2. BLOCK STUDENTS: If a regular student tries to log in via the Admin Login page
-        if (url()->previous() === route('admin.login') && !$user->is_admin) {
+        if ($request->input('login_as') === 'admin' && !$user->is_admin) {
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -72,6 +79,11 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        // Respect portal requested in the logout form
+        if ($request->input('login_as') === 'admin') {
+            return redirect()->route('admin.login');
+        }
+
+        return redirect()->route('login');
     }
 }
