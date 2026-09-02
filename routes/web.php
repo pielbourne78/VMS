@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules\Password;
 
 
 Route::get('/violation-monitoring', [ViolationController::class, 'index'])
+    ->middleware(['auth', 'verified'])
     ->name('violation.monitoring');
 
 Route::get('/test-email', function () {
@@ -61,6 +62,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/report', function () {
+    return view('report');
+})->middleware(['auth', 'verified'])->name('report');
 
 Route::get('/user-photo/{path}', function (string $path) {
     $fullPath = Storage::disk('public')->path($path);
