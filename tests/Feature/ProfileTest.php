@@ -61,6 +61,27 @@ class ProfileTest extends TestCase
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
 
+    public function test_user_profile_photo_url_is_resolved_from_storage_and_defaults_when_missing(): void
+    {
+        $userWithPhoto = User::factory()->create([
+            'profile_picture' => 'profile-pictures/test-avatar.jpg',
+        ]);
+
+        $this->assertSame(
+            route('user.photo', ['path' => 'profile-pictures/test-avatar.jpg']),
+            $userWithPhoto->profile_photo_url
+        );
+
+        $userWithoutPhoto = User::factory()->create([
+            'profile_picture' => null,
+        ]);
+
+        $this->assertSame(
+            'https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png',
+            $userWithoutPhoto->profile_photo_url
+        );
+    }
+
     public function test_user_can_delete_their_account(): void
     {
         $user = User::factory()->create();
