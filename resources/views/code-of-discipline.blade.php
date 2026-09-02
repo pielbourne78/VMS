@@ -104,8 +104,7 @@
                     ☰
                 </button>
                 <a href="{{ route('dashboard') }}" class="hover:text-red-200 transition">DASHBOARD</a>
-                <a href="{{ route('violation.monitoring') }}" class="hover:text-red-200 transition">VIOLATION
-                    MONITORING</a>
+                <a href="{{ route('violation.monitoring') }}" class="hover:text-red-200 transition">VIOLATION MONITORING</a>
                 <a href="#" class="hover:text-red-200 transition">REPORT</a>
             </nav>
             <div class="flex items-center gap-6">

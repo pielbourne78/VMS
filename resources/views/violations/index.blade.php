@@ -36,6 +36,9 @@
 
 <body class="bg-gray-100 antialiased flex min-h-screen overflow-x-hidden">
 
+    <!-- Reusable Sidebar Component -->
+    @include('components.sidebar')
+
     <!-- ================= Sidebar ================= -->
     <aside class="grc-red text-white w-80 flex flex-col py-6 shadow-xl z-10 flex-shrink-0">
         <!-- College Logo & Name -->
@@ -98,6 +101,13 @@
     <!-- ================= Main Content ================= -->
     <div class="flex-1 flex flex-col bg-white">
         <!-- Header Navigation -->
+        <header class="header-gradient text-white px-8 py-6 shadow-lg flex items-center justify-between border-b-4 border-grc-red flex-shrink-0">
+            <nav class="flex items-center gap-8 text-lg font-semibold tracking-tight">
+                <!-- Hamburger Toggle Button -->
+                <svg onclick="toggleSidebar()" class="w-8 h-8 cursor-pointer hover:text-red-200 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+
         <header
             class="header-gradient text-white px-8 py-6 shadow-lg flex items-center justify-between border-b-4 border-grc-red flex-shrink-0">
             <nav class="flex items-center gap-10 text-lg font-semibold tracking-tight">
@@ -159,7 +169,7 @@
                 </div>
 
                 <!-- TAB 1: RESOLVED CASE -->
-                <div class="tab-content" id="content-1">
+                <div class="tab-content hidden" id="content-1">
                     <div class="grid grid-cols-3 font-bold text-grc-red text-base border-b-2 border-gray-200 pb-4 mb-6">
                         <div>CODE | VIOLATION:</div>
                         <div>PENALTY LIST:</div>
@@ -171,7 +181,7 @@
                 </div>
 
                 <!-- TAB 2: TOTAL VIOLATION -->
-                <div class="tab-content" id="content-2">
+                <div class="tab-content hidden" id="content-2">
                     <div class="grid grid-cols-3 font-bold text-grc-red text-base border-b-2 border-gray-200 pb-4 mb-6">
                         <div>CODE | VIOLATION:</div>
                         <div>STATUS</div>
@@ -183,7 +193,7 @@
                 </div>
 
                 <!-- TAB 3: PENDING -->
-                <div class="tab-content" id="content-3">
+                <div class="tab-content hidden" id="content-3">
                     <div class="grid grid-cols-3 font-bold text-grc-red text-base border-b-2 border-gray-200 pb-4 mb-6">
                         <div>CODE | VIOLATION:</div>
                         <div>DETAILS</div>
@@ -200,8 +210,14 @@
     </div>
 
     <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('w-0');
+            sidebar.classList.toggle('w-80');
+            sidebar.classList.toggle('px-0');
+        }
+
         function switchTab(index) {
-            // Update tab borders underline styling
             for (let i = 0; i < 4; i++) {
                 const tabEl = document.getElementById('tab-' + i);
                 const contentEl = document.getElementById('content-' + i);
@@ -218,6 +234,8 @@
             }
         }
 
+        document.addEventListener("DOMContentLoaded", function() {
+
         // Initialize default tab on load
         document.addEventListener("DOMContentLoaded", function () {
             for (let i = 1; i < 4; i++) {
@@ -226,6 +244,11 @@
             }
             document.getElementById('tab-0').classList.add('border-white');
         });
+    
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('sidebar-closed');
+    }
     </script>
 
 </body>
