@@ -28,14 +28,16 @@
             </a>
         </div>
 
-        <h2 style="text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 10px;">Student Portal Login</h2>
+        <h2 style="text-align: center; font-size: 20px; font-weight: 700; margin-bottom: 10px;">Student Portal Login
+        </h2>
         </h2>
         <p style="text-align: center; font-size: 13px; color: #6b7280; margin-bottom: 20px;">Sign in with your
             student credentials</p>
 
         <!-- ERROR MESSAGE -->
         @if (session('status'))
-            <div style="background-color: #d1fae5; color: #065f46; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 14px;">
+            <div
+                style="background-color: #d1fae5; color: #065f46; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 14px;">
                 {{ session('status') }}
             </div>
         @endif
@@ -121,6 +123,10 @@
             <div style="margin-top: 10px;">
                 <a href="{{ route('password.request') }}"
                     style="color: #3b82f6; font-weight: bold; text-decoration: none;">Forgot Password?</a>
+            </div>
+            <div style="margin-top: 10px;">
+                Back to <a href="{{ route('welcome') }}"
+                    style="color: #3b82f6; font-weight: bold; text-decoration: none;">Homepage</a>
             </div>
         </div>
     </div>
