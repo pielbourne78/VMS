@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\ReportController as AdminReportController; // ADDED: Imported Admin Report Controller
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ViolationController;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
-
 
 Route::get('/violation-monitoring', [ViolationController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -81,8 +81,9 @@ Route::view('/code-of-discipline', 'code-of-discipline')
 
 Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])->name('admin.login');
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/report', [AdminReportController::class, 'index'])->name('report'); // ADDED: Admin Report route inside the admin group
 });
 
 Route::middleware('auth')->group(function () {

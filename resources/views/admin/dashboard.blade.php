@@ -54,7 +54,7 @@
             <a href="{{ route('admin.dashboard') }}"
                 class="bg-white/20 px-5 py-2 rounded-full shadow-inner tracking-wide border border-white/30">DASHBOARD</a>
             <a href="#" class="hover:text-red-200 transition tracking-wide">VIOLATION MONITORING</a>
-            <a href="#" class="hover:text-red-200 transition tracking-wide">REPORT</a>
+            <a href="{{ route('admin.report') }}" class="hover:text-red-200 transition tracking-wide">REPORT</a> 
         </nav>
 
         <!-- Right Side Actions (Bell & Profile) -->
