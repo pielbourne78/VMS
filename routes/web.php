@@ -11,6 +11,17 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
+// Route::get('/apply-consequences', [ViolationController::class, 'index'])
+//     ->middleware(['auth']); // I-check kung aling middleware ang nakaharang
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    // Apply Consequences Page
+    Route::get('/apply-consequences', [ViolationController::class, 'applyConsequences'])->name('admin.apply-consequences');
+    
+    // Approve Consequence Action
+    Route::patch('/violations/{id}/approve', [ViolationController::class, 'approve'])->name('admin.violations.approve');
+});
+
 
 Route::get('/violation-monitoring', [ViolationController::class, 'index'])
     ->middleware(['auth', 'verified'])
