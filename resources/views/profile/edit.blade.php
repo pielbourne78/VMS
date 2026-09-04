@@ -1,4 +1,4 @@
-@extends('layouts.student')
+@extends(Auth::user()->is_admin ? 'layouts.admin' : 'layouts.student')
 
 @section('title', 'Edit Profile')
 
