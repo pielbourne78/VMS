@@ -109,7 +109,7 @@
             <nav class="flex flex-col space-y-1 font-bold text-sm">
                 <a href="#" class="px-6 py-3.5 bg-red-900/50 border-l-4 border-white tracking-wide transition">Record
                     Violation</a>
-                <a href="#" class="px-6 py-3.5 hover:bg-red-900/30 transition tracking-wide">Track violation History</a>
+                <a href="{{ route('admin.violations.index') }}" class="px-6 py-3.5 hover:bg-red-900/30 transition tracking-wide">Track violation History</a>
                 <a href="#" class="px-6 py-3.5 hover:bg-red-900/30 transition tracking-wide">Apply Consequences</a>
             </nav>
 

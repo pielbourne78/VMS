@@ -24,7 +24,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         // Use the root login view for students (resources/views/login.blade.php)
-        return view('login', compact('login_as'));
+        return view('auth.login', compact('login_as'));
     }
 
     /**

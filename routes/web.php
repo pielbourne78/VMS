@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentViolationController;
 use App\Http\Controllers\ViolationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -12,9 +13,19 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
 
-Route::get('/violation-monitoring', [ViolationController::class, 'index'])
+
+Route::get('/violation-monitoring', [StudentViolationController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('violation.monitoring');
+
+// Admin-exclusive Violation Tracking & Monitoring Routes
+Route::middleware(['auth', 'admin', 'verified'])->prefix('admin')->name('admin.violations.')->group(function () {
+    Route::get('/violations', [ViolationController::class, 'index'])->name('index');
+    Route::post('/violations', [ViolationController::class, 'store'])->name('store');
+    Route::get('/violations/student/{user}', [ViolationController::class, 'history'])->name('history');
+    Route::patch('/violations/{violation}', [ViolationController::class, 'update'])->name('update');
+    Route::delete('/violations/{violation}', [ViolationController::class, 'destroy'])->name('destroy');
+});
 
 Route::get('/test-email', function () {
     try {

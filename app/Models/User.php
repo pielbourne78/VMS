@@ -30,6 +30,7 @@ class User extends Authenticatable
         'course',
         'password',
         'role',
+        'is_admin',
         'profile_picture',
     ];
 
@@ -64,5 +65,10 @@ class User extends Authenticatable
             ? route('user.photo', ['path' => $this->profile_picture])
             : 'https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png'
         );
+    }
+
+    public function violations()
+    {
+        return $this->hasMany(Violation::class, 'user_id');
     }
 }
