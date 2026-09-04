@@ -32,7 +32,7 @@
         <nav class="flex items-center gap-6 text-sm font-bold">
             <a href="{{ route('admin.dashboard') }}" class="hover:text-red-200 transition tracking-wide">DASHBOARD</a>
             <a href="{{ route('admin.violation.monitoring') }}" class="bg-white/20 px-5 py-2 rounded-full shadow-inner tracking-wide border border-white/30">VIOLATION MONITORING</a>
-            <a href="#" class="hover:text-red-200 transition tracking-wide">REPORT</a>
+            <a href="{{ route('admin.violation.history') }}" class="hover:text-red-200 transition tracking-wide">REPORT</a>
         </nav>
         <div class="flex items-center gap-5">
             <div class="bg-red-900/40 p-2.5 rounded-full shadow-inner" aria-label="Notifications">

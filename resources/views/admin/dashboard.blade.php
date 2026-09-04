@@ -53,8 +53,8 @@
         <nav class="flex items-center gap-6 text-sm font-bold">
             <a href="{{ route('admin.dashboard') }}"
                 class="bg-white/20 px-5 py-2 rounded-full shadow-inner tracking-wide border border-white/30">DASHBOARD</a>
-            <a href="#" class="hover:text-red-200 transition tracking-wide">VIOLATION MONITORING</a>
-            <a href="#" class="hover:text-red-200 transition tracking-wide">REPORT</a>
+            <a href="{{ route('admin.violation.monitoring') }}" class="hover:text-red-200 transition tracking-wide">VIOLATION MONITORING</a>
+            <a href="{{ route('admin.violation.history') }}" class="hover:text-red-200 transition tracking-wide">REPORT</a>
         </nav>
 
         <!-- Right Side Actions (Bell & Profile) -->
@@ -68,13 +68,13 @@
                 </svg>
             </div>
             <!-- Profile Pill -->
-            <div
+            <a href="{{ route('profile.edit') }}"
                 class="flex items-center gap-3 bg-white text-grc-red px-4 py-1.5 rounded-full font-bold cursor-pointer shadow-md hover:bg-gray-50 transition">
                 <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile"
                     class="w-7 h-7 rounded-full border-2 border-grc-red object-cover"
                     onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png';">
                 <span class="tracking-tight text-xs">PROFILE</span>
-            </div>
+            </a>
         </div>
     </header>
 
@@ -96,7 +96,7 @@
             <div class="px-6 flex flex-col items-center mb-8">
                 <div
                     class="w-24 h-24 rounded-full bg-gray-300 overflow-hidden shadow-lg border-4 border-white mb-3 flex items-center justify-center">
-                    <img src="https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png"
+                    <img src="{{ Auth::user()->profile_photo_url }}"
                         alt="Admin Avatar" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-lg font-black uppercase tracking-wider text-center">
@@ -107,10 +107,18 @@
 
             <!-- Sidebar Navigation Menu -->
             <nav class="flex flex-col space-y-1 font-bold text-sm">
-                <a href="#" class="px-6 py-3.5 bg-red-900/50 border-l-4 border-white tracking-wide transition">Record
-                    Violation</a>
-                <a href="#" class="px-6 py-3.5 hover:bg-red-900/30 transition tracking-wide">Track violation History</a>
-                <a href="#" class="px-6 py-3.5 hover:bg-red-900/30 transition tracking-wide">Apply Consequences</a>
+                <a href="{{ route('admin.violation.record') }}"
+                    class="px-6 py-3.5 hover:bg-red-900/30 transition tracking-wide">
+                    RECORD VIOLATION
+                </a>
+                <a href="{{ route('admin.violation.history') }}"
+                    class="px-6 py-3.5 hover:bg-red-900/30 transition tracking-wide">
+                    TRACK VIOLATION HISTORY
+                </a>
+                <a href="{{ route('admin.violation.consequences') }}"
+                    class="px-6 py-3.5 hover:bg-red-900/30 transition tracking-wide">
+                    APPLY CONSEQUENCES
+                </a>
             </nav>
 
             <!-- Collapse / Arrow Toggle Circle Button -->
@@ -133,7 +141,7 @@
         </aside>
 
         <!-- ================= Right Main Content Area ================= -->
-        <main class="flex-1 flex flex-col bg-white overflow-y-auto px-10 py-8">
+            <main class="flex-1 flex flex-col bg-white overflow-y-auto px-4 sm:px-10 py-8">
 
             <!-- Page Title -->
             <h2 class="text-2xl font-black text-gray-900 tracking-tight mb-8">ADMIN DASHBOARD</h2>
@@ -155,7 +163,7 @@
                         </div>
                         <h3 class="text-2xl font-black tracking-wider">TOTAL VIOLATION</h3>
                     </div>
-                    <a href="#"
+                    <a href="{{ route('admin.violation.history') }}"
                         class="text-white text-sm font-bold tracking-tight hover:underline flex items-center gap-1">
                         View details &gt;
                     </a>
@@ -175,7 +183,7 @@
                         </div>
                         <h3 class="text-2xl font-black tracking-wider">ACTIVE CASES</h3>
                     </div>
-                    <a href="#"
+                    <a href="{{ route('admin.violation.record') }}"
                         class="text-white text-sm font-bold tracking-tight hover:underline flex items-center gap-1">
                         View details &gt;
                     </a>
@@ -194,7 +202,7 @@
                         </div>
                         <h3 class="text-2xl font-black tracking-wider">PENDING ALERT</h3>
                     </div>
-                    <a href="#"
+                    <a href="{{ route('admin.violation.history') }}"
                         class="text-white text-sm font-bold tracking-tight hover:underline flex items-center gap-1">
                         View details &gt;
                     </a>
@@ -213,7 +221,7 @@
                         </div>
                         <h3 class="text-2xl font-black tracking-wider">RESOLVE CASES</h3>
                     </div>
-                    <a href="#"
+                    <a href="{{ route('admin.violation.consequences') }}"
                         class="text-white text-sm font-bold tracking-tight hover:underline flex items-center gap-1">
                         View details &gt;
                     </a>
