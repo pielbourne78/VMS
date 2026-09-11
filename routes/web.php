@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReportController as AdminReportController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentViolationController;
 use App\Http\Controllers\ViolationController;
+use App\Http\Controllers\ConsequenceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
@@ -12,9 +15,18 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
 
-Route::get('/violation-monitoring', [ViolationController::class, 'index'])
+Route::get('/violation-monitoring', [StudentViolationController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('violation.monitoring');
+
+    //Admin-exclusive Violation Tracking & Monitoring Routes
+Route::middleware(['auth', 'admin', 'verified'])->prefix('admin')->name('admin.violations.')->group(function () {
+    Route::get('/violations', [ViolationController::class, 'index'])->name('index');
+    Route::post('/violations', [ViolationController::class, 'store'])->name('store');
+    Route::get('/violations/student/{user}', [ViolationController::class, 'history'])->name('history');
+    Route::patch('/violations/{violation}', [ViolationController::class, 'update'])->name('update');
+    Route::delete('/violations/{violation}', [ViolationController::class, 'destroy'])->name('destroy');
+});
 
 Route::get('/test-email', function () {
     try {
@@ -60,6 +72,11 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::get('/dashboard', function () {
+    // If the logged-in user is an admin, force them to the admin dashboard
+    if (auth()->user()->is_admin) {
+        return redirect()->route('admin.dashboard');
+    }
+
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -81,10 +98,23 @@ Route::view('/code-of-discipline', 'code-of-discipline')
 
 Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])->name('admin.login');
 
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-});
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/report', [AdminReportController::class, 'index'])->name('report');
 
+    // Record Violation
+    Route::get('/violation-monitoring', [ViolationController::class, 'create'])->name('violation.monitoring');
+    Route::post('/violations', [ViolationController::class, 'store'])->name('violations.store');
+
+    // Violation Monitoring Overview (Recent Violations list)
+    Route::get('/violations/recent', function () {
+        return view('admin.recent-violations');
+    })->name('violations.recent');
+    
+    // Apply Consequences
+Route::get('/consequences', [ConsequenceController::class, 'index'])->name('consequences');
+Route::patch('/violations/{violation}/approve', [ConsequenceController::class, 'approve'])->name('violations.approve');
+});
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

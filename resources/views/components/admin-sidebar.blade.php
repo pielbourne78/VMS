@@ -13,19 +13,21 @@
 
     <!-- Sidebar Navigation Menu -->
     <nav class="flex flex-col space-y-1 font-bold text-sm">
-        <a href="#"
-            class="px-6 py-3.5 {{ request()->routeIs('admin.violations.record') ? 'bg-red-900/50 border-l-4 border-white' : 'hover:bg-red-900/30 border-l-4 border-transparent' }} tracking-wide transition">
-            Record Violation
-        </a>
-        <a href="#"
-            class="px-6 py-3.5 {{ request()->routeIs('admin.violations.history') ? 'bg-red-900/50 border-l-4 border-white' : 'hover:bg-red-900/30 border-l-4 border-transparent' }} tracking-wide transition">
-            Track violation History
-        </a>
-        <a href="#"
-            class="px-6 py-3.5 {{ request()->routeIs('admin.violations.consequences') ? 'bg-red-900/50 border-l-4 border-white' : 'hover:bg-red-900/30 border-l-4 border-transparent' }} tracking-wide transition">
-            Apply Consequences
-        </a>
-    </nav>
+    <a href="{{ route('admin.violation.monitoring') }}"
+        class="px-6 py-3.5 border-l-4 tracking-wide transition-all duration-200 hover:border-white hover:bg-red-900/30 {{ request()->routeIs('admin.violation.monitoring') ? 'bg-red-900/50 border-white' : 'border-transparent' }}">
+        Record Violation
+    </a>
+
+    <a href="{{ route('admin.violations.index') }}"
+        class="px-6 py-3.5 border-l-4 tracking-wide transition-all duration-200 hover:border-white hover:bg-red-900/30 {{ request()->routeIs('admin.violations.index') ? 'bg-red-900/50 border-white' : 'border-transparent' }}">
+        Track violation History
+    </a>
+
+    <a href="{{ route('admin.consequences') }}"
+        class="px-6 py-3.5 border-l-4 tracking-wide transition-all duration-200 hover:border-white hover:bg-red-900/30 {{ request()->routeIs('admin.consequences') ? 'bg-red-900/50 border-white' : 'border-transparent' }}">
+        Apply Consequences
+    </a>
+</nav>
 
     <!-- Collapse Arrow (only visible when sidebar is open) -->
     <button id="adminSidebarCloseArrow" onclick="toggleAdminSidebar()"

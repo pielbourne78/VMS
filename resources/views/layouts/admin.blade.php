@@ -52,8 +52,11 @@
                 class="{{ request()->routeIs('admin.dashboard') ? 'bg-white/20 px-5 py-2 rounded-full shadow-inner border border-white/30' : 'hover:text-red-200 transition' }} tracking-wide">
                 DASHBOARD
             </a>
-            <a href="#" class="hover:text-red-200 transition tracking-wide">VIOLATION MONITORING</a>
-            <a href="#" class="hover:text-red-200 transition tracking-wide">REPORT</a>
+            <a href="{{ route('admin.violations.recent') }}"
+                class="{{ request()->routeIs('admin.violations.recent') ? 'bg-white/20 px-5 py-2 rounded-full shadow-inner border border-white/30' : 'hover:text-red-200 transition' }} tracking-wide">
+                VIOLATION MONITORING
+            </a>
+             <a href="{{ route('admin.report') }}" class="hover:text-red-200 transition tracking-wide">REPORT</a> 
         </nav>
 
         <!-- Right Side Actions (Bell & Profile) -->
