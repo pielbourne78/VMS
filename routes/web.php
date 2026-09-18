@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentViolationController;
 use App\Http\Controllers\ViolationController;
+use App\Http\Controllers\RecordViolationController;
 use App\Http\Controllers\ConsequenceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -77,7 +78,11 @@ Route::get('/dashboard', function () {
         return redirect()->route('admin.dashboard');
     }
 
-    return view('dashboard');
+    $violations = \App\Models\Violation::where('user_id', auth()->id())
+        ->orderByDesc('occurred_at')
+        ->get();
+
+    return view('dashboard', compact('violations'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/report', function () {
@@ -103,8 +108,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/report', [AdminReportController::class, 'index'])->name('report');
 
     // Record Violation
-    Route::get('/violation-monitoring', [ViolationController::class, 'create'])->name('violation.monitoring');
-    Route::post('/violations', [ViolationController::class, 'store'])->name('violations.store');
+    Route::get('/violation-monitoring', [RecordViolationController::class, 'create'])->name('violation.monitoring');
+    Route::post('/record-violations', [RecordViolationController::class, 'store'])->name('violations.record.store');
 
     // Violation Monitoring Overview (Recent Violations list)
     Route::get('/violations/recent', function () {
@@ -112,8 +117,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     })->name('violations.recent');
     
     // Apply Consequences
-Route::get('/consequences', [ConsequenceController::class, 'index'])->name('consequences');
-Route::patch('/violations/{violation}/approve', [ConsequenceController::class, 'approve'])->name('violations.approve');
+    Route::get('/consequences', [ConsequenceController::class, 'index'])->name('consequences');
+    Route::patch('/violations/{violation}/approve', [ConsequenceController::class, 'approve'])->name('violations.approve');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

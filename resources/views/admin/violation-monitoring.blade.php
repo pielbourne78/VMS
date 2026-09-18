@@ -22,7 +22,7 @@
 
     {{-- Form Area --}}
     <div class="flex-1 bg-white px-8 py-10">
-        <form method="POST" action="{{ route('admin.violations.store') }}" class="mx-auto max-w-5xl">
+       <form method="POST" action="{{ route('admin.violations.record.store') }}" class="mx-auto max-w-5xl">
             @csrf
 
             <div class="grid grid-cols-1 gap-x-16 gap-y-6 md:grid-cols-2">

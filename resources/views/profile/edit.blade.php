@@ -149,19 +149,22 @@
                         <div>
                             <label for="course"
                                 class="block text-sm font-semibold text-gray-700 mb-1">Course</label>
-                            <input id="course" name="course" type="text"
-                                value="{{ old('course', data_get($user, 'course')) }}"
+                            <select id="course" name="course"
                                 class="w-full rounded-xl border-gray-300 shadow-sm focus:border-grc-red focus:ring focus:ring-grc-red/20 px-4 py-2.5 text-sm">
+                                <option value="">Select Course</option>
+                                <optgroup label="Course">
+                                    <option value="BS Business Administration - Human Resources Dev't Mgt." {{ old('course', data_get($user, 'course')) == "BS Business Administration - Human Resources Dev't Mgt." ? 'selected' : '' }}>BS Business Administration - Major in Human Resources Dev't Mgt.</option>
+                                    <option value="BS Business Administration - Marketing Management" {{ old('course', data_get($user, 'course')) == "BS Business Administration - Marketing Management" ? 'selected' : '' }}>BS Business Administration - Major in Marketing Management</option>
+                                    <option value="BS Entrepreneurship" {{ old('course', data_get($user, 'course')) == 'BS Entrepreneurship' ? 'selected' : '' }}>Bachelor of Science in Entrepreneurship</option>
+                                    <option value="BS Accountancy" {{ old('course', data_get($user, 'course')) == 'BS Accountancy' ? 'selected' : '' }}>Bachelor of Science in Accountancy</option>
+                                    <option value="BS Information Technology" {{ old('course', data_get($user, 'course')) == 'BS Information Technology' ? 'selected' : '' }}>Bachelor of Science in Information Technology</option>
+                                    <option value="BS Secondary Education - English" {{ old('course', data_get($user, 'course')) == 'BS Secondary Education - English' ? 'selected' : '' }}>BS Secondary Education - Major in English</option>
+                                    <option value="BS Secondary Education - Mathematics" {{ old('course', data_get($user, 'course')) == 'BS Secondary Education - Mathematics' ? 'selected' : '' }}>BS Secondary Education - Major in Mathematics</option>
+                                    <option value="BS Secondary Education - PE" {{ old('course', data_get($user, 'course')) == 'BS Secondary Education - PE' ? 'selected' : '' }}>BS Secondary Education - Major in Physical Education (PE)</option>
+                                    <option value="BS Elementary Education - SPEd" {{ old('course', data_get($user, 'course')) == 'BS Elementary Education - SPEd' ? 'selected' : '' }}>BS Elementary Education - Major in Special Education (SPEd)</option>
+                                </optgroup>
+                            </select>
                             @error('course')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
-                        </div>
-                        <div>
-                            <label for="section"
-                                class="block text-sm font-semibold text-gray-700 mb-1">Section</label>
-                            <input id="section" name="section" type="text"
-                                value="{{ old('section', data_get($user, 'section')) }}"
-                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-grc-red focus:ring focus:ring-grc-red/20 px-4 py-2.5 text-sm">
-                            @error('section')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
                         <div>
@@ -176,6 +179,16 @@
                                 <option value="4th Year" {{ old('year_level', data_get($user, 'year_level')) == '4th Year' ? 'selected' : '' }}>4th Year</option>
                             </select>
                             @error('year_level')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                        </div>
+                        <div>
+                            <label for="section"
+                                class="block text-sm font-semibold text-gray-700 mb-1">Section</label>
+                            <select id="section" name="section"
+                                class="w-full rounded-xl border-gray-300 shadow-sm focus:border-grc-red focus:ring focus:ring-grc-red/20 px-4 py-2.5 text-sm">
+                                <option value="">Select Year Level First</option>
+                            </select>
+                            @error('section')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         </div>
                     @endif
@@ -341,5 +354,49 @@
             reader.readAsDataURL(event.target.files[0]);
         }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const yearLevelSelect = document.getElementById('year_level');
+        const sectionSelect = document.getElementById('section');
+
+        if (!yearLevelSelect || !sectionSelect) return;
+
+        const sectionMap = {
+            '1st Year': ['101', '102', '103', '104', '105', '106'],
+            '2nd Year': ['201', '202', '203', '204', '205', '206'],
+            '3rd Year': ['301', '302', '303', '304', '305', '306'],
+            '4th Year': ['401', '402', '403', '404', '405', '406'],
+        };
+
+        const existingSection = "{{ old('section', data_get($user, 'section')) }}";
+
+        function populateSections(selectedYear, preselect = null) {
+            sectionSelect.innerHTML = '';
+
+            if (!selectedYear || !sectionMap[selectedYear]) {
+                sectionSelect.innerHTML = '<option value="">Select Year Level First</option>';
+                return;
+            }
+
+            sectionSelect.innerHTML = '<option value="">Select Section</option>';
+            sectionMap[selectedYear].forEach(function (sec) {
+                const option = document.createElement('option');
+                option.value = sec;
+                option.textContent = sec;
+                if (preselect && preselect === sec) {
+                    option.selected = true;
+                }
+                sectionSelect.appendChild(option);
+            });
+        }
+
+        if (yearLevelSelect.value) {
+            populateSections(yearLevelSelect.value, existingSection);
+        }
+
+        yearLevelSelect.addEventListener('change', function () {
+            populateSections(this.value);
+        });
+    });
 </script>
 @endpush
