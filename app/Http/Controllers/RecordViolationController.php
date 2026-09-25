@@ -60,8 +60,8 @@ class RecordViolationController extends Controller
             'status' => 'pending',
         ]);
 
-        $student = $violation->student()->first();
-        if ($student) {
+        $student = User::find($violation->user_id);
+        if ($student instanceof User) {
             $student->notify(new ViolationStatusUpdated([
                 'title' => 'Violation Recorded',
                 'message' => 'A new violation has been recorded: ' . $violation->violation_type . '.',
