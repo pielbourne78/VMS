@@ -124,13 +124,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Apply Consequences
     Route::get('/consequences', [ConsequenceController::class, 'index'])->name('consequences');
     Route::patch('/violations/{violation}/approve', [ConsequenceController::class, 'approve'])->name('violations.approve');
-<<<<<<< HEAD
-=======
 
     // Student reasoning appeals review
     Route::get('/appeals', [\App\Http\Controllers\AdminAppealController::class, 'index'])->name('appeals');
     Route::patch('/appeals/{quizAttempt}/review', [\App\Http\Controllers\AdminAppealController::class, 'review'])->name('appeals.review');
->>>>>>> 045b408 (ok na to melben)
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

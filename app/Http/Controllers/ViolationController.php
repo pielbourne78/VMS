@@ -79,8 +79,7 @@ class ViolationController extends Controller
             'violations' => $violations,
         ]);
     }
-<<<<<<< HEAD
-=======
+
 
     public function recentViolations()
     {
@@ -159,5 +158,5 @@ class ViolationController extends Controller
             ->route('admin.violation.monitoring')
             ->with('success', 'Violation recorded successfully!');
     }
->>>>>>> 045b408 (ok na to melben)
+
 }
