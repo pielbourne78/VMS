@@ -20,7 +20,7 @@ Route::get('/violation-monitoring', [StudentViolationController::class, 'index']
     ->middleware(['auth', 'verified'])
     ->name('violation.monitoring');
 
-    //Admin-exclusive Violation Tracking & Monitoring Routes
+//Admin-exclusive Violation Tracking & Monitoring Routes
 Route::middleware(['auth', 'admin', 'verified'])->prefix('admin')->name('admin.violations.')->group(function () {
     Route::get('/violations', [ViolationController::class, 'index'])->name('index');
     Route::post('/violations', [ViolationController::class, 'store'])->name('store');
@@ -73,7 +73,6 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::get('/dashboard', function () {
-    // If the logged-in user is an admin, force them to the admin dashboard
     if (auth()->user()->is_admin) {
         return redirect()->route('admin.dashboard');
     }
@@ -85,9 +84,16 @@ Route::get('/dashboard', function () {
     return view('dashboard', compact('violations'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/report', function () {
-    return view('report');
-})->middleware(['auth', 'verified'])->name('report');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/violations/{violation}/penalty-quiz', [\App\Http\Controllers\PenaltyQuizController::class, 'show'])
+        ->name('student.penalty.quiz');
+
+    Route::post('/violations/{violation}/penalty-quiz', [\App\Http\Controllers\PenaltyQuizController::class, 'submit'])
+        ->name('student.penalty.quiz.submit');
+});
+Route::get('/report', [StudentViolationController::class, 'report'])
+    ->middleware(['auth', 'verified'])
+    ->name('report');
 
 Route::get('/user-photo/{path}', function (string $path) {
     $fullPath = Storage::disk('public')->path($path);
@@ -105,20 +111,26 @@ Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])->n
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    Route::get('/report', [AdminReportController::class, 'index'])->name('report');
+    Route::get('/report', [ViolationController::class, 'report'])->name('report');
+    Route::get('/violations/report', [ViolationController::class, 'report'])->name('violations.report');
 
     // Record Violation
     Route::get('/violation-monitoring', [RecordViolationController::class, 'create'])->name('violation.monitoring');
     Route::post('/record-violations', [RecordViolationController::class, 'store'])->name('violations.record.store');
 
     // Violation Monitoring Overview (Recent Violations list)
-    Route::get('/violations/recent', function () {
-        return view('admin.recent-violations');
-    })->name('violations.recent');
-    
+    Route::get('/violations/recent', [ViolationController::class, 'recentViolations'])->name('violations.recent');
+
     // Apply Consequences
     Route::get('/consequences', [ConsequenceController::class, 'index'])->name('consequences');
     Route::patch('/violations/{violation}/approve', [ConsequenceController::class, 'approve'])->name('violations.approve');
+<<<<<<< HEAD
+=======
+
+    // Student reasoning appeals review
+    Route::get('/appeals', [\App\Http\Controllers\AdminAppealController::class, 'index'])->name('appeals');
+    Route::patch('/appeals/{quizAttempt}/review', [\App\Http\Controllers\AdminAppealController::class, 'review'])->name('appeals.review');
+>>>>>>> 045b408 (ok na to melben)
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -127,6 +139,17 @@ Route::middleware('auth')->group(function () {
     // Profile Picture Routes
     Route::post('/profile/picture', [ProfileController::class, 'updateProfilePicture'])->name('profile.picture.update');
     Route::delete('/profile/picture', [ProfileController::class, 'destroyProfilePicture'])->name('profile.picture.destroy');
+
+    Route::post('/notifications/{notification}/read', function ($notification) {
+        $user = auth()->user();
+        $item = $user->notifications()->findOrFail($notification);
+
+        if (is_null($item->read_at)) {
+            $item->markAsRead();
+        }
+
+        return response()->json(['status' => 'read', 'notification_id' => $notification]);
+    })->name('notifications.read');
 });
 
 require __DIR__ . '/auth.php';

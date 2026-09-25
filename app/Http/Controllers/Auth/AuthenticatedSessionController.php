@@ -14,8 +14,13 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): View
+    public function create(Request $request): View
     {
+        // Serve a dedicated admin login view when visiting /admin/login
+        if ($request->is('admin/login')) {
+            return view('auth.admin-login');
+        }
+
         return view('auth.login');
     }
 
@@ -51,6 +56,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/login');
+        return redirect()->route('welcome');
     }
 }

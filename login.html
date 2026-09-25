@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+﻿<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Login | {{ config('app.name', 'Laravel') }}</title>
+    <meta name="csrf-token" content="sUVlvhdNOsRsDZIxOpOAhCIksU3RFWbFenzmubqd">
+    <title>Login | Laravel</title>
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 </head>
 
@@ -24,7 +24,7 @@
         <!-- Logo -->
         <div
             style="position: absolute; top: -70px; left: 50%; transform: translateX(-50%); width: 144px; height: 144px; background-color: #ffffff; border-radius: 50%; padding: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); display: flex; align-items: center; justify-content: center;">
-            <a href="{{ url('/') }}">
+            <a href="http://127.0.0.1:8000">
                 <img src="/images/logo.jpg" alt="Logo" style="width: 100px; height: 100px; object-fit: contain;">
             </a>
         </div>
@@ -33,33 +33,19 @@
         </h2>
 
         <!-- ERROR MESSAGE -->
-        @if (session('status'))
-            <div
-                style="background-color: #d1fae5; color: #065f46; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 14px;">
-                {{ session('status') }}
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div
-                style="background-color: #fee2e2; color: #991b1b; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; font-size: 14px;">
-                {{ session('error') }}
-            </div>
-        @endif
-
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
+        
+        
+        <form method="POST" action="http://127.0.0.1:8000/login">
+            <input type="hidden" name="_token" value="sUVlvhdNOsRsDZIxOpOAhCIksU3RFWbFenzmubqd" autocomplete="off">
             <input type="hidden" name="login_as" value="student">
 
             <!-- Email -->
             <div style="margin-bottom: 15px;">
-                <input type="email" name="email" placeholder="Email Address" value="{{ old('email') }}" required
+                <input type="email" name="email" placeholder="Email Address" value="" required
                     autofocus required
                     style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; box-sizing: border-box;">
 
-                <x-input-error :messages="$errors->get('email')" class="mt-2" />
-
+                
             </div>
 
             <!-- Password -->
@@ -116,14 +102,14 @@
 
         <!-- Register Link -->
         <div style="margin-top: 20px; font-size: 14px; text-align: center; color: #4b5563;">
-            No account? <a href="{{ route('register') }}"
+            No account? <a href="http://127.0.0.1:8000/register"
                 style="color: #22c55e; font-weight: bold; text-decoration: none;">Register here</a>
             <div style="margin-top: 10px;">
-                <a href="{{ route('password.request') }}"
+                <a href="http://127.0.0.1:8000/forgot-password"
                     style="color: #3b82f6; font-weight: bold; text-decoration: none;">Forgot Password?</a>
             </div>
             <div style="margin-top: 10px;">
-                Back to <a href="{{ route('welcome') }}"
+                Back to <a href="http://127.0.0.1:8000"
                     style="color: #3b82f6; font-weight: bold; text-decoration: none;">Homepage</a>
             </div>
         </div>

@@ -79,4 +79,85 @@ class ViolationController extends Controller
             'violations' => $violations,
         ]);
     }
+<<<<<<< HEAD
+=======
+
+    public function recentViolations()
+    {
+        $violations = Violation::query()
+            ->with(['student'])
+            ->orderByDesc('occurred_at')
+            ->take(15)
+            ->get();
+
+        return view('admin.recent-violations', compact('violations'));
+    }
+
+    public function report()
+    {
+        $violations = Violation::query()
+            ->with(['student'])
+            ->orderByDesc('occurred_at')
+            ->get();
+
+        return view('admin.report', compact('violations'));
+    }
+
+    public function create()
+    {
+        $students = User::where('role', 'student')
+            ->orderBy('student_id')
+            ->get();
+
+        $violationTypes = [
+            'Late',
+            'Uniform Violation',
+            'Misconduct',
+            'Absence',
+            'Disrespect',
+            'Others'
+        ];
+
+        $locations = [
+            'Building A',
+            'Building B',
+            'Canteen',
+            'Library',
+            'Parking Area',
+            'Gymnasium',
+            'Classroom'
+        ];
+
+        return view('admin.violation-monitoring', compact('students', 'violationTypes', 'locations'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'violation_type' => 'required|string',
+            'occurred_at' => 'required|date',
+            'location' => 'required|string',
+            'description' => 'required|string',
+            'notification_alert' => 'nullable',
+            'student_notification' => 'nullable',
+        ]);
+
+        Violation::create([
+            'user_id' => $validated['user_id'],
+            'violation_type' => $validated['violation_type'],
+            'occurred_at' => $validated['occurred_at'],
+            'location' => $validated['location'],
+            'description' => $validated['description'],
+            'reported_by' => Auth::id(),
+            'notification_alert' => $request->boolean('notification_alert'),
+            'student_notification' => $request->boolean('student_notification'),
+            'status' => 'pending', // default status
+        ]);
+
+        return redirect()
+            ->route('admin.violation.monitoring')
+            ->with('success', 'Violation recorded successfully!');
+    }
+>>>>>>> 045b408 (ok na to melben)
 }

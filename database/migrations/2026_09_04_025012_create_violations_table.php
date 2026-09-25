@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('violation_type');
             $table->text('description')->nullable();
             $table->dateTime('occurred_at');
-            $table->enum('status', ['pending', 'resolved', 'dismissed'])->default('pending');
+            $table->enum('status', ['pending', 'consequence_applied', 'resolved', 'dismissed'])->default('pending');
             $table->text('resolution_notes')->nullable();
             $table->foreignId('resolved_by')->nullable()->constrained('users')->nullOnDelete();
             $table->dateTime('resolved_at')->nullable();

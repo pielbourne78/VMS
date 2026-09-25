@@ -40,4 +40,14 @@ class Violation extends Model
     {
         return $this->belongsTo(User::class, 'issued_by');
     }
+
+    public function quiz()
+    {
+        return $this->hasOne(Quiz::class);
+    }
+
+    public function hasPendingQuiz(): bool
+    {
+        return $this->status === 'consequence_applied' && $this->quiz()->exists();
+    }
 }

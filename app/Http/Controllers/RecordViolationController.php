@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Violation;
+use App\Notifications\ViolationStatusUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,24 +41,34 @@ class RecordViolationController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'user_id'              => 'required|exists:users,id',
-            'violation_type'       => 'required|string',
-            'occurred_at'          => 'required|date',
-            'location'             => 'required|string',
-            'description'          => 'required|string',
-            'notification_alert'   => 'nullable',
+            'user_id' => 'required|exists:users,id',
+            'violation_type' => 'required|string',
+            'occurred_at' => 'required|date',
+            'location' => 'required|string',
+            'description' => 'required|string',
+            'notification_alert' => 'nullable',
             'student_notification' => 'nullable',
         ]);
 
-        Violation::create([
-            'violation_code'  => 'V-' . strtoupper(uniqid()),
-            'user_id'         => $validated['user_id'],
-            'issued_by'       => Auth::id(),
-            'violation_type'  => $validated['violation_type'],
-            'description'     => $validated['location'] . ' — ' . $validated['description'],
-            'occurred_at'     => $validated['occurred_at'],
-            'status'          => 'pending',
+        $violation = Violation::create([
+            'violation_code' => 'V-' . strtoupper(uniqid()),
+            'user_id' => $validated['user_id'],
+            'issued_by' => Auth::id(),
+            'violation_type' => $validated['violation_type'],
+            'description' => $validated['location'] . ' — ' . $validated['description'],
+            'occurred_at' => $validated['occurred_at'],
+            'status' => 'pending',
         ]);
+
+        $student = $violation->student()->first();
+        if ($student) {
+            $student->notify(new ViolationStatusUpdated([
+                'title' => 'Violation Recorded',
+                'message' => 'A new violation has been recorded: ' . $violation->violation_type . '.',
+                'url' => route('report'),
+                'type' => 'student_violation',
+            ]));
+        }
 
         return redirect()
             ->route('admin.violation.monitoring')

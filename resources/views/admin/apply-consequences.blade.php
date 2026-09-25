@@ -26,7 +26,7 @@
                 @forelse($violations as $violation)
                     <tr class="hover:bg-blue-100/40">
                         <td class="py-3 px-6 font-bold text-gray-800 text-sm">
-                            {{ $violation->user->full_name ?? $violation->user->name ?? 'Student Name' }}
+                            {{ $violation->student->full_name ?? $violation->student->name ?? 'Student Name' }}
                         </td>
                         <td class="py-3 px-6 font-bold text-gray-700 uppercase text-sm">
                             {{ $violation->violation_type ?? $violation->description ?? 'N/A' }}
@@ -38,7 +38,8 @@
                             <form action="{{ route('admin.violations.approve', $violation->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('PATCH')
-                                <button type="submit" class="bg-lime-500 hover:bg-lime-600 text-black font-extrabold px-5 py-1 rounded-full text-xs shadow transition">
+                                <button type="submit"
+                                    class="bg-lime-500 hover:bg-lime-600 text-black font-extrabold px-5 py-1 rounded-full text-xs shadow transition">
                                     Approve
                                 </button>
                             </form>

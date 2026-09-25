@@ -5,9 +5,11 @@ namespace App\Http\Requests\Auth;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class LoginRequest extends FormRequest
 {
@@ -41,13 +43,34 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
-        if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        $email = $this->input('email');
+        $password = $this->input('password');
+        $loginAs = $this->input('login_as', 'student');
+
+        $user = User::where('email', $email)->first();
+
+        if (!$user || !Hash::check($password, $user->password)) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
                 'email' => 'Invalid username or password.',
             ]);
         }
+
+        // Role-based login guard: ensure requested login form matches user's role
+        if ($loginAs === 'admin' && !$user->is_admin) {
+            throw ValidationException::withMessages([
+                'email' => 'This account is not authorized for administrator access.',
+            ]);
+        }
+
+        if ($loginAs !== 'admin' && $user->is_admin) {
+            throw ValidationException::withMessages([
+                'email' => 'Please use the administrator login to sign in.',
+            ]);
+        }
+
+        Auth::login($user, $this->boolean('remember'));
 
         RateLimiter::clear($this->throttleKey());
     }
@@ -59,7 +82,7 @@ class LoginRequest extends FormRequest
      */
     public function ensureIsNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 
@@ -77,6 +100,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }

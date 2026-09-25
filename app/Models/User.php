@@ -63,12 +63,17 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn() => $this->profile_picture
-            ? route('user.photo', ['path' => $this->profile_picture])
-            : 'https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png'
+                ? route('user.photo', ['path' => $this->profile_picture])
+                : 'https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png'
         );
     }
-     public function violations()
+    public function violations()
     {
         return $this->hasMany(Violation::class, 'user_id');
+    }
+
+    public function unreadNotificationsCount(): int
+    {
+        return $this->unreadNotifications()->count();
     }
 }
