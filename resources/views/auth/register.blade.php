@@ -62,24 +62,41 @@
                     <span style="color: red; font-size: 12px;"
                         x-text="errors.student_id ? errors.student_id[0] : ''"></span>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <!-- Year Level Dropdown -->
-                    <select name="year_level" required
-                        style="padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; color: #6b7280;">
-                        <option value="" disabled selected>Year</option>
-                        <option value="1st Year">1st Year</option>
-                        <option value="2nd Year">2nd Year</option>
-                        <option value="3rd Year">3rd Year</option>
-                        <option value="4th Year">4th Year</option>
-                    </select>
+               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+    <!-- Year Level Dropdown -->
+    <select name="year_level" id="year_level" required
+        style="padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; color: #6b7280;">
+        <option value="" disabled selected>Year</option>
+        <option value="1st Year">1st Year</option>
+        <option value="2nd Year">2nd Year</option>
+        <option value="3rd Year">3rd Year</option>
+        <option value="4th Year">4th Year</option>
+    </select>
 
-                    <!-- Course Input -->
-                    <input type="text" name="course" placeholder="Course" required
-                        style="padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb;">
-                </div>
+    <!-- Section Dropdown (populated based on Year Level) -->
+    <select name="section" id="section" required
+        style="padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; color: #6b7280;">
+        <option value="" disabled selected>Select Year First</option>
+    </select>
+</div>
 
-                <input type="text" name="section" placeholder="Section" required
-                    style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb;">
+<!-- Course Dropdown -->
+    <select name="course" required
+            style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background-color: #f9fafb; color: #6b7280;">
+            <option value="" disabled selected>Select Course</option>
+                <option value="BS Business Administration - Human Resources Dev't Mgt.">BS Business Administration - Major in Human Resources Dev't Mgt.</option>
+                <option value="BS Business Administration - Marketing Management">BS Business Administration - Major in Marketing Management</option>
+                <option value="BS Entrepreneurship">Bachelor of Science in Entrepreneurship</option>
+                <option value="BS Accountancy">Bachelor of Science in Accountancy</option>
+                <option value="BS Information Technology">Bachelor of Science in Information Technology</option>
+                <option value="BS Secondary Education - English">BS Secondary Education - Major in English</option>
+                <option value="BS Secondary Education - Mathematics">BS Secondary Education - Major in Mathematics</option>
+                <option value="BS Secondary Education - PE">BS Secondary Education - Major in Physical Education (PE)</option>
+                <option value="BS Elementary Education - SPEd">BS Elementary Education - Major in Special Education (SPEd)</option>
+            </optgroup>
+    </select>
+
+            
                 <!-- Password -->
                 <div class="mt-4" x-data="{ showPassword: false }">
                     <div style="position: relative;">
@@ -160,6 +177,37 @@
                 style="color: #22c55e; font-weight: bold; text-decoration: none;">Login here</a>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const yearLevelSelect = document.getElementById('year_level');
+        const sectionSelect = document.getElementById('section');
+
+        const sectionMap = {
+            '1st Year': ['101', '102', '103', '104', '105', '106'],
+            '2nd Year': ['201', '202', '203', '204', '205', '206'],
+            '3rd Year': ['301', '302', '303', '304', '305', '306'],
+            '4th Year': ['401', '402', '403', '404', '405', '406'],
+        };
+
+        yearLevelSelect.addEventListener('change', function () {
+            const selectedYear = this.value;
+            sectionSelect.innerHTML = '';
+
+            if (!selectedYear || !sectionMap[selectedYear]) {
+                sectionSelect.innerHTML = '<option value="" disabled selected>Select Year First</option>';
+                return;
+            }
+
+            sectionSelect.innerHTML = '<option value="" disabled selected>Select Section</option>';
+            sectionMap[selectedYear].forEach(function (sec) {
+                const option = document.createElement('option');
+                option.value = sec;
+                option.textContent = sec;
+                sectionSelect.appendChild(option);
+            });
+        });
+    });
+</script>
 </body>
 
 </html>

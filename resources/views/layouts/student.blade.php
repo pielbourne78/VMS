@@ -117,8 +117,12 @@
                         REPORT
                     </a>
                 </nav>
-
                 <div class="flex items-center gap-5">
+                    <!-- Student Name -->
+                    <span class="text-white font-bold text-sm tracking-wide uppercase hidden sm:inline">
+                        {{ Auth::user()->name }}
+                    </span>
+
                     <!-- Notification Bell Wrapper -->
                     <div class="relative">
                         <button id="notifBellButton" type="button"

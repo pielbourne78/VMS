@@ -50,21 +50,27 @@ class ViolationController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        $courses = User::query()
-            ->whereNotNull('course')
-            ->where('course', '!=', '')
-            ->distinct()
-            ->orderBy('course')
-            ->pluck('course');
+        $courses = [
+    "BS Business Administration - Human Resources Dev't Mgt.",
+    "BS Business Administration - Marketing Management",
+    "BS Entrepreneurship",
+    "BS Accountancy",
+    "BS Information Technology",
+    "BS Secondary Education - English",
+    "BS Secondary Education - Mathematics",
+    "BS Secondary Education - PE",
+    "BS Elementary Education - SPEd",
+    "Computer Hardware Servicing NCII",
+];
 
-        $sections = User::query()
-            ->whereNotNull('section')
-            ->where('section', '!=', '')
-            ->distinct()
-            ->orderBy('section')
-            ->pluck('section');
+$sections = [
+    '101', '102', '103', '104', '105', '106',
+    '201', '202', '203', '204', '205', '206',
+    '301', '302', '303', '304', '305', '306',
+    '401', '402', '403', '404', '405', '406',
+];
 
-        return view('admin.violations.index', compact('violations', 'courses', 'sections'));
+return view('admin.violations.index', compact('violations', 'courses', 'sections'));
     }
 
     public function history(Request $request, User $user)
