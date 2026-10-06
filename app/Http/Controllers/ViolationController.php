@@ -30,6 +30,10 @@ class ViolationController extends Controller
                 $q->whereHas('student', fn($studentQuery) =>
                     $studentQuery->where('section', $request->string('section')));
             })
+            ->when($request->filled('year_level'), function ($q) use ($request) {
+                $q->whereHas('student', fn($studentQuery) =>
+                    $studentQuery->where('year_level', $request->string('year_level')));
+            })
             ->when($request->filled('date_from'), function ($q) use ($request) {
                 $q->whereDate('occurred_at', '>=', $request->date('date_from'));
             })
@@ -51,26 +55,48 @@ class ViolationController extends Controller
             ->withQueryString();
 
         $courses = [
-    "BS Business Administration - Human Resources Dev't Mgt.",
-    "BS Business Administration - Marketing Management",
-    "BS Entrepreneurship",
-    "BS Accountancy",
-    "BS Information Technology",
-    "BS Secondary Education - English",
-    "BS Secondary Education - Mathematics",
-    "BS Secondary Education - PE",
-    "BS Elementary Education - SPEd",
-    "Computer Hardware Servicing NCII",
-];
+            "BS Business Administration - Human Resources Dev't Mgt.",
+            "BS Business Administration - Marketing Management",
+            "BS Entrepreneurship",
+            "BS Accountancy",
+            "BS Information Technology",
+            "BS Secondary Education - English",
+            "BS Secondary Education - Mathematics",
+            "BS Secondary Education - PE",
+            "BS Elementary Education - SPEd",
+            "Computer Hardware Servicing NCII",
+        ];
 
-$sections = [
-    '101', '102', '103', '104', '105', '106',
-    '201', '202', '203', '204', '205', '206',
-    '301', '302', '303', '304', '305', '306',
-    '401', '402', '403', '404', '405', '406',
-];
+        $sections = [
+            '101',
+            '102',
+            '103',
+            '104',
+            '105',
+            '106',
+            '201',
+            '202',
+            '203',
+            '204',
+            '205',
+            '206',
+            '301',
+            '302',
+            '303',
+            '304',
+            '305',
+            '306',
+            '401',
+            '402',
+            '403',
+            '404',
+            '405',
+            '406',
+        ];
 
-return view('admin.violations.index', compact('violations', 'courses', 'sections'));
+        $yearLevels = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
+
+        return view('admin.violations.index', compact('violations', 'courses', 'sections', 'yearLevels'));
     }
 
     public function history(Request $request, User $user)
@@ -149,15 +175,13 @@ return view('admin.violations.index', compact('violations', 'courses', 'sections
         ]);
 
         Violation::create([
+            'violation_code' => 'V-' . strtoupper(uniqid()),
             'user_id' => $validated['user_id'],
+            'issued_by' => Auth::id(),
             'violation_type' => $validated['violation_type'],
+            'description' => $validated['location'] . ' — ' . $validated['description'],
             'occurred_at' => $validated['occurred_at'],
-            'location' => $validated['location'],
-            'description' => $validated['description'],
-            'reported_by' => Auth::id(),
-            'notification_alert' => $request->boolean('notification_alert'),
-            'student_notification' => $request->boolean('student_notification'),
-            'status' => 'pending', // default status
+            'status' => 'pending',
         ]);
 
         return redirect()

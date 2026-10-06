@@ -140,6 +140,12 @@
                         </div>
                         @endif
                     </div>
+                    <div class="border-t border-gray-100 bg-gray-50 p-2">
+                        <a href="{{ route('admin.notifications.index') }}"
+                            class="block rounded-lg bg-red-600 px-3 py-2 text-center text-xs font-bold uppercase tracking-[0.12em] text-white transition hover:bg-red-700">
+                            View all notifications
+                        </a>
+                    </div>
                 </div>
             </div>
             <!-- Profile Pill -->

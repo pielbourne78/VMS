@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Quiz;
+use App\Models\User;
 use App\Models\Violation;
+use App\Notifications\StudentQuizSubmissionNotification;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -62,6 +64,15 @@ class PenaltyQuizController extends Controller
             'total_questions' => $totalQuestions,
             'passed' => $passed,
         ]);
+
+        User::where('is_admin', true)->get()->each(function ($admin) {
+            $admin->notify(new StudentQuizSubmissionNotification([
+                'title' => 'Quiz submission received',
+                'message' => auth()->user()->full_name . ' submitted a penalty quiz for review.',
+                'url' => route('admin.appeals'),
+                'type' => 'student_quiz_submission',
+            ]));
+        });
 
         $violation->update(['status' => 'consequence_applied']);
 

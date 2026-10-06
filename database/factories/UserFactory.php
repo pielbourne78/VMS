@@ -24,14 +24,23 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $firstNames = ['Ralp', 'Gina', 'Juan', 'Maria', 'Carlo', 'Kyla', 'Kevin', 'Jessa', 'Bryan', 'Chloe'];
+        $lastNames = ['Dominguez', 'Roxas', 'Santos', 'Reyes', 'Garcia', 'Mendoza', 'Ramos', 'Aquino'];
+
+        $fName = fake()->randomElement($firstNames);
+        $lName = fake()->randomElement($lastNames);
+
         return [
-            'name' => fake()->name(),
-            'full_name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
-            'profile_picture' => null,
+            'name' => "$lName, $fName",
+            'full_name' => "$lName, $fName",
+            'student_id' => '2026-' . str_pad(fake()->unique()->numberBetween(1, 999), 5, '0', STR_PAD_LEFT),
+            'course' => fake()->randomElement(['Bachelor of Science in Information Technology', 'Bachelor of Science in Computer Science']),
+            'year_level' => fake()->randomElement(['1st Year', '2nd Year', '3rd Year', '4th Year']),
+            'section' => fake()->randomElement(['101', '201', '301']),
+            'role' => 'student',
+            // Add a unique random suffix so emails never clash
+            'email' => strtolower(Str::slug($fName . '.' . $lName, '.')) . '_' . fake()->unique()->randomNumber(3) . '@grc.edu.ph',
+            'password' => Hash::make('password123'),
         ];
     }
 

@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password;
 
+Route::redirect('/login.html', '/login')->name('legacy.login');
+Route::redirect('/admin/login.html', '/admin/login')->name('legacy.admin.login');
 
 Route::get('/violation-monitoring', [StudentViolationController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -128,6 +130,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Student reasoning appeals review
     Route::get('/appeals', [\App\Http\Controllers\AdminAppealController::class, 'index'])->name('appeals');
     Route::patch('/appeals/{quizAttempt}/review', [\App\Http\Controllers\AdminAppealController::class, 'review'])->name('appeals.review');
+
+    // Admin notifications
+    Route::get('/notifications', [\App\Http\Controllers\AdminNotificationController::class, 'index'])->name('notifications.index');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

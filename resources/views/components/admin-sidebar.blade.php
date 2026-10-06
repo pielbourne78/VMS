@@ -33,6 +33,11 @@
             class="px-6 py-3.5 border-l-4 tracking-wide transition-all duration-200 hover:border-white hover:bg-red-900/30 {{ request()->routeIs('admin.appeals') ? 'bg-red-900/50 border-white' : 'border-transparent' }}">
             Review Appeals
         </a>
+
+        <a href="{{ route('admin.notifications.index') }}"
+            class="px-6 py-3.5 border-l-4 tracking-wide transition-all duration-200 hover:border-white hover:bg-red-900/30 {{ request()->routeIs('admin.notifications.index') ? 'bg-red-900/50 border-white' : 'border-transparent' }}">
+            Notifications
+        </a>
     </nav>
 
     <!-- Collapse Arrow (only visible when sidebar is open) -->

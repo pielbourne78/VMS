@@ -21,6 +21,7 @@ class Violation extends Model
         'resolution_notes',
         'resolved_by',
         'resolved_at',
+        'deleted_at',
     ];
 
     protected function casts(): array
@@ -39,6 +40,11 @@ class Violation extends Model
     public function issuedBy()
     {
         return $this->belongsTo(User::class, 'issued_by');
+    }
+
+    public function resolvedBy()
+    {
+        return $this->belongsTo(User::class, 'resolved_by');
     }
 
     public function quiz()

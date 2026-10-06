@@ -11,18 +11,18 @@
         </div>
     @endif
 
-    <!-- Red Border Box Container -->
-    <div class="bg-blue-50/50 border-4 border-red-700 rounded-sm shadow-md max-w-4xl overflow-hidden">
-        <table class="w-full text-left border-collapse">
-            <thead>
-                <tr class="border-b-2 border-red-700 text-gray-800 bg-blue-100/60">
-                    <th class="py-3 px-6 text-base font-extrabold">Student name</th>
-                    <th class="py-3 px-6 text-base font-extrabold">Violation type</th>
-                    <th class="py-3 px-6 text-base font-extrabold">Status</th>
-                    <th class="py-3 px-6 text-base font-extrabold text-center">Action</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-blue-200">
+    <div class="bg-blue-50/60 border-4 border-red-700 rounded-xl shadow-[0_12px_28px_rgba(191,30,46,0.1)] max-w-5xl overflow-hidden">
+        <div class="max-h-[500px] overflow-y-auto admin-consequences-scroll">
+            <table class="w-full text-left border-collapse min-w-[760px]">
+                <thead class="sticky top-0 z-10">
+                    <tr class="border-b-2 border-red-700 text-gray-800 bg-blue-100/80">
+                        <th class="py-3 px-6 text-base font-extrabold">Student name</th>
+                        <th class="py-3 px-6 text-base font-extrabold">Violation type</th>
+                        <th class="py-3 px-6 text-base font-extrabold">Status</th>
+                        <th class="py-3 px-6 text-base font-extrabold text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-blue-200">
                 @forelse($violations as $violation)
                     <tr class="hover:bg-blue-100/40">
                         <td class="py-3 px-6 font-bold text-gray-800 text-sm">
@@ -53,6 +53,27 @@
                     </tr>
                 @endforelse
             </tbody>
-        </table>
+            </table>
+        </div>
     </div>
+
+    <style>
+        .admin-consequences-scroll::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .admin-consequences-scroll::-webkit-scrollbar-track {
+            background: #eef2ff;
+        }
+
+        .admin-consequences-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+            border: 2px solid #eef2ff;
+        }
+
+        .admin-consequences-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 @endsection
