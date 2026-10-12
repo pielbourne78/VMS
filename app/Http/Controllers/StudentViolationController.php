@@ -7,24 +7,30 @@ use Illuminate\Http\Request;
 class StudentViolationController extends Controller
 {
     public function index(Request $request)
-    {
-        $student = auth()->user();
+{
+    $student = auth()->user();
 
-        if (!$student) {
-            abort(401);
-        }
-
-        $violations = $student->violations()
-            ->orderByDesc('occurred_at')
-            ->get();
-
-        $activeCases = $violations->where('status', 'pending');
-        $resolvedCases = $violations->where('status', 'resolved');
-        $pendingCases = $violations->where('status', 'pending');
-        $totalViolations = $violations;
-
-        return view('violations.index', compact('activeCases', 'resolvedCases', 'pendingCases', 'totalViolations'));
+    if (!$student) {
+        abort(401);
     }
+
+    $violations = $student->violations()
+        ->orderByDesc('occurred_at')
+        ->get();
+
+    // Correct filtering based on your actual status values
+    $activeCases = $violations->whereNotIn('status', ['consequence_applied', 'resolved']); // still open / not yet approved
+    $pendingCases = $violations->where('status', 'consequence_applied'); // awaiting quiz or under review
+    $resolvedCases = $violations->where('status', 'resolved');
+    $totalViolations = $violations;
+
+    return view('violations.index', compact(
+        'activeCases',
+        'resolvedCases',
+        'pendingCases',
+        'totalViolations'
+    ));
+}
 
     public function report()
     {
@@ -42,20 +48,19 @@ class StudentViolationController extends Controller
 
                 $violation->status_label = match ($status) {
                     'resolved' => 'Resolved Case',
-                    'pending' => 'Pending',
-                    'consequence_applied' => 'Active Case',
+                    'pending' => 'Active Case',
+                    'consequence_applied' => 'Pending',
                     'dismissed' => 'Dismissed',
                     default => 'Active Case',
                 };
 
                 $violation->status_color = match ($status) {
                     'resolved' => 'green',
-                    'pending' => 'yellow',
-                    'consequence_applied' => 'red',
+                    'pending' => 'red',
+                    'consequence_applied' => 'yellow',
                     'dismissed' => 'gray',
                     default => 'red',
                 };
-
                 return $violation;
             });
 

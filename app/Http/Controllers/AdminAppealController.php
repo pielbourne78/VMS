@@ -35,7 +35,7 @@ class AdminAppealController extends Controller
 
         $violation = $quizAttempt->quiz->violation;
         $violation->update([
-            'status' => $approved ? 'resolved' : 'consequence_applied',
+            'status' => $approved ? 'resolved' : 'pending',
         ]);
 
         if ($quizAttempt->user) {

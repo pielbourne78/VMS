@@ -9,96 +9,126 @@ use Illuminate\Support\Facades\Auth;
 
 class ViolationController extends Controller
 {
-    public function index(Request $request)
-    {
-        $query = Violation::query()
-            ->with(['student', 'issuedBy'])
-            ->when($request->filled('search'), function ($q) use ($request) {
-                $term = $request->string('search');
-                $q->whereHas('student', fn($s) =>
-                    $s->where('name', 'like', "%{$term}%")
-                        ->orWhere('full_name', 'like', "%{$term}%")
-                        ->orWhere('student_id', 'like', "%{$term}%"));
-            })
-            ->when($request->filled('status'), fn($q) =>
-                $q->where('status', $request->string('status')))
-            ->when($request->filled('course'), function ($q) use ($request) {
-                $q->whereHas('student', fn($studentQuery) =>
-                    $studentQuery->where('course', $request->string('course')));
-            })
-            ->when($request->filled('section'), function ($q) use ($request) {
-                $q->whereHas('student', fn($studentQuery) =>
-                    $studentQuery->where('section', $request->string('section')));
-            })
-            ->when($request->filled('year_level'), function ($q) use ($request) {
-                $q->whereHas('student', fn($studentQuery) =>
-                    $studentQuery->where('year_level', $request->string('year_level')));
-            })
-            ->when($request->filled('date_from'), function ($q) use ($request) {
-                $q->whereDate('occurred_at', '>=', $request->date('date_from'));
-            })
-            ->when($request->filled('date_to'), function ($q) use ($request) {
-                $q->whereDate('occurred_at', '<=', $request->date('date_to'));
-            });
+  public function index(Request $request)
+{
+    // Check if we are in "All" mode (no specific filters)
+    $isAllMode = !$request->filled('status')
+        && !$request->filled('course')
+        && !$request->filled('section')
+        && !$request->filled('year_level')
+        && !$request->filled('date_from')
+        && !$request->filled('date_to')
+        && !$request->filled('search');
 
-        $sortBy = in_array($request->input('sort_by'), ['violation_type', 'status', 'occurred_at', 'violation_code'], true)
-            ? $request->input('sort_by')
-            : 'occurred_at';
-
-        $sortDir = in_array(strtolower((string) $request->input('sort_dir', 'desc')), ['asc', 'desc'], true)
-            ? strtolower((string) $request->input('sort_dir', 'desc'))
-            : 'desc';
-
-        $violations = $query
-            ->orderBy($sortBy, $sortDir)
+    if ($isAllMode) {
+        // ===== SHOW ONE ROW PER STUDENT =====
+        $students = \App\Models\User::query()
+            ->whereHas('violations')
+            ->withCount('violations')
+            ->with(['violations' => function ($q) {
+                $q->latest('occurred_at');
+            }])
+            ->orderBy('full_name')
             ->paginate(15)
             ->withQueryString();
 
-        $courses = [
-            "BS Business Administration - Human Resources Dev't Mgt.",
-            "BS Business Administration - Marketing Management",
-            "BS Entrepreneurship",
-            "BS Accountancy",
-            "BS Information Technology",
-            "BS Secondary Education - English",
-            "BS Secondary Education - Mathematics",
-            "BS Secondary Education - PE",
-            "BS Elementary Education - SPEd",
-            "Computer Hardware Servicing NCII",
-        ];
-
-        $sections = [
-            '101',
-            '102',
-            '103',
-            '104',
-            '105',
-            '106',
-            '201',
-            '202',
-            '203',
-            '204',
-            '205',
-            '206',
-            '301',
-            '302',
-            '303',
-            '304',
-            '305',
-            '306',
-            '401',
-            '402',
-            '403',
-            '404',
-            '405',
-            '406',
-        ];
-
+        $courses = $this->getCourses();
+        $sections = $this->getSections();
         $yearLevels = ['1st Year', '2nd Year', '3rd Year', '4th Year'];
 
-        return view('admin.violations.index', compact('violations', 'courses', 'sections', 'yearLevels'));
+        return view('admin.violations.index', [
+            'mode' => 'students',
+            'students' => $students,
+            'violations' => collect(), // empty
+            'courses' => $courses,
+            'sections' => $sections,
+            'yearLevels' => $yearLevels,
+        ]);
     }
 
+    // ===== NORMAL MODE (individual violations) =====
+    $query = Violation::query()
+        ->with(['student', 'issuedBy'])
+        ->when($request->filled('search'), function ($q) use ($request) {
+            $term = $request->string('search');
+            $q->whereHas('student', fn($s) =>
+                $s->where('name', 'like', "%{$term}%")
+                    ->orWhere('full_name', 'like', "%{$term}%")
+                    ->orWhere('student_id', 'like', "%{$term}%"));
+        })
+        ->when($request->filled('status'), function ($q) use ($request) {
+            $status = (string) $request->string('status');
+            $statusMap = [
+                'pending'   => 'consequence_applied',
+                'resolved'  => 'resolved',
+                'active'    => 'pending',
+                'dismissed' => 'dismissed',
+            ];
+            $dbStatus = $statusMap[$status] ?? $status;
+            $q->where('status', $dbStatus);
+        })
+        ->when($request->filled('course'), function ($q) use ($request) {
+            $q->whereHas('student', fn($s) => $s->where('course', $request->string('course')));
+        })
+        ->when($request->filled('section'), function ($q) use ($request) {
+            $q->whereHas('student', fn($s) => $s->where('section', $request->string('section')));
+        })
+        ->when($request->filled('year_level'), function ($q) use ($request) {
+            $q->whereHas('student', fn($s) => $s->where('year_level', $request->string('year_level')));
+        })
+        ->when($request->filled('date_from'), function ($q) use ($request) {
+            $q->whereDate('occurred_at', '>=', $request->date('date_from'));
+        })
+        ->when($request->filled('date_to'), function ($q) use ($request) {
+            $q->whereDate('occurred_at', '<=', $request->date('date_to'));
+        });
+
+    $sortBy = in_array($request->input('sort_by'), ['violation_type', 'status', 'occurred_at', 'violation_code'], true)
+        ? $request->input('sort_by')
+        : 'occurred_at';
+
+    $sortDir = in_array(strtolower((string) $request->input('sort_dir', 'desc')), ['asc', 'desc'], true)
+        ? strtolower((string) $request->input('sort_dir', 'desc'))
+        : 'desc';
+
+    $violations = $query->orderBy($sortBy, $sortDir)->paginate(15)->withQueryString();
+
+    return view('admin.violations.index', [
+        'mode' => 'violations',
+        'violations' => $violations,
+        'students' => collect(),
+        'courses' => $this->getCourses(),
+        'sections' => $this->getSections(),
+        'yearLevels' => ['1st Year', '2nd Year', '3rd Year', '4th Year'],
+    ]);
+}
+
+// Helper methods (add these inside the controller class)
+private function getCourses()
+{
+    return [
+        "BS Business Administration - Human Resources Dev't Mgt.",
+        "BS Business Administration - Marketing Management",
+        "BS Entrepreneurship",
+        "BS Accountancy",
+        "BS Information Technology",
+        "BS Secondary Education - English",
+        "BS Secondary Education - Mathematics",
+        "BS Secondary Education - PE",
+        "BS Elementary Education - SPEd",
+        "Computer Hardware Servicing NCII",
+    ];
+}
+
+private function getSections()
+{
+    return [
+        '101','102','103','104','105','106',
+        '201','202','203','204','205','206',
+        '301','302','303','304','305','306',
+        '401','402','403','404','405','406',
+    ];
+}
     public function history(Request $request, User $user)
     {
         $violations = $user->violations()

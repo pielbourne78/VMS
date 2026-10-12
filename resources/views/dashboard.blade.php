@@ -21,21 +21,22 @@
                         </svg>
                     </div>
 
-                    <div class="flex justify-center">
-                        @if($violation->status === 'pending')
-                            <button class="bg-red-600 text-white text-sm px-6 py-2 rounded-full font-bold shadow hover:bg-red-700 transition">
-                                PENDING
-                            </button>
-                        @elseif($violation->status === 'consequence_applied')
-                            <a href="{{ route('student.penalty.quiz', $violation) }}" class="bg-orange-500 text-white text-sm px-6 py-2 rounded-full font-bold shadow hover:bg-orange-600 transition inline-block">
-                                ACTIVE CASE
-                            </a>
-                        @else
-                            <button class="bg-green-600 text-white text-sm px-6 py-2 rounded-full font-bold shadow hover:bg-green-700 transition">
-                                RESOLVED
-                            </button>
-                        @endif
-                    </div>
+             <div class="flex justify-center">
+    @if($violation->status === 'consequence_applied')
+        <a href="{{ route('student.penalty.quiz', $violation) }}"
+           class="bg-red-600 text-white text-sm px-6 py-2 rounded-full font-bold shadow hover:bg-red-700 transition inline-block">
+            PENDING
+        </a>
+    @elseif($violation->status === 'resolved')
+        <button class="bg-green-600 text-white text-sm px-6 py-2 rounded-full font-bold shadow cursor-default">
+            RESOLVED
+        </button>
+    @else
+        <button class="bg-orange-500 text-white text-sm px-6 py-2 rounded-full font-bold shadow cursor-default">
+            ACTIVE CASE
+        </button>
+    @endif
+</div>
                 </div>
             @endforeach
         </section>

@@ -32,7 +32,7 @@ class ConsequenceController extends Controller
         if ($violation->student) {
             $violation->student->notify(new ViolationStatusUpdated([
                 'title' => 'Consequence Applied',
-                'message' => 'Your case for ' . $violation->violation_type . ' is now active. Please complete the penalty quiz.',
+                'message' => 'A consequence was applied to your case for ' . $violation->violation_type . '. Your case is now pending. Please complete the penalty quiz.',
                 'url' => route('student.penalty.quiz', $violation),
                 'type' => 'consequence_applied',
             ]));

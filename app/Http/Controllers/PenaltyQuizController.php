@@ -13,23 +13,24 @@ use Illuminate\View\View;
 class PenaltyQuizController extends Controller
 {
     public function show(Violation $violation): View|RedirectResponse
-    {
-        if (!auth()->check()) {
-            return redirect()->route('login');
-        }
-
-        if (auth()->id() !== $violation->user_id) {
-            abort(403);
-        }
-
-        if (!in_array($violation->status, ['consequence_applied'], true)) {
-            return redirect()->route('dashboard')->with('error', 'This violation is not currently awaiting a penalty quiz.');
-        }
-
-        $quiz = Quiz::ensureForViolation($violation);
-
-        return view('student.penalty-quiz', compact('violation', 'quiz'));
+{
+    if (!auth()->check()) {
+        return redirect()->route('login');
     }
+
+    if (auth()->id() !== $violation->user_id) {
+        abort(403);
+    }
+
+    // Allow both statuses that should show the quiz
+    if (!in_array($violation->status, ['pending', 'consequence_applied'], true)) {
+        return redirect()->route('dashboard')->with('error', 'This violation is not currently awaiting a penalty quiz.');
+    }
+
+    $quiz = Quiz::ensureForViolation($violation);
+
+    return view('student.penalty-quiz', compact('violation', 'quiz'));
+}
 
     public function submit(Request $request, Violation $violation): RedirectResponse
     {

@@ -227,7 +227,16 @@
                     </div>
                 </div>
             </header>
-
+            @if(session('error'))
+                <div class="mx-8 mt-4 rounded-lg bg-red-100 border border-red-300 text-red-800 px-4 py-3 text-sm font-semibold">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if(session('success'))
+                <div class="mx-8 mt-4 rounded-lg bg-green-100 border border-green-300 text-green-800 px-4 py-3 text-sm font-semibold">
+                    {{ session('success') }}
+                </div>
+            @endif
             <!-- Page-specific content -->
             @yield('content')
 

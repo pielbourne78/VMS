@@ -113,38 +113,71 @@
     </form>
 
     <div class="bg-white border border-gray-200 rounded-2xl shadow-[0_12px_30px_rgba(0,0,0,0.08)] overflow-hidden w-full max-w-[1500px] mx-auto">
-        <div class="max-h-[620px] overflow-y-auto overflow-x-hidden admin-scrollable-table">
-            <table class="w-full text-left text-sm min-w-[980px]">
-                <thead class="grc-red text-white uppercase text-xs font-bold sticky top-0 z-10">
-                    <tr>
+    <div class="max-h-[620px] overflow-y-auto overflow-x-hidden admin-scrollable-table">
+        <table class="w-full text-left text-sm min-w-[980px]">
+            <thead class="grc-red text-white uppercase text-xs font-bold sticky top-0 z-10">
+                <tr>
+                    @if(($mode ?? 'violations') === 'students')
+                        <th class="px-4 py-3">Student ID</th>
+                        <th class="px-4 py-3">Student Name</th>
+                        <th class="px-4 py-3">Course</th>
+                        <th class="px-4 py-3">Total Violations</th>
+                        <th class="px-4 py-3 text-right">Action</th>
+                    @else
                         <th class="px-4 py-3">ID</th>
                         <th class="px-4 py-3">Student Name</th>
                         <th class="px-4 py-3">Violation Type</th>
                         <th class="px-4 py-3">Date & Time</th>
                         <th class="px-4 py-3">Status</th>
                         <th class="px-4 py-3 text-right">Action</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-100">
+                    @endif
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                @if(($mode ?? 'violations') === 'students')
+                    {{-- ONE ROW PER STUDENT --}}
+                    @forelse ($students as $student)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-3 font-bold text-red-700">{{ $student->student_id ?? 'N/A' }}</td>
+                            <td class="px-4 py-3 font-semibold">{{ $student->full_name ?? $student->name }}</td>
+                            <td class="px-4 py-3">{{ $student->course ?? 'N/A' }}</td>
+                            <td class="px-4 py-3 font-bold">{{ $student->violations_count }}</td>
+                            <td class="px-4 py-3 text-right">
+                                <a href="{{ route('admin.violations.history', $student->id) }}"
+                                   class="text-xs bg-gray-200 px-3 py-1.5 rounded-full font-bold hover:bg-gray-300">
+                                    View History
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-4 py-6 text-center text-gray-400">No students with violations found.</td>
+                        </tr>
+                    @endforelse
+                @else
+                    {{-- NORMAL: ONE ROW PER VIOLATION --}}
                     @forelse ($violations as $violation)
                         <tr class="hover:bg-gray-50">
                             <td class="px-4 py-3 font-bold text-red-700">{{ $violation->violation_code }}</td>
                             <td class="px-4 py-3 font-semibold">
-                                {{ $violation->student->full_name ?? $violation->student->name }}</td>
+                                {{ $violation->student->full_name ?? $violation->student->name ?? 'N/A' }}
+                            </td>
                             <td class="px-4 py-3">{{ $violation->violation_type }}</td>
-                            <td class="px-4 py-3 font-bold">{{ $violation->occurred_at?->format('M d, Y h:i A') ?? 'N/A' }}
+                            <td class="px-4 py-3 font-bold">
+                                {{ $violation->occurred_at?->format('M d, Y h:i A') ?? 'N/A' }}
                             </td>
                             <td class="px-4 py-3">
-                                <span
-                                    class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide {{ $violation->status === 'resolved' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
-                                    {{ ucfirst($violation->status) }}
+                                <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wide
+                                    {{ $violation->status === 'resolved' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
+                                    {{ $violation->status === 'consequence_applied' ? 'Pending' : ucfirst($violation->status) }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 text-right">
                                 @if ($violation->student)
                                     <a href="{{ route('admin.violations.history', $violation->student->id) }}"
-                                        class="text-xs bg-gray-200 px-3 py-1.5 rounded-full font-bold hover:bg-gray-300">View
-                                        History</a>
+                                       class="text-xs bg-gray-200 px-3 py-1.5 rounded-full font-bold hover:bg-gray-300">
+                                        View History
+                                    </a>
                                 @else
                                     <span class="text-xs text-gray-400 font-bold">No Student</span>
                                 @endif
@@ -155,14 +188,20 @@
                             <td colspan="6" class="px-4 py-6 text-center text-gray-400">No violations recorded.</td>
                         </tr>
                     @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="mt-4 flex justify-end">
-        {{ $violations->links() }}
+                @endif
+            </tbody>
+        </table>
     </div>
 
+    {{-- Pagination --}}
+<div class="px-4 py-3 border-t">
+    @if(($mode ?? '') === 'students')
+        {{ $students->links() }}
+    @else
+        {{ $violations->links() }}
+    @endif
+</div>
+</div>
     <style>
         .admin-scrollable-table::-webkit-scrollbar {
             width: 10px;
