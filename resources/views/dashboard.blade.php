@@ -7,38 +7,46 @@
 
     @if(isset($violations) && count($violations) > 0)
         <section class="col-span-7 space-y-4">
-            @foreach($violations as $index => $violation)
-                <div class="grid grid-cols-5 items-center bg-white border-t-4 border-b-4 border-grc-red rounded-lg px-5 py-4 text-center font-bold shadow-md hover:shadow-lg transition-shadow">
-                    <div class="col-span-3 text-left text-grc-red text-lg font-black pl-2 uppercase tracking-wide">
-                        {{ $violation->violation_type }}
-                    </div>
-
-                    <div class="flex flex-col items-center justify-center gap-1">
-                        <svg class="h-9 w-9 text-yellow-400 drop-shadow" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </div>
-
-             <div class="flex justify-center">
-    @if($violation->status === 'consequence_applied')
-        <a href="{{ route('student.penalty.quiz', $violation) }}"
-           class="bg-red-600 text-white text-sm px-6 py-2 rounded-full font-bold shadow hover:bg-red-700 transition inline-block">
-            PENDING
-        </a>
-    @elseif($violation->status === 'resolved')
-        <button class="bg-green-600 text-white text-sm px-6 py-2 rounded-full font-bold shadow cursor-default">
-            RESOLVED
-        </button>
-    @else
-        <button class="bg-orange-500 text-white text-sm px-6 py-2 rounded-full font-bold shadow cursor-default">
-            ACTIVE CASE
-        </button>
-    @endif
-</div>
-                </div>
-            @endforeach
+           @foreach($violations as $index => $violation)
+    @php
+        $isMajor = $violation->offense_category === 'major';
+        $bar = $isMajor ? 'border-red-600'
+            : match ($violation->status) {
+                'pending' => 'border-orange-500',
+                'consequence_applied' => 'border-blue-500',
+                default => 'border-green-500',
+            };
+    @endphp
+    <div class="grid grid-cols-5 items-center bg-white border-l-8 {{ $bar }} border-y border-r border-gray-200 rounded-lg px-5 py-4 shadow-md">
+        <div class="col-span-3 text-left">
+            <p class="text-grc-red text-lg font-black uppercase tracking-wide">{{ $violation->violation_type }}</p>
+            @if($violation->offense_code)
+                <p class="text-xs font-bold text-gray-600">
+                    {{ $violation->offense_code }} · {{ $isMajor ? 'Major' : 'Minor' }} ·
+                    {{ $violation->offense_ordinal }} offense
+                </p>
+                <p class="text-xs text-gray-500">
+                    Sanction: {{ $violation->sanction_label }}
+                    @if($violation->beyond_path) <span class="text-red-600 font-bold">(beyond sanction path)</span> @endif
+                </p>
+            @endif
+        </div>
+        <div class="flex justify-center">
+            <svg class="h-9 w-9 {{ $isMajor ? 'text-red-600' : 'text-yellow-400' }}" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+        </div>
+        <div class="flex justify-center">
+            @if($violation->status === 'pending')
+                <button class="bg-orange-500 text-white text-sm px-6 py-2 rounded-full font-bold shadow cursor-default">ACTIVE CASE</button>
+            @elseif($violation->status === 'consequence_applied')
+                <a href="{{ route('student.penalty.quiz', $violation) }}" class="bg-blue-600 text-white text-sm px-6 py-2 rounded-full font-bold shadow hover:bg-blue-700 transition inline-block">PENDING</a>
+            @else
+                <button class="bg-green-600 text-white text-sm px-6 py-2 rounded-full font-bold shadow">RESOLVED</button>
+            @endif
+        </div>
+    </div>
+@endforeach
         </section>
 
         <section class="col-span-5 space-y-6">

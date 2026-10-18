@@ -52,6 +52,7 @@
                     the name of the erring student from the roll of students. The subsequent transfer
                     credentials shall be issued immediately.
                 </p>
+                
                 <p>
                     <strong>F. Expulsion</strong> – a penalty wherein the institution declares an erring student
                     disqualified for admission to any public or private higher education institution in the

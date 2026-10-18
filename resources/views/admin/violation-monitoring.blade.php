@@ -43,16 +43,29 @@
                     </div>
 
                     {{-- Violation Type --}}
-                    <div>
-                        <label class="mb-1 block text-sm font-medium text-gray-700">Violation Type</label>
-                        <select name="violation_type" required
-                            class="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2.5 text-sm focus:border-red-500 focus:ring-red-500">
-                            <option value="">Select violation type</option>
-                            @foreach ($violationTypes as $type)
-                                <option value="{{ $type }}" @selected(old('violation_type') === $type)>{{ $type }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    {{-- Offense --}}
+<div>
+    <label class="mb-1 block text-sm font-medium text-gray-700">Violation (Code of Discipline)</label>
+    <select name="offense_code" id="offense-select" required
+        class="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2.5 text-sm focus:border-red-500 focus:ring-red-500">
+        <option value="">Select violation</option>
+        <optgroup label="Minor Offenses">
+            @foreach ($offenses as $code => $o)
+                @if ($o[0] === 'minor')
+                    <option value="{{ $code }}" @selected(old('offense_code') === $code)>{{ $code }} - {{ $o[1] }}</option>
+                @endif
+            @endforeach
+        </optgroup>
+        <optgroup label="Major Offenses">
+            @foreach ($offenses as $code => $o)
+                @if ($o[0] === 'major')
+                    <option value="{{ $code }}" @selected(old('offense_code') === $code)>{{ $code }} - {{ $o[1] }}</option>
+                @endif
+            @endforeach
+        </optgroup>
+    </select>
+    <p id="sanction-preview" class="mt-2 text-xs font-semibold text-red-700"></p>
+</div>
 
                     {{-- Date and Time --}}
                     <div>
@@ -131,10 +144,37 @@
 @endsection
 
 @push('scripts')
-    <script>
-        document.getElementById('student-select')?.addEventListener('change', function () {
-            const option = this.options[this.selectedIndex];
-            this.options[0].textContent = option.dataset.studentId || 'STUDENT ID';
-        });
-    </script>
+   <script>
+    const counts = @json($counts);
+    const offenses = @json($offenses);
+    const minorPath = @json(config('offenses.minor_path'));
+    const types = @json(config('offenses.sanction_types'));
+
+    const studentSel = document.getElementById('student-select');
+    const offenseSel = document.getElementById('offense-select');
+    const preview = document.getElementById('sanction-preview');
+
+    studentSel?.addEventListener('change', function () {
+        const option = this.options[this.selectedIndex];
+        this.options[0].textContent = option.dataset.studentId || 'STUDENT ID';
+        updatePreview();
+    });
+    offenseSel?.addEventListener('change', updatePreview);
+
+    function updatePreview() {
+        const code = offenseSel.value, uid = studentSel.value;
+        if (!code || !uid) { preview.textContent = ''; return; }
+        const n = ((counts[uid] || {})[code] || 0) + 1;
+        const [cat, , path] = offenses[code];
+        let label;
+        if (cat === 'minor') {
+            label = minorPath[Math.min(n, minorPath.length) - 1];
+        } else {
+            const l = path[Math.min(n, path.length) - 1];
+            label = l + ' - ' + types[l];
+        }
+        const max = cat === 'minor' ? minorPath.length : path.length;
+        preview.textContent = 'Offense #' + n + ' (' + cat.toUpperCase() + ') - Sanction: ' + label + (n > max ? ' (beyond sanction path, review needed)' : '');
+    }
+</script>
 @endpush

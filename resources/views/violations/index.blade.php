@@ -5,7 +5,6 @@
 @section('content')
     <main class="flex-1 grc-red p-8 flex flex-col overflow-y-auto">
 
-        <!-- Tabs Navigation -->
         <div class="flex justify-center gap-12 text-white font-bold text-base mb-8">
             <div class="cursor-pointer pb-1 transition-all border-b-2 border-transparent" id="tab-0" onclick="switchTab(0)">ACTIVE CASE ({{ $activeCases->count() }})</div>
             <div class="cursor-pointer pb-1 transition-all border-b-2 border-transparent" id="tab-1" onclick="switchTab(1)">RESOLVED CASE ({{ $resolvedCases->count() }})</div>
@@ -13,91 +12,56 @@
             <div class="cursor-pointer pb-1 transition-all border-b-2 border-transparent" id="tab-3" onclick="switchTab(3)">PENDING ({{ $pendingCases->count() }})</div>
         </div>
 
-        <!-- White Card Container -->
-        <div class="bg-white rounded-3xl p-8 max-w-4xl w-full mx-auto shadow-2xl min-h-[350px]">
+        <div class="bg-white rounded-3xl p-8 max-w-5xl w-full mx-auto shadow-2xl min-h-[350px]">
 
-            <!-- TAB 0: ACTIVE CASE -->
-            <div class="tab-content" id="content-0">
-                <div class="grid grid-cols-3 font-bold text-grc-red text-base border-b-2 border-gray-200 pb-4 mb-6">
-                    <div>CODE | VIOLATION:</div>
-                    <div>DESCRIPTION</div>
-                    <div>DUE DATE / OCCURRED:</div>
-                </div>
-                @forelse($activeCases as $violation)
-                    <div class="grid grid-cols-3 py-3 border-b border-gray-100 text-sm font-medium">
-                        <div class="font-bold text-red-700">{{ $violation->violation_code }} - {{ $violation->violation_type }}</div>
-                        <div>{{ $violation->description ?? 'N/A' }}</div>
-                        <div>{{ $violation->occurred_at->format('M d, Y') }}</div>
-                    </div>
-                @empty
-                    <div class="text-center text-gray-400 italic py-16 text-sm">
-                        No active case records found.
-                    </div>
-                @endforelse
-            </div>
+            @php
+                $tabs = [
+                    0 => ['list' => $activeCases,   'empty' => 'No active case records found.'],
+                    1 => ['list' => $resolvedCases, 'empty' => 'No resolved case records found.'],
+                    2 => ['list' => $totalViolations, 'empty' => 'No total violation records found.'],
+                    3 => ['list' => $pendingCases,  'empty' => 'No pending records found.'],
+                ];
+            @endphp
 
-            <!-- TAB 1: RESOLVED CASE -->
-            <div class="tab-content hidden" id="content-1">
-                <div class="grid grid-cols-3 font-bold text-grc-red text-base border-b-2 border-gray-200 pb-4 mb-6">
-                    <div>CODE | VIOLATION:</div>
-                    <div>RESOLUTION NOTES:</div>
-                    <div>DONE:</div>
-                </div>
-                @forelse($resolvedCases as $violation)
-                    <div class="grid grid-cols-3 py-3 border-b border-gray-100 text-sm font-medium">
-                        <div class="font-bold text-red-700">{{ $violation->violation_code }} - {{ $violation->violation_type }}</div>
-                        <div>{{ $violation->resolution_notes ?? 'Resolved' }}</div>
-                        <div>{{ $violation->resolved_at ? $violation->resolved_at->format('M d, Y') : 'N/A' }}</div>
+            @foreach($tabs as $i => $tab)
+                <div class="tab-content {{ $i === 0 ? '' : 'hidden' }}" id="content-{{ $i }}">
+                    <div class="grid grid-cols-12 gap-4 font-bold text-grc-red text-sm border-b-2 border-gray-200 pb-4 mb-4">
+                        <div class="col-span-4">CODE | VIOLATION</div>
+                        <div class="col-span-3">DETAILS</div>
+                        <div class="col-span-3">SANCTION</div>
+                        <div class="col-span-2 text-right">STATUS</div>
                     </div>
-                @empty
-                    <div class="text-center text-gray-400 italic py-16 text-sm">
-                        No resolved case records found.
-                    </div>
-                @endforelse
-            </div>
 
-            <!-- TAB 2: TOTAL VIOLATION -->
-            <div class="tab-content hidden" id="content-2">
-                <div class="grid grid-cols-3 font-bold text-grc-red text-base border-b-2 border-gray-200 pb-4 mb-6">
-                    <div>CODE | VIOLATION:</div>
-                    <div>STATUS</div>
-                    <div>DATE</div>
+                    @forelse($tab['list'] as $violation)
+                        <div class="grid grid-cols-12 gap-4 py-3 border-b border-gray-100 text-sm items-start">
+                            <div class="col-span-4">@include('violations.partials.code-cell', ['violation' => $violation])</div>
+                            <div class="col-span-3 text-gray-700">
+                                {{ $violation->description ?? 'N/A' }}
+                                <p class="text-[11px] text-gray-400 mt-0.5">{{ $violation->occurred_at->format('M d, Y') }}</p>
+                            </div>
+                            <div class="col-span-3 text-gray-700">
+                                @if($violation->sanction_label)
+                                    <span class="font-semibold">{{ $violation->sanction_label }}</span>
+                                    @if($violation->beyond_path)
+                                        <p class="text-[11px] text-red-600 font-bold">Beyond sanction path</p>
+                                    @endif
+                                @else
+                                    <span class="text-gray-400">—</span>
+                                @endif
+                            </div>
+                            <div class="col-span-2 text-right">
+                                <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold uppercase {{ $violation->display_status_class }}">
+                                    {{ $violation->display_status }}
+                                </span>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="text-center text-gray-400 italic py-16 text-sm">{{ $tab['empty'] }}</div>
+                    @endforelse
                 </div>
-                @forelse($totalViolations as $violation)
-                    <div class="grid grid-cols-3 py-3 border-b border-gray-100 text-sm font-medium">
-                        <div class="font-bold text-red-700">{{ $violation->violation_code }} - {{ $violation->violation_type }}</div>
-                        <div class="uppercase text-xs font-bold px-2 py-1 rounded w-fit bg-gray-100">{{ $violation->status }}</div>
-                        <div>{{ $violation->occurred_at->format('M d, Y') }}</div>
-                    </div>
-                @empty
-                    <div class="text-center text-gray-400 italic py-16 text-sm">
-                        No total violation records found.
-                    </div>
-                @endforelse
-            </div>
-
-            <!-- TAB 3: PENDING -->
-            <div class="tab-content hidden" id="content-3">
-                <div class="grid grid-cols-3 font-bold text-grc-red text-base border-b-2 border-gray-200 pb-4 mb-6">
-                    <div>CODE | VIOLATION:</div>
-                    <div>DETAILS</div>
-                    <div>STATUS</div>
-                </div>
-                @forelse($pendingCases as $violation)
-                    <div class="grid grid-cols-3 py-3 border-b border-gray-100 text-sm font-medium">
-                        <div class="font-bold text-red-700">{{ $violation->violation_code }} - {{ $violation->violation_type }}</div>
-                        <div>{{ $violation->description ?? 'N/A' }}</div>
-                        <div class="text-yellow-600 font-bold uppercase text-xs">{{ $violation->status }}</div>
-                    </div>
-                @empty
-                    <div class="text-center text-gray-400 italic py-16 text-sm">
-                        No pending records found.
-                    </div>
-                @endforelse
-            </div>
+            @endforeach
 
         </div>
-
     </main>
 @endsection
 
