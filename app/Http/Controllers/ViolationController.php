@@ -9,6 +9,20 @@ use Illuminate\Support\Facades\Auth;
 
 class ViolationController extends Controller
 {
+    public function getOffenseOrdinalAttribute(): ?string
+{
+    $n = $this->offense_number;
+
+    if (!$n) {
+        return null;
+    }
+
+    if (in_array($n % 100, [11, 12, 13], true)) {
+        return $n . 'th';
+    }
+
+    return $n . (['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][$n % 10]);
+}
   public function index(Request $request)
 {
     // Check if we are in "All" mode (no specific filters)
