@@ -123,7 +123,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Record Violation
     Route::get('/violation-monitoring', [RecordViolationController::class, 'create'])->name('violation.monitoring');
     Route::post('/record-violations', [RecordViolationController::class, 'store'])->name('violations.record.store');
-
+    Route::post('/offenses', [\App\Http\Controllers\OffenseController::class, 'store'])->name('offenses.store');
     // Violation Monitoring Overview (Recent Violations list)
     Route::get('/violations/recent', [ViolationController::class, 'recentViolations'])->name('violations.recent');
 

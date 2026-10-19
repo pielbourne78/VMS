@@ -98,16 +98,24 @@ class Violation extends Model
     }
     public static function sanctionFor(string $code, int $number): array
 {
-    [$category, , $path] = array_pad(config("offenses.offenses.$code"), 3, null);
+    $offense = \App\Models\Offense::where('code', $code)->firstOrFail();
 
-    if ($category === 'minor') {
+    if ($offense->category === 'minor') {
         $steps = config('offenses.minor_path');
-        $beyond = $number > count($steps);
-        return ['letter' => null, 'label' => $steps[min($number, count($steps)) - 1], 'beyond' => $beyond];
+        return [
+            'letter' => null,
+            'label' => $steps[min($number, count($steps)) - 1],
+            'beyond' => $number > count($steps),
+        ];
     }
 
-    $beyond = $number > count($path);
+    $path = $offense->sanction_path;
     $letter = $path[min($number, count($path)) - 1];
-    return ['letter' => $letter, 'label' => $letter . ' - ' . config("offenses.sanction_types.$letter"), 'beyond' => $beyond];
+
+    return [
+        'letter' => $letter,
+        'label' => $letter . ' - ' . config("offenses.sanction_types.$letter"),
+        'beyond' => $number > count($path),
+    ];
 }
 }

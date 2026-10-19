@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Offense;
+use Illuminate\Validation\Rule;
 use App\Models\User;
 use App\Models\Violation;
 use App\Notifications\ViolationStatusUpdated;
@@ -14,7 +15,9 @@ class RecordViolationController extends Controller
 {
     $students = User::where('role', 'student')->orderBy('student_id')->get();
 
-    $offenses = config('offenses.offenses');
+    $offenses = Offense::where('is_active', true)->orderBy('id')->get()
+    ->mapWithKeys(fn ($o) => [$o->code => [$o->category, $o->title, $o->sanction_path]])
+    ->all();
 
     // counts[user_id][offense_code] = how many times already
     $counts = Violation::where('status', '!=', 'dismissed')
@@ -34,13 +37,15 @@ public function store(Request $request)
 {
     $validated = $request->validate([
         'user_id' => 'required|exists:users,id',
-        'offense_code' => 'required|in:' . implode(',', array_keys(config('offenses.offenses'))),
+        'offense_code' => ['required', Rule::exists('offenses', 'code')->where('is_active', true)],
         'occurred_at' => 'required|date',
         'location' => 'required|string',
         'description' => 'required|string',
     ]);
 
-    [$category, $title] = config('offenses.offenses.' . $validated['offense_code']);
+    $offense = Offense::where('code', $validated['offense_code'])->firstOrFail();
+    $category = $offense->category;
+    $title = $offense->title;
 
     $number = Violation::where('user_id', $validated['user_id'])
         ->where('offense_code', $validated['offense_code'])
@@ -49,21 +54,21 @@ public function store(Request $request)
 
     $sanction = Violation::sanctionFor($validated['offense_code'], $number);
 
-    $violation = Violation::create([
-        'violation_code' => Violation::caseIdFor($validated['offense_code'], $number, $validated['user_id']),
-        'user_id' => $validated['user_id'],
-        'issued_by' => Auth::id(),
-        'violation_type' => $title,
-        'offense_code' => $validated['offense_code'],
-        'offense_category' => $category,
-        'offense_number' => $number,
-        'sanction_code' => $sanction['letter'],
-        'sanction_label' => $sanction['label'],
-        'beyond_path' => $sanction['beyond'],
-        'description' => $validated['location'] . ' — ' . $validated['description'],
-        'occurred_at' => $validated['occurred_at'],
-        'status' => 'pending',
-    ]);
+   $violation = Violation::create([
+    'violation_code' => Violation::caseIdFor($validated['offense_code'], $number, $validated['user_id']),
+    'user_id' => $validated['user_id'],
+    'issued_by' => Auth::id(),
+    'violation_type' => $title,
+    'offense_code' => $validated['offense_code'],
+    'offense_category' => $category,
+    'offense_number' => $number,
+    'sanction_code' => $sanction['letter'],
+    'sanction_label' => $sanction['label'],
+    'beyond_path' => $sanction['beyond'],
+    'description' => $validated['location'] . ' — ' . $validated['description'],
+    'occurred_at' => $validated['occurred_at'],
+    'status' => 'pending',
+]);
 
     $student = User::find($violation->user_id);
     if ($student instanceof User) {

@@ -139,11 +139,75 @@
                     </button>
                 </div>
             </form>
+            {{-- Add a new violation to the list --}}
+<div class="mx-auto mt-12 max-w-5xl rounded-xl border border-gray-200 bg-gray-50 p-6">
+    <h2 class="text-lg font-black text-gray-900">Add New Violation to the List</h2>
+    <p class="text-sm text-gray-600 mb-4">Once added, it appears in the Violation dropdown above.</p>
+
+    @if ($errors->offense->any())
+        <div class="mb-4 rounded-lg bg-red-100 px-4 py-3 text-sm text-red-800">
+            @foreach ($errors->offense->all() as $error)
+                <p>{{ $error }}</p>
+            @endforeach
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('admin.offenses.store') }}" class="grid grid-cols-1 gap-4 md:grid-cols-3">
+        @csrf
+        <div>
+            <label class="mb-1 block text-sm font-medium text-gray-700">Violation Code</label>
+            <input type="text" name="code" value="{{ old('code') }}" maxlength="10" placeholder="e.g. MA27" required
+                class="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm uppercase">
+        </div>
+        <div>
+            <label class="mb-1 block text-sm font-medium text-gray-700">Category</label>
+            <select name="category" id="new-category" required
+                class="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm">
+                <option value="minor" @selected(old('category') === 'minor')>Minor</option>
+                <option value="major" @selected(old('category') === 'major')>Major</option>
+            </select>
+        </div>
+        <div>
+            <label class="mb-1 block text-sm font-medium text-gray-700">Violation Name</label>
+            <input type="text" name="title" value="{{ old('title') }}" required
+                class="w-full rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm">
+        </div>
+
+        <div id="new-path" class="md:col-span-3 hidden">
+            <label class="mb-1 block text-sm font-medium text-gray-700">
+                Sanction path (1st to 5th offense, leave unused steps empty)
+            </label>
+            <div class="grid grid-cols-5 gap-2">
+                @for ($i = 0; $i < 5; $i++)
+                    <select name="sanction_path[]" class="rounded-md border border-gray-300 bg-white px-2 py-2 text-sm">
+                        <option value="">{{ $i + 1 }}{{ ['st','nd','rd','th','th'][$i] }} -</option>
+                        @foreach (config('offenses.sanction_types') as $letter => $name)
+                            <option value="{{ $letter }}" @selected(old("sanction_path.$i") === $letter)>{{ $letter }} - {{ $name }}</option>
+                        @endforeach
+                    </select>
+                @endfor
+            </div>
+        </div>
+
+        <div class="md:col-span-3 flex justify-end">
+            <button type="submit" class="rounded-lg bg-red-700 px-6 py-2.5 text-sm font-medium text-white hover:bg-red-800">
+                Add Violation
+            </button>
+        </div>
+    </form>
+</div>
         </div>
     </div>
 @endsection
 
 @push('scripts')
+<script>
+    const newCategory = document.getElementById('new-category');
+    const newPath = document.getElementById('new-path');
+    function togglePath() { newPath.classList.toggle('hidden', newCategory.value !== 'major'); }
+    newCategory?.addEventListener('change', togglePath);
+    togglePath();
+</script>
    <script>
     const counts = @json($counts);
     const offenses = @json($offenses);
