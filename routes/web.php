@@ -84,9 +84,9 @@ Route::get('/dashboard', function () {
         ->get();
 
     return view('dashboard', compact('violations'));
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified', 'student'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'student'])->group(function () {
     Route::get('/violations/{violation}/penalty-quiz', [\App\Http\Controllers\PenaltyQuizController::class, 'show'])
         ->name('student.penalty.quiz');
 
@@ -94,7 +94,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('student.penalty.quiz.submit');
 });
 Route::get('/report', [StudentViolationController::class, 'report'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'student'])
     ->name('report');
 
 Route::get('/user-photo/{path}', function (string $path) {
@@ -108,6 +108,10 @@ Route::get('/user-photo/{path}', function (string $path) {
 Route::view('/code-of-discipline', 'code-of-discipline')
     ->middleware(['auth', 'verified'])
     ->name('code.of.discipline');
+
+Route::view('/admin/code-of-discipline', 'admin.codeOfdiscpline.codeOfdiscipline')
+    ->middleware(['auth', 'admin'])
+    ->name('admin.codeOfdiscipline');
 
 Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])->name('admin.login');
 
@@ -129,6 +133,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Student reasoning appeals review
     Route::get('/appeals', [\App\Http\Controllers\AdminAppealController::class, 'index'])->name('appeals');
+    Route::get('/appeal-reports', [\App\Http\Controllers\AdminNotificationController::class, 'appealReports'])->name('appeal.reports');
+    Route::patch('/appeals/{quizAttempt}/approve', [\App\Http\Controllers\AdminAppealController::class, 'approve'])->name('appeals.approve');
+    Route::patch('/appeals/{quizAttempt}/decline', [\App\Http\Controllers\AdminAppealController::class, 'decline'])->name('appeals.decline');
     Route::patch('/appeals/{quizAttempt}/review', [\App\Http\Controllers\AdminAppealController::class, 'review'])->name('appeals.review');
 
     // Admin notifications
@@ -148,10 +155,22 @@ Route::middleware('auth')->group(function () {
 
         if (is_null($item->read_at)) {
             $item->markAsRead();
+            $status = 'read';
+        } else {
+            $item->forceFill(['read_at' => null])->save();
+            $status = 'unread';
         }
 
-        return response()->json(['status' => 'read', 'notification_id' => $notification]);
+        return response()->json(['status' => $status, 'notification_id' => $notification]);
     })->name('notifications.read');
+
+    Route::delete('/notifications/{notification}', function ($notification) {
+        $user = auth()->user();
+        $item = $user->notifications()->findOrFail($notification);
+        $item->delete();
+
+        return response()->json(['status' => 'deleted', 'notification_id' => $notification]);
+    })->name('notifications.destroy');
 });
 
 require __DIR__ . '/auth.php';

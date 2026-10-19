@@ -206,6 +206,44 @@ class StudentViolationPageTest extends TestCase
             ->assertSee('Violation History');
     }
 
+    public function test_admin_violation_history_uses_offense_code_as_case_id_and_shows_sanction(): void
+    {
+        $admin = User::factory()->create([
+            'is_admin' => true,
+            'email' => 'admin-case-id@example.com',
+            'name' => 'Admin Case ID User',
+        ]);
+
+        $student = User::factory()->create([
+            'role' => 'student',
+            'email' => 'student-case-id@example.com',
+            'name' => 'Case ID Student',
+            'full_name' => 'Case ID Student',
+            'student_id' => 'S-1101',
+        ]);
+
+        Violation::create([
+            'user_id' => $student->id,
+            'issued_by' => $admin->id,
+            'violation_code' => 'MA1-01',
+            'violation_type' => 'Sexual harassment / acts of lasciviousness',
+            'offense_code' => 'MA1',
+            'offense_category' => 'major',
+            'offense_number' => 1,
+            'sanction_code' => 'D',
+            'sanction_label' => 'D - Non-readmission',
+            'description' => 'Student committed a serious offense.',
+            'occurred_at' => now()->subDays(2),
+            'status' => 'pending',
+        ]);
+
+        $this->actingAs($admin)
+            ->get(route('admin.violations.history', $student->id))
+            ->assertOk()
+            ->assertSee('MA1')
+            ->assertSee('D - Non-readmission');
+    }
+
     public function test_admin_can_mark_violation_as_consequence_applied(): void
     {
         $admin = User::factory()->create([
@@ -337,6 +375,65 @@ class StudentViolationPageTest extends TestCase
             ->get(route('admin.notifications.index'))
             ->assertOk()
             ->assertSee('Quiz submission');
+    }
+
+    public function test_admin_appeal_history_shows_pending_cases_and_supports_explicit_decisions(): void
+    {
+        $admin = User::factory()->create([
+            'is_admin' => true,
+            'email' => 'admin-appeal-history@example.com',
+            'name' => 'Admin Appeal History User',
+        ]);
+
+        $student = User::factory()->create([
+            'role' => 'student',
+            'email' => 'student-appeal-history@example.com',
+            'name' => 'History Appeal Student',
+        ]);
+
+        $violation = Violation::create([
+            'user_id' => $student->id,
+            'issued_by' => $admin->id,
+            'violation_code' => 'V-904',
+            'violation_type' => 'Late Entry',
+            'description' => 'Student arrived late to class.',
+            'occurred_at' => now()->subDay(),
+            'status' => 'consequence_applied',
+        ]);
+
+        $quiz = Quiz::ensureForViolation($violation);
+        $question = $quiz->questions()->first();
+
+        $this->actingAs($student)
+            ->post(route('student.penalty.quiz.submit', $violation), [
+                'question_' . $question->id => 'I arrived late due to transport issues and I understand the consequences.',
+            ])
+            ->assertRedirect(route('report'));
+
+        $attempt = QuizAttempt::query()->where('user_id', $student->id)->latest()->first();
+        $this->assertNotNull($attempt);
+
+        $this->actingAs($admin)
+            ->get('/admin/appeals')
+            ->assertOk()
+            ->assertSee('Appeal History')
+            ->assertSee('Pending')
+            ->assertSee('Approve')
+            ->assertSee('Decline');
+
+        $this->actingAs($admin)
+            ->patch(route('admin.appeals.decline', $attempt), [
+                'admin_note' => 'The explanation is not enough to reverse the consequence.',
+            ])
+            ->assertRedirect(route('admin.appeals'));
+
+        $attempt->refresh();
+        $this->assertFalse((bool) $attempt->admin_approved);
+        $this->assertSame('The explanation is not enough to reverse the consequence.', $attempt->admin_note);
+        $this->assertDatabaseHas('violations', [
+            'id' => $violation->id,
+            'status' => 'pending',
+        ]);
     }
 
     public function test_student_reasoning_submission_and_admin_appeal_review_workflow(): void

@@ -1,5 +1,5 @@
 <aside id="adminSidebar"
-    class="admin-sidebar-collapsed grc-red text-white w-72 flex flex-col py-6 shadow-2xl z-10 flex-shrink-0 relative transition-all duration-300">
+    class="admin-sidebar-collapsed admin-sidebar-collapsed text-white w-72 flex flex-col py-6 shadow-2xl z-10 flex-shrink-0 relative transition-all duration-300">
 
     <!-- Admin Avatar & Info -->
     <div class="px-6 flex flex-col items-center mb-8">
@@ -29,8 +29,8 @@
             Apply Consequences
         </a>
 
-        <a href="{{ route('admin.appeals') }}"
-            class="px-6 py-3.5 border-l-4 tracking-wide transition-all duration-200 hover:border-white hover:bg-red-900/30 {{ request()->routeIs('admin.appeals') ? 'bg-red-900/50 border-white' : 'border-transparent' }}">
+        <a href="{{ route('admin.appeal.reports') }}"
+            class="px-6 py-3.5 border-l-4 tracking-wide transition-all duration-200 hover:border-white hover:bg-red-900/30 {{ request()->routeIs('admin.appeal.reports') ? 'bg-red-900/50 border-white' : 'border-transparent' }}">
             Review Appeals
         </a>
 

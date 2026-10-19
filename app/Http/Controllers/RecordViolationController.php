@@ -50,7 +50,7 @@ public function store(Request $request)
     $sanction = Violation::sanctionFor($validated['offense_code'], $number);
 
     $violation = Violation::create([
-        'violation_code' => 'V-' . strtoupper(uniqid()),
+        'violation_code' => Violation::caseIdFor($validated['offense_code'], $number, $validated['user_id']),
         'user_id' => $validated['user_id'],
         'issued_by' => Auth::id(),
         'violation_type' => $title,

@@ -96,10 +96,18 @@ class MockDataSeeder extends Seeder
             ];
 
             $recordsToCreate = $index % 2 === 0 ? 2 : 1;
+            $majorOffenseCodes = ['MA1', 'MA6', 'MA11', 'MA17'];
+            $minorOffenseCodes = ['MI1', 'MI3', 'MI5', 'MI8', 'MI9'];
 
             for ($n = 0; $n < $recordsToCreate; $n++) {
                 $violation = $violationTemplates[($index + $n) % count($violationTemplates)];
-                $violationCode = 'VIO-' . strtoupper($studentData['student_id']) . '-' . ($n + 1);
+                $offenseCode = ($n % 2 === 0) ? $majorOffenseCodes[$index % count($majorOffenseCodes)] : $minorOffenseCodes[$index % count($minorOffenseCodes)];
+                $offenseNumber = Violation::where('user_id', $student->id)
+                    ->where('offense_code', $offenseCode)
+                    ->where('status', '!=', 'dismissed')
+                    ->count() + 1;
+                $sanction = Violation::sanctionFor($offenseCode, $offenseNumber);
+                $violationCode = Violation::caseIdFor($offenseCode, $offenseNumber, $student->id);
 
                 $violationRecord = Violation::firstOrCreate(
                     [
@@ -109,6 +117,12 @@ class MockDataSeeder extends Seeder
                     [
                         'issued_by' => $admin->id,
                         'violation_type' => $violation['type'],
+                        'offense_code' => $offenseCode,
+                        'offense_category' => in_array($offenseCode[0], ['M'], true) && str_starts_with($offenseCode, 'MA') ? 'major' : 'minor',
+                        'offense_number' => $offenseNumber,
+                        'sanction_code' => $sanction['letter'],
+                        'sanction_label' => $sanction['label'],
+                        'beyond_path' => $sanction['beyond'],
                         'description' => $violation['description'],
                         'status' => $violation['status'],
                         'occurred_at' => now()->subDays(($index * 3) + $n + 1),

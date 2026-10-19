@@ -44,7 +44,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('admin.login.post') }}">
             @csrf
 
             <input type="hidden" name="login_as" value="admin">

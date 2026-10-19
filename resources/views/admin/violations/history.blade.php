@@ -91,6 +91,10 @@
                             <td class="px-5 py-4 text-gray-700">
                                 <div class="space-y-2">
                                     <p>{{ $violation->description ?? 'No description provided.' }}</p>
+                                    @if (!empty($violation->sanction_label))
+                                        <p class="text-xs text-red-700"><span class="font-bold">Sanction:</span>
+                                            {{ $violation->sanction_label }}</p>
+                                    @endif
                                     @if (!empty($violation->resolution_notes))
                                         <p class="text-xs text-gray-500"><span class="font-bold">Resolution:</span>
                                             {{ $violation->resolution_notes }}</p>

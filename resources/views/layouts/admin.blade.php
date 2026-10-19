@@ -11,6 +11,9 @@
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
+            background: #f3f3f3;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         .grc-red {
@@ -33,8 +36,42 @@
             background: linear-gradient(90deg, #C51D2C 0%, #D92334 100%);
         }
 
+        .soft-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 12px 30px rgba(31, 41, 55, 0.08);
+            border: 1px solid rgba(15, 23, 42, 0.04);
+        }
+
+        .surface-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.92));
+            border: 1px solid rgba(15, 23, 42, 0.04);
+            box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .surface-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 32px rgba(15, 23, 42, 0.08);
+        }
+
+        .animate-reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.45s ease, transform 0.45s ease;
+        }
+
+        .animate-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         #adminSidebar {
             transition: all 0.3s ease;
+            background: linear-gradient(180deg, rgba(191, 30, 46, 0.97), rgba(138, 18, 28, 0.96));
+            box-shadow: 12px 0 35px rgba(90, 12, 21, 0.18);
+            border-right: 1px solid rgba(255,255,255,0.12);
+            min-height: calc(100vh - 72px);
         }
 
         #adminSidebar.admin-sidebar-collapsed {
@@ -44,6 +81,13 @@
             padding-right: 0 !important;
             opacity: 0;
             overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .header-gradient nav {
+                gap: 0.5rem;
+                font-size: 0.7rem;
+            }
         }
     </style>
     @stack('styles')
@@ -57,32 +101,37 @@
         <!-- Logo and College Name -->
         <div class="flex items-center gap-4">
             <button id="adminSidebarOpenBtn" onclick="toggleAdminSidebar()"
-                class="text-white text-2xl focus:outline-none hover:opacity-80 transition cursor-pointer">
+                class="text-white text-2xl focus:outline-none hover:opacity-80 transition cursor-pointer rounded-full bg-white/10 p-2">
                 ☰
             </button>
             <img src="{{ asset('images/logo.jpg') }}" alt="GRC Logo"
-                class="h-12 w-12 object-contain bg-white rounded-full p-1 shadow">
+                class="h-12 w-12 object-contain bg-white rounded-full p-1 shadow-lg ring-2 ring-white/50">
             <div>
                 <h1 class="text-xs font-bold uppercase tracking-wider opacity-90 leading-tight">Global</h1>
                 <h2 class="text-sm font-extrabold uppercase tracking-tight leading-tight">Reciprocal Colleges</h2>
             </div>
         </div>
-
         <!-- Navigation Links -->
-        <nav class="flex items-center gap-6 text-sm font-bold">
+        <nav class="flex items-center gap-3 text-sm font-bold">
+                      
             <a href="{{ route('admin.dashboard') }}"
-                class="{{ request()->routeIs('admin.dashboard') ? 'bg-white/20 px-5 py-2 rounded-full shadow-inner border border-white/30' : 'hover:text-red-200 transition' }} tracking-wide">
+                class="{{ request()->routeIs('admin.dashboard') ? 'bg-white/20 px-4 py-2 rounded-full shadow-inner border border-white/30' : 'hover:bg-white/10 hover:px-4 hover:py-2 hover:rounded-full transition-all' }} tracking-wide">
                 DASHBOARD
             </a>
+            <a href="{{ route('admin.codeOfdiscipline') }}"
+                class="{{ request()->routeIs('admin.codeOfdiscipline') ? 'bg-white/20 px-4 py-2 rounded-full shadow-inner border border-white/30' : 'hover:bg-white/10 hover:px-4 hover:py-2 hover:rounded-full transition-all' }} tracking-wide">
+                CODE OF DISCIPLINE
+            </a>
+
             <a href="{{ route('admin.violations.recent') }}"
-                class="{{ request()->routeIs('admin.violations.recent') ? 'bg-white/20 px-5 py-2 rounded-full shadow-inner border border-white/30' : 'hover:text-red-200 transition' }} tracking-wide">
+                class="{{ request()->routeIs('admin.violations.recent') ? 'bg-white/20 px-4 py-2 rounded-full shadow-inner border border-white/30' : 'hover:bg-white/10 hover:px-4 hover:py-2 hover:rounded-full transition-all' }} tracking-wide">
                 VIOLATION MONITORING
             </a>
             <a href="{{ route('admin.appeals') }}"
-                class="{{ request()->routeIs('admin.appeals') ? 'bg-white/20 px-5 py-2 rounded-full shadow-inner border border-white/30' : 'hover:text-red-200 transition' }} tracking-wide">
+                class="{{ request()->routeIs('admin.appeals*') ? 'bg-white/20 px-4 py-2 rounded-full shadow-inner border border-white/30' : 'hover:bg-white/10 hover:px-4 hover:py-2 hover:rounded-full transition-all' }} tracking-wide">
                 APPEALS
             </a>
-            <a href="{{ route('admin.report') }}" class="hover:text-red-200 transition tracking-wide">REPORT</a>
+            <a href="{{ route('admin.report') }}" class="hover:bg-white/10 hover:px-4 hover:py-2 hover:rounded-full transition-all tracking-wide">REPORT</a>
         </nav>
 
         <!-- Right Side Actions (Bell & Profile) -->
@@ -199,12 +248,29 @@
         @include('components.admin-sidebar')
 
         <!-- ================= Right Main Content Area ================= -->
-        <main class="flex-1 flex flex-col bg-white overflow-y-auto px-10 py-8">
+        <main class="flex-1 flex flex-col overflow-y-auto px-4 md:px-8 lg:px-10 py-6 md:py-8 bg-[#f2f2f2]">
             @yield('content')
         </main>
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const revealItems = document.querySelectorAll('[data-reveal]');
+            if (revealItems.length && 'IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.12 });
+
+                revealItems.forEach((item) => observer.observe(item));
+            } else {
+                revealItems.forEach((item) => item.classList.add('is-visible'));
+            }
+        });
         function toggleAdminSidebar() {
             const sidebar = document.getElementById('adminSidebar');
             const openBtn = document.getElementById('adminSidebarOpenBtn');
@@ -232,10 +298,28 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({})
-            }).then(response => response.json()).then(() => {
+            }).then(response => response.json()).then((data) => {
                 if (element) {
-                    element.classList.remove('bg-red-50/60');
-                    element.classList.add('bg-white');
+                    const item = element.closest('[data-notification-id]');
+                    const statusBadge = item?.querySelector('[data-status-badge]');
+                    const actionButton = item?.querySelector('[data-toggle-read-button]');
+
+                    if (statusBadge) {
+                        statusBadge.textContent = data.status === 'read' ? 'Read' : 'Unread';
+                        statusBadge.className = data.status === 'read'
+                            ? 'inline-flex rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700'
+                            : 'inline-flex rounded-full bg-amber-100 px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-amber-700';
+                    }
+
+                    if (actionButton) {
+                        actionButton.textContent = data.status === 'read' ? 'Mark unread' : 'Mark read';
+                    }
+
+                    if (item) {
+                        item.classList.toggle('bg-red-50/60', data.status !== 'read');
+                        item.classList.toggle('bg-white', data.status === 'read');
+                    }
+
                     const dot = element.querySelector('span.w-2\\.5');
                     if (dot) dot.remove();
                 }
@@ -243,11 +327,28 @@
                 const badge = document.querySelector('#adminNotifBellButton .absolute');
                 if (badge) {
                     const currentCount = Number(badge.textContent.trim());
-                    if (currentCount > 1) {
+                    if (data.status === 'read' && currentCount > 1) {
                         badge.textContent = currentCount - 1;
-                    } else {
+                    } else if (data.status === 'read' && currentCount === 1) {
                         badge.remove();
                     }
+                }
+            }).catch(() => { });
+        }
+
+        function deleteAdminNotification(notificationId, element) {
+            if (!confirm('Delete this appeal report?')) return;
+
+            fetch(`/notifications/${notificationId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json()).then(() => {
+                if (element) {
+                    element.remove();
                 }
             }).catch(() => { });
         }

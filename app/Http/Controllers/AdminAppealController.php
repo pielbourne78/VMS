@@ -15,17 +15,35 @@ class AdminAppealController extends Controller
     {
         $attempts = QuizAttempt::with(['user', 'quiz.violation.student'])
             ->whereHas('quiz.violation', function ($query) {
-                $query->where('status', 'consequence_applied');
+                $query->whereIn('status', ['consequence_applied', 'pending', 'resolved']);
             })
-            ->latest('created_at')
+            ->orderByDesc('reviewed_at')
+            ->orderByDesc('created_at')
             ->get();
 
         return view('admin.appeals', compact('attempts'));
     }
 
+    public function approve(Request $request, QuizAttempt $quizAttempt): RedirectResponse
+    {
+        return $this->resolveDecision($request, $quizAttempt, true);
+    }
+
+    public function decline(Request $request, QuizAttempt $quizAttempt): RedirectResponse
+    {
+        return $this->resolveDecision($request, $quizAttempt, false);
+    }
+
     public function review(Request $request, QuizAttempt $quizAttempt): RedirectResponse
     {
-        $approved = $request->boolean('approved');
+        return $this->resolveDecision($request, $quizAttempt, $request->boolean('approved'));
+    }
+
+    protected function resolveDecision(Request $request, QuizAttempt $quizAttempt, bool $approved): RedirectResponse
+    {
+        $request->validate([
+            'admin_note' => ['nullable', 'string', 'max:1000'],
+        ]);
 
         $quizAttempt->update([
             'admin_approved' => $approved,
@@ -51,7 +69,9 @@ class AdminAppealController extends Controller
 
         return redirect()->route('admin.appeals')->with(
             'success',
-            $approved ? 'The student reasoning was approved and the violation has been resolved.' : 'The student reasoning was not approved. The case remains active under consequence review.'
+            $approved
+                ? 'The student reasoning was approved and the violation has been resolved.'
+                : 'The student reasoning was not approved. The case remains active under consequence review.'
         );
     }
 }

@@ -58,6 +58,17 @@
             box-shadow: 0 16px 30px rgba(15, 23, 42, 0.08);
         }
 
+        .animate-reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.45s ease, transform 0.45s ease;
+        }
+
+        .animate-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         @media (max-width: 1024px) {
             .dashboard-shell {
                 flex-direction: column;
@@ -99,21 +110,21 @@
             <!-- Header Navigation -->
             <header
                 class="header-gradient text-white px-8 py-5 shadow-lg flex items-center justify-between border-b-4 border-grc-red flex-shrink-0">
-                <nav class="flex items-center gap-6 text-base font-semibold tracking-tight header-nav">
+                <nav class="flex items-center gap-3 text-base font-semibold tracking-tight header-nav">
                     <button id="sidebarOpenBtn" onclick="toggleSidebar()"
-                        class="text-white text-2xl focus:outline-none hover:opacity-80 transition cursor-pointer pr-2">
+                        class="text-white text-2xl focus:outline-none hover:opacity-80 transition cursor-pointer pr-2 rounded-full bg-white/10 p-2">
                         ☰
                     </button>
                     <a href="{{ route('dashboard') }}"
-                        class="{{ request()->routeIs('dashboard') ? 'stat-btn-gradient text-white px-6 py-2.5 rounded-full shadow-inner' : 'hover:text-red-200 transition' }} tracking-wide">
+                        class="{{ request()->routeIs('dashboard') ? 'stat-btn-gradient text-white px-5 py-2.5 rounded-full shadow-inner' : 'hover:bg-white/10 hover:px-5 hover:py-2.5 hover:rounded-full transition-all' }} tracking-wide">
                         DASHBOARD
                     </a>
                     <a href="{{ route('violation.monitoring') }}"
-                        class="{{ request()->routeIs('violation.monitoring') ? 'stat-btn-gradient text-white px-6 py-2.5 rounded-full shadow-inner' : 'hover:text-red-200 transition' }} tracking-wide">
+                        class="{{ request()->routeIs('violation.monitoring') ? 'stat-btn-gradient text-white px-5 py-2.5 rounded-full shadow-inner' : 'hover:bg-white/10 hover:px-5 hover:py-2.5 hover:rounded-full transition-all' }} tracking-wide">
                         VIOLATION MONITORING
                     </a>
                     <a href="{{ route('report') }}"
-                        class="{{ request()->routeIs('report') ? 'stat-btn-gradient text-white px-6 py-2.5 rounded-full shadow-inner' : 'hover:text-red-200 transition' }} tracking-wide">
+                        class="{{ request()->routeIs('report') ? 'stat-btn-gradient text-white px-5 py-2.5 rounded-full shadow-inner' : 'hover:bg-white/10 hover:px-5 hover:py-2.5 hover:rounded-full transition-all' }} tracking-wide">
                         REPORT
                     </a>
                 </nav>
@@ -245,6 +256,24 @@
 
     <!-- Shared Scripts -->
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const revealItems = document.querySelectorAll('[data-reveal]');
+            if (revealItems.length && 'IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('is-visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.12 });
+
+                revealItems.forEach((item) => observer.observe(item));
+            } else {
+                revealItems.forEach((item) => item.classList.add('is-visible'));
+            }
+        });
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const openBtn = document.getElementById('sidebarOpenBtn');

@@ -59,6 +59,6 @@ class AuthenticatedSessionController extends Controller
         Cookie::queue(Cookie::forget(config('session.cookie')));
         Cookie::queue(Cookie::forget('XSRF-TOKEN'));
 
-        return redirect()->route('login')->with('status', 'You have been logged out successfully.');
+        return redirect()->route('welcome')->with('status', 'You have been logged out successfully.');
     }
 }

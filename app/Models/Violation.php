@@ -8,27 +8,41 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Violation extends Model
 {
-    public function getDisplayStatusAttribute(): string
-{
-    return match ($this->status) {
-        'pending' => 'Active Case',
-        'consequence_applied' => 'Pending',
-        'resolved' => 'Resolved',
-        'dismissed' => 'Dismissed',
-        default => ucfirst((string) $this->status),
-    };
-}
-
-public function getDisplayStatusClassAttribute(): string
-{
-    return match ($this->status) {
-        'pending' => 'bg-orange-100 text-orange-700',
-        'consequence_applied' => 'bg-blue-100 text-blue-700',
-        'resolved' => 'bg-green-100 text-green-700',
-        default => 'bg-gray-100 text-gray-600',
-    };
-}
     use HasFactory, SoftDeletes;
+
+    public function getDisplayStatusAttribute(): string
+    {
+        return match ($this->status) {
+            'pending' => 'Active Case',
+            'consequence_applied' => 'Pending',
+            'resolved' => 'Resolved',
+            'dismissed' => 'Dismissed',
+            default => ucfirst((string) $this->status),
+        };
+    }
+
+    public function getDisplayStatusClassAttribute(): string
+    {
+        return match ($this->status) {
+            'pending' => 'bg-orange-100 text-orange-700',
+            'consequence_applied' => 'bg-blue-100 text-blue-700',
+            'resolved' => 'bg-green-100 text-green-700',
+            default => 'bg-gray-100 text-gray-600',
+        };
+    }
+
+    public static function caseIdFor(string $offenseCode, int $offenseNumber, ?int $userId = null): string
+    {
+        $code = strtoupper(trim((string) $offenseCode));
+
+        if ($userId === null) {
+            return sprintf('%s-%02d', $code, $offenseNumber);
+        }
+
+        $suffix = substr((string) $userId, -3);
+
+        return sprintf('%s-%s-%02d', $code, $suffix, $offenseNumber);
+    }
 
     protected $fillable = [
         'violation_code',
