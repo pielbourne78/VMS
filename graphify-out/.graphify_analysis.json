@@ -1,0 +1,1073 @@
+{
+  "communities": {
+    "0": [
+      "app_http_controllers_adminappealcontroller",
+      "app_http_controllers_adminappealcontroller_adminappealcontroller",
+      "app_http_controllers_adminappealcontroller_adminappealcontroller_approve",
+      "app_http_controllers_adminappealcontroller_adminappealcontroller_decline",
+      "app_http_controllers_adminappealcontroller_adminappealcontroller_index",
+      "app_http_controllers_adminappealcontroller_adminappealcontroller_resolvedecision",
+      "app_http_controllers_adminappealcontroller_adminappealcontroller_review",
+      "app_http_controllers_adminappealcontroller_closure_1",
+      "app_http_controllers_adminnotificationcontroller",
+      "app_http_controllers_adminnotificationcontroller_adminnotificationcontroller",
+      "app_http_controllers_adminnotificationcontroller_adminnotificationcontroller_appealreports",
+      "app_http_controllers_adminnotificationcontroller_adminnotificationcontroller_index",
+      "app_http_controllers_auth_authenticatedsessioncontroller",
+      "app_http_controllers_auth_authenticatedsessioncontroller_authenticatedsessioncontroller",
+      "app_http_controllers_auth_authenticatedsessioncontroller_authenticatedsessioncontroller_create",
+      "app_http_controllers_auth_authenticatedsessioncontroller_authenticatedsessioncontroller_destroy",
+      "app_http_controllers_auth_authenticatedsessioncontroller_authenticatedsessioncontroller_store",
+      "app_http_controllers_auth_confirmablepasswordcontroller",
+      "app_http_controllers_auth_confirmablepasswordcontroller_confirmablepasswordcontroller",
+      "app_http_controllers_auth_confirmablepasswordcontroller_confirmablepasswordcontroller_show",
+      "app_http_controllers_auth_confirmablepasswordcontroller_confirmablepasswordcontroller_store",
+      "app_http_controllers_auth_emailverificationnotificationcontroller",
+      "app_http_controllers_auth_emailverificationnotificationcontroller_emailverificationnotificationcontroller",
+      "app_http_controllers_auth_emailverificationnotificationcontroller_emailverificationnotificationcontroller_store",
+      "app_http_controllers_auth_emailverificationpromptcontroller",
+      "app_http_controllers_auth_emailverificationpromptcontroller_emailverificationpromptcontroller",
+      "app_http_controllers_auth_emailverificationpromptcontroller_emailverificationpromptcontroller_invoke",
+      "app_http_controllers_auth_newpasswordcontroller",
+      "app_http_controllers_auth_newpasswordcontroller_closure_1",
+      "app_http_controllers_auth_newpasswordcontroller_newpasswordcontroller",
+      "app_http_controllers_auth_newpasswordcontroller_newpasswordcontroller_create",
+      "app_http_controllers_auth_newpasswordcontroller_newpasswordcontroller_store",
+      "app_http_controllers_auth_passwordcontroller",
+      "app_http_controllers_auth_passwordcontroller_passwordcontroller",
+      "app_http_controllers_auth_passwordcontroller_passwordcontroller_update",
+      "app_http_controllers_auth_passwordresetlinkcontroller",
+      "app_http_controllers_auth_passwordresetlinkcontroller_passwordresetlinkcontroller",
+      "app_http_controllers_auth_passwordresetlinkcontroller_passwordresetlinkcontroller_create",
+      "app_http_controllers_auth_passwordresetlinkcontroller_passwordresetlinkcontroller_store",
+      "app_http_controllers_auth_registeredusercontroller",
+      "app_http_controllers_auth_registeredusercontroller_registeredusercontroller",
+      "app_http_controllers_auth_registeredusercontroller_registeredusercontroller_create",
+      "app_http_controllers_auth_registeredusercontroller_registeredusercontroller_store",
+      "app_http_controllers_auth_verifyemailcontroller",
+      "app_http_controllers_auth_verifyemailcontroller_verifyemailcontroller",
+      "app_http_controllers_auth_verifyemailcontroller_verifyemailcontroller_invoke",
+      "app_http_controllers_controller",
+      "app_http_controllers_controller_controller",
+      "app_http_controllers_offensecontroller",
+      "app_http_controllers_offensecontroller_offensecontroller",
+      "app_http_controllers_offensecontroller_offensecontroller_store",
+      "app_http_controllers_penaltyquizcontroller_penaltyquizcontroller",
+      "app_http_controllers_penaltyquizcontroller_penaltyquizcontroller_show",
+      "app_http_controllers_penaltyquizcontroller_penaltyquizcontroller_submit",
+      "app_http_controllers_profilecontroller",
+      "app_http_controllers_profilecontroller_profilecontroller",
+      "app_http_controllers_profilecontroller_profilecontroller_destroy",
+      "app_http_controllers_profilecontroller_profilecontroller_destroyprofilepicture",
+      "app_http_controllers_profilecontroller_profilecontroller_edit",
+      "app_http_controllers_profilecontroller_profilecontroller_update",
+      "app_http_controllers_profilecontroller_profilecontroller_updateprofilepicture",
+      "app_http_controllers_reportcontroller",
+      "app_http_controllers_reportcontroller_reportcontroller",
+      "app_http_controllers_reportcontroller_reportcontroller_index",
+      "app_http_middleware_checksessiontimeout",
+      "app_models_quizattempt_quizattempt",
+      "illuminate_auth_events_passwordreset",
+      "illuminate_auth_events_registered",
+      "illuminate_foundation_auth_emailverificationrequest",
+      "illuminate_foundation_http_middleware_verifycsrftoken",
+      "illuminate_http_redirectresponse",
+      "illuminate_http_request",
+      "illuminate_support_carbon",
+      "illuminate_support_facades_auth",
+      "illuminate_support_facades_cookie",
+      "illuminate_support_facades_password",
+      "illuminate_support_facades_redirect",
+      "illuminate_validation_rules",
+      "illuminate_validation_rules_password",
+      "illuminate_validation_validationexception",
+      "illuminate_view_view",
+      "routes_auth",
+      "routes_auth_closure_1",
+      "routes_auth_closure_2"
+    ],
+    "1": [
+      "app_console_commands_normalizestudentcoursedata",
+      "app_console_commands_normalizestudentcoursedata_normalizestudentcoursedata",
+      "app_console_commands_normalizestudentcoursedata_normalizestudentcoursedata_handle",
+      "app_http_controllers_violationcontroller_violationcontroller_history",
+      "app_http_requests_auth_loginrequest",
+      "app_http_requests_auth_loginrequest_loginrequest",
+      "app_http_requests_auth_loginrequest_loginrequest_authenticate",
+      "app_http_requests_auth_loginrequest_loginrequest_authorize",
+      "app_http_requests_auth_loginrequest_loginrequest_ensureisnotratelimited",
+      "app_http_requests_auth_loginrequest_loginrequest_rules",
+      "app_http_requests_auth_loginrequest_loginrequest_throttlekey",
+      "app_http_requests_profileupdaterequest",
+      "app_http_requests_profileupdaterequest_profileupdaterequest",
+      "app_http_requests_profileupdaterequest_profileupdaterequest_rules",
+      "app_models_user",
+      "app_models_user_closure_1",
+      "app_models_user_user",
+      "app_models_user_user_casts",
+      "app_models_user_user_profilephotourl",
+      "app_models_user_user_unreadnotificationscount",
+      "app_models_user_user_violations",
+      "config_auth",
+      "config_cache",
+      "config_database",
+      "config_session",
+      "database_factories_userfactory",
+      "database_factories_userfactory_closure_1",
+      "database_factories_userfactory_userfactory",
+      "database_factories_userfactory_userfactory_definition",
+      "database_factories_userfactory_userfactory_unverified",
+      "database_seeders_mockdataseeder",
+      "illuminate_auth_events_lockout",
+      "illuminate_console_command",
+      "illuminate_contracts_validation_validationrule",
+      "illuminate_database_eloquent_casts_attribute",
+      "illuminate_database_eloquent_factories_factory",
+      "illuminate_database_eloquent_factories_hasfactory",
+      "illuminate_foundation_auth_user",
+      "illuminate_foundation_http_formrequest",
+      "illuminate_notifications_notifiable",
+      "illuminate_support_facades_hash",
+      "illuminate_support_facades_ratelimiter",
+      "illuminate_support_str",
+      "illuminate_validation_rule",
+      "pdo_mysql",
+      "static"
+    ],
+    "2": [
+      "app_models_offense",
+      "app_models_offense_offense",
+      "app_models_offense_offense_casts",
+      "app_models_quiz",
+      "app_models_quiz_quiz",
+      "app_models_quiz_quiz_attempts",
+      "app_models_quiz_quiz_builddefaultquestions",
+      "app_models_quiz_quiz_buildreasoningprompt",
+      "app_models_quiz_quiz_ensureforviolation",
+      "app_models_quiz_quiz_questions",
+      "app_models_quiz_quiz_violation",
+      "app_models_quizattempt",
+      "app_models_quizattempt_quizattempt_quiz",
+      "app_models_quizattempt_quizattempt_user",
+      "app_models_quizquestion",
+      "app_models_quizquestion_quizquestion",
+      "app_models_quizquestion_quizquestion_quiz",
+      "illuminate_database_eloquent_model",
+      "illuminate_database_eloquent_relations_belongsto",
+      "illuminate_database_eloquent_relations_hasmany",
+      "illuminate_foundation_inspiring",
+      "illuminate_support_facades_artisan",
+      "routes_console",
+      "routes_console_closure_1",
+      "self",
+      "tests_feature_studentviolationpagetest",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_admin_appeal_history_shows_pending_cases_and_supports_explicit_decisions",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_admin_can_mark_violation_as_consequence_applied",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_admin_receives_a_notification_when_student_submits_a_quiz",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_admin_report_page_loads_live_violation_data",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_admin_student_violation_history_page_shows_full_details",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_admin_violation_history_uses_offense_code_as_case_id_and_shows_sanction",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_admin_violation_list_filters_by_course_and_section",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_admin_violation_list_filters_by_year_level",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_mock_data_seeder_assigns_admin_role_and_student_profile_fields",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_mock_data_seeder_uses_unique_student_names_and_a_limited_violation_count",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_student_can_open_penalty_quiz_for_consequence_violation",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_student_login_uses_the_configured_session_lifetime_and_stays_authenticated",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_student_reasoning_submission_and_admin_appeal_review_workflow",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_student_report_page_shows_real_violation_history_and_statuses",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_student_violation_monitoring_page_loads_for_authenticated_student"
+    ],
+    "3": [
+      "package",
+      "package_devdependencies",
+      "package_devdependencies_alpinejs",
+      "package_devdependencies_autoprefixer",
+      "package_devdependencies_axios",
+      "package_devdependencies_concurrently",
+      "package_devdependencies_laravel_vite_plugin",
+      "package_devdependencies_postcss",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_tailwindcss_forms",
+      "package_devdependencies_tailwindcss_vite",
+      "package_devdependencies_vite",
+      "package_private",
+      "package_schema",
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_type",
+      "ref_alpinejs",
+      "ref_autoprefixer",
+      "ref_axios",
+      "ref_concurrently",
+      "ref_laravel_vite_plugin",
+      "ref_postcss",
+      "ref_tailwindcss",
+      "ref_tailwindcss_forms",
+      "ref_tailwindcss_vite",
+      "ref_vite",
+      "resources_js_app",
+      "resources_js_bootstrap",
+      "resources_js_bootstrap_token",
+      "tailwind_config",
+      "vite_config"
+    ],
+    "4": [
+      "app_http_controllers_admincontroller",
+      "app_http_controllers_admincontroller_admincontroller",
+      "app_http_controllers_admincontroller_admincontroller_index",
+      "app_http_controllers_studentviolationcontroller",
+      "app_http_controllers_studentviolationcontroller_closure_1",
+      "app_http_controllers_studentviolationcontroller_studentviolationcontroller",
+      "app_http_controllers_studentviolationcontroller_studentviolationcontroller_dashboard",
+      "app_http_controllers_studentviolationcontroller_studentviolationcontroller_index",
+      "app_http_controllers_studentviolationcontroller_studentviolationcontroller_report",
+      "app_services_disciplinedashboardservice",
+      "app_services_disciplinedashboardservice_disciplinedashboardservice",
+      "app_services_disciplinedashboardservice_disciplinedashboardservice_foradmin",
+      "app_services_disciplinedashboardservice_disciplinedashboardservice_forstudent",
+      "app_services_disciplinedashboardservice_disciplinedashboardservice_summarize",
+      "illuminate_support_collection",
+      "illuminate_support_facades_mail",
+      "illuminate_support_facades_route",
+      "illuminate_support_facades_storage",
+      "illuminate_support_facades_validator",
+      "routes_web",
+      "routes_web_closure_1",
+      "routes_web_closure_2",
+      "routes_web_closure_3",
+      "routes_web_closure_4",
+      "routes_web_closure_5",
+      "routes_web_delete_notifications_notification",
+      "routes_web_get",
+      "routes_web_get_test_email",
+      "routes_web_get_user_photo_path",
+      "routes_web_post_notifications_notification_read",
+      "routes_web_post_validate_fields"
+    ],
+    "5": [
+      "app_http_controllers_violationcontroller",
+      "app_http_controllers_violationcontroller_closure_1",
+      "app_http_controllers_violationcontroller_closure_10",
+      "app_http_controllers_violationcontroller_closure_11",
+      "app_http_controllers_violationcontroller_closure_12",
+      "app_http_controllers_violationcontroller_closure_13",
+      "app_http_controllers_violationcontroller_closure_14",
+      "app_http_controllers_violationcontroller_closure_15",
+      "app_http_controllers_violationcontroller_closure_2",
+      "app_http_controllers_violationcontroller_closure_3",
+      "app_http_controllers_violationcontroller_closure_4",
+      "app_http_controllers_violationcontroller_closure_5",
+      "app_http_controllers_violationcontroller_closure_6",
+      "app_http_controllers_violationcontroller_closure_7",
+      "app_http_controllers_violationcontroller_closure_8",
+      "app_http_controllers_violationcontroller_closure_9",
+      "app_http_controllers_violationcontroller_violationcontroller",
+      "app_http_controllers_violationcontroller_violationcontroller_buildsummary",
+      "app_http_controllers_violationcontroller_violationcontroller_bulkaction",
+      "app_http_controllers_violationcontroller_violationcontroller_create",
+      "app_http_controllers_violationcontroller_violationcontroller_escalate",
+      "app_http_controllers_violationcontroller_violationcontroller_getcourses",
+      "app_http_controllers_violationcontroller_violationcontroller_getoffenseordinalattribute",
+      "app_http_controllers_violationcontroller_violationcontroller_getsections",
+      "app_http_controllers_violationcontroller_violationcontroller_index",
+      "app_http_controllers_violationcontroller_violationcontroller_recentviolations",
+      "app_http_controllers_violationcontroller_violationcontroller_report",
+      "app_http_controllers_violationcontroller_violationcontroller_store"
+    ],
+    "6": [
+      "app_models_violation",
+      "app_models_violation_violation",
+      "app_models_violation_violation_caseowner",
+      "app_models_violation_violation_casts",
+      "app_models_violation_violation_getdisplaystatusattribute",
+      "app_models_violation_violation_getdisplaystatusclassattribute",
+      "app_models_violation_violation_getnextactionrouteattribute",
+      "app_models_violation_violation_getoffenseordinalattribute",
+      "app_models_violation_violation_haspendingquiz",
+      "app_models_violation_violation_isescalated",
+      "app_models_violation_violation_isopen",
+      "app_models_violation_violation_issuedby",
+      "app_models_violation_violation_lastupdatedby",
+      "app_models_violation_violation_quiz",
+      "app_models_violation_violation_recordedby",
+      "app_models_violation_violation_requiresaction",
+      "app_models_violation_violation_resolvedby",
+      "app_models_violation_violation_student",
+      "illuminate_database_eloquent_softdeletes"
+    ],
+    "7": [
+      "app_http_middleware_adminmiddleware",
+      "app_http_middleware_adminmiddleware_adminmiddleware",
+      "app_http_middleware_adminmiddleware_adminmiddleware_handle",
+      "app_http_middleware_checksessiontimeout_checksessiontimeout",
+      "app_http_middleware_checksessiontimeout_checksessiontimeout_handle",
+      "app_http_middleware_studentmiddleware",
+      "app_http_middleware_studentmiddleware_studentmiddleware",
+      "app_http_middleware_studentmiddleware_studentmiddleware_handle",
+      "bootstrap_app",
+      "bootstrap_app_closure_1",
+      "bootstrap_app_closure_2",
+      "bootstrap_app_closure_3",
+      "closure",
+      "illuminate_foundation_application",
+      "illuminate_foundation_configuration_exceptions",
+      "illuminate_foundation_configuration_middleware",
+      "public_index",
+      "symfony_component_httpfoundation_response"
+    ],
+    "8": [
+      "database_migrations_2026_09_04_025012_create_violations_table",
+      "database_migrations_2026_09_04_025012_create_violations_table_closure_1",
+      "database_migrations_2026_09_04_025012_create_violations_table_down",
+      "database_migrations_2026_09_04_025012_create_violations_table_up",
+      "database_migrations_2026_09_20_000003_create_quiz_questions_table",
+      "database_migrations_2026_09_20_000003_create_quiz_questions_table_closure_1",
+      "database_migrations_2026_09_20_000003_create_quiz_questions_table_down",
+      "database_migrations_2026_09_20_000003_create_quiz_questions_table_up",
+      "database_migrations_2026_09_20_000006_create_notifications_table",
+      "database_migrations_2026_09_20_000006_create_notifications_table_closure_1",
+      "database_migrations_2026_09_20_000006_create_notifications_table_down",
+      "database_migrations_2026_09_20_000006_create_notifications_table_up",
+      "illuminate_support_facades_schema"
+    ],
+    "9": [
+      "app_notifications_studentquizsubmissionnotification",
+      "app_notifications_violationstatusupdated",
+      "app_notifications_violationstatusupdated_violationstatusupdated",
+      "app_notifications_violationstatusupdated_violationstatusupdated_construct",
+      "app_notifications_violationstatusupdated_violationstatusupdated_toarray",
+      "app_notifications_violationstatusupdated_violationstatusupdated_via",
+      "illuminate_bus_queueable",
+      "illuminate_notifications_notification",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_student_dashboard_handles_legacy_migration_warning_without_sanction_field",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_student_dashboard_only_shows_sanction_warning_notifications",
+      "tests_feature_studentviolationpagetest_studentviolationpagetest_test_student_notification_can_be_marked_as_read"
+    ],
+    "10": [
+      "database_migrations_2026_07_19_074549_add_custom_fields_to_users_table",
+      "database_migrations_2026_07_19_074549_add_custom_fields_to_users_table_closure_1",
+      "database_migrations_2026_07_19_074549_add_custom_fields_to_users_table_closure_2",
+      "database_migrations_2026_07_19_074549_add_custom_fields_to_users_table_closure_3",
+      "database_migrations_2026_07_19_074549_add_custom_fields_to_users_table_closure_4",
+      "database_migrations_2026_07_19_074549_add_custom_fields_to_users_table_closure_5",
+      "database_migrations_2026_07_19_074549_add_custom_fields_to_users_table_closure_6",
+      "database_migrations_2026_07_19_074549_add_custom_fields_to_users_table_closure_7",
+      "database_migrations_2026_07_19_074549_add_custom_fields_to_users_table_down",
+      "database_migrations_2026_07_19_074549_add_custom_fields_to_users_table_up",
+      "illuminate_database_schema_blueprint"
+    ],
+    "11": [
+      "illuminate_foundation_testing_refreshdatabase",
+      "illuminate_foundation_testing_testcase",
+      "tests_feature_exampletest",
+      "tests_feature_exampletest_exampletest",
+      "tests_feature_exampletest_exampletest_test_student_dashboard_renders_for_authenticated_student",
+      "tests_feature_exampletest_exampletest_test_student_profile_edit_page_renders",
+      "tests_feature_exampletest_exampletest_test_the_application_returns_a_successful_response",
+      "tests_feature_studentlayoutregressiontest",
+      "tests_feature_studentlayoutregressiontest_studentlayoutregressiontest",
+      "tests_feature_studentlayoutregressiontest_studentlayoutregressiontest_test_student_dashboard_has_balanced_layout_markup_and_student_sidebar_items",
+      "tests_testcase"
+    ],
+    "12": [
+      "illuminate_auth_notifications_resetpassword",
+      "illuminate_support_facades_notification",
+      "tests_feature_auth_passwordresettest",
+      "tests_feature_auth_passwordresettest_closure_1",
+      "tests_feature_auth_passwordresettest_closure_2",
+      "tests_feature_auth_passwordresettest_passwordresettest",
+      "tests_feature_auth_passwordresettest_passwordresettest_test_password_can_be_reset_with_valid_token",
+      "tests_feature_auth_passwordresettest_passwordresettest_test_reset_password_link_can_be_requested",
+      "tests_feature_auth_passwordresettest_passwordresettest_test_reset_password_link_screen_can_be_rendered",
+      "tests_feature_auth_passwordresettest_passwordresettest_test_reset_password_screen_can_be_rendered"
+    ],
+    "13": [
+      "app_http_controllers_recordviolationcontroller_recordviolationcontroller_store",
+      "app_models_violation_violation_caseidfor",
+      "app_models_violation_violation_sanctionfor",
+      "database_seeders_databaseseeder",
+      "database_seeders_databaseseeder_databaseseeder",
+      "database_seeders_databaseseeder_databaseseeder_run",
+      "database_seeders_mockdataseeder_mockdataseeder",
+      "database_seeders_mockdataseeder_mockdataseeder_run",
+      "illuminate_database_seeder"
+    ],
+    "14": [
+      "composer",
+      "composer_description",
+      "composer_keywords",
+      "composer_license",
+      "composer_minimum_stability",
+      "composer_name",
+      "composer_prefer_stable",
+      "composer_schema",
+      "composer_type"
+    ],
+    "15": [
+      "composer_require_dev",
+      "composer_require_dev_fakerphp_faker",
+      "composer_require_dev_laravel_breeze",
+      "composer_require_dev_laravel_pail",
+      "composer_require_dev_laravel_pint",
+      "composer_require_dev_laravel_sail",
+      "composer_require_dev_mockery_mockery",
+      "composer_require_dev_nunomaduro_collision",
+      "composer_require_dev_phpunit_phpunit"
+    ],
+    "16": [
+      "composer_scripts",
+      "composer_scripts_dev",
+      "composer_scripts_post_autoload_dump",
+      "composer_scripts_post_create_project_cmd",
+      "composer_scripts_post_root_package_install",
+      "composer_scripts_post_update_cmd",
+      "composer_scripts_pre_package_uninstall",
+      "composer_scripts_setup",
+      "composer_scripts_test"
+    ],
+    "17": [
+      "database_migrations_2026_09_20_000001_update_violation_status_enum",
+      "database_migrations_2026_09_20_000001_update_violation_status_enum_down",
+      "database_migrations_2026_09_20_000001_update_violation_status_enum_up",
+      "database_migrations_2026_10_19_064112_create_offenses_table",
+      "database_migrations_2026_10_19_064112_create_offenses_table_closure_1",
+      "database_migrations_2026_10_19_064112_create_offenses_table_down",
+      "database_migrations_2026_10_19_064112_create_offenses_table_up",
+      "illuminate_database_migrations_migration",
+      "illuminate_support_facades_db"
+    ],
+    "18": [
+      "tests_feature_auth_passwordupdatetest",
+      "tests_feature_auth_passwordupdatetest_passwordupdatetest",
+      "tests_feature_auth_passwordupdatetest_passwordupdatetest_test_correct_password_must_be_provided_to_update_password",
+      "tests_feature_auth_passwordupdatetest_passwordupdatetest_test_password_can_be_updated",
+      "tests_feature_auth_registrationtest",
+      "tests_feature_auth_registrationtest_registrationtest",
+      "tests_feature_auth_registrationtest_registrationtest_test_new_users_can_register",
+      "tests_feature_auth_registrationtest_registrationtest_test_registration_screen_can_be_rendered",
+      "tests_testcase_testcase"
+    ],
+    "19": [
+      "tests_feature_dashboardmanagementtest",
+      "tests_feature_dashboardmanagementtest_closure_1",
+      "tests_feature_dashboardmanagementtest_closure_2",
+      "tests_feature_dashboardmanagementtest_closure_3",
+      "tests_feature_dashboardmanagementtest_dashboardmanagementtest",
+      "tests_feature_dashboardmanagementtest_dashboardmanagementtest_test_admin_can_escalate_high_risk_case_and_track_case_ownership",
+      "tests_feature_dashboardmanagementtest_dashboardmanagementtest_test_admin_dashboard_exposes_operational_overview",
+      "tests_feature_dashboardmanagementtest_dashboardmanagementtest_test_admin_violation_index_displays_management_summary_and_review_actions",
+      "tests_feature_dashboardmanagementtest_dashboardmanagementtest_test_student_dashboard_exposes_real_lifecycle_summary"
+    ],
+    "20": [
+      "app_providers_appserviceprovider",
+      "app_providers_appserviceprovider_appserviceprovider",
+      "app_providers_appserviceprovider_appserviceprovider_boot",
+      "app_providers_appserviceprovider_appserviceprovider_register",
+      "app_providers_appserviceprovider_closure_1",
+      "bootstrap_providers",
+      "illuminate_auth_middleware_redirectifauthenticated",
+      "illuminate_support_serviceprovider"
+    ],
+    "21": [
+      "illuminate_auth_events_verified",
+      "illuminate_support_facades_event",
+      "illuminate_support_facades_url",
+      "tests_feature_auth_emailverificationtest",
+      "tests_feature_auth_emailverificationtest_emailverificationtest",
+      "tests_feature_auth_emailverificationtest_emailverificationtest_test_email_can_be_verified",
+      "tests_feature_auth_emailverificationtest_emailverificationtest_test_email_is_not_verified_with_invalid_hash",
+      "tests_feature_auth_emailverificationtest_emailverificationtest_test_email_verification_screen_can_be_rendered"
+    ],
+    "22": [
+      "tests_feature_auth_authenticationtest",
+      "tests_feature_auth_authenticationtest_authenticationtest",
+      "tests_feature_auth_authenticationtest_authenticationtest_test_admin_appeal_reports_page_loads_with_default_filters",
+      "tests_feature_auth_authenticationtest_authenticationtest_test_admin_users_can_authenticate_using_the_admin_login_screen",
+      "tests_feature_auth_authenticationtest_authenticationtest_test_login_screen_can_be_rendered",
+      "tests_feature_auth_authenticationtest_authenticationtest_test_users_can_authenticate_using_the_login_screen",
+      "tests_feature_auth_authenticationtest_authenticationtest_test_users_can_logout",
+      "tests_feature_auth_authenticationtest_authenticationtest_test_users_can_not_authenticate_with_invalid_password"
+    ],
+    "23": [
+      "tests_feature_profiletest",
+      "tests_feature_profiletest_profiletest",
+      "tests_feature_profiletest_profiletest_test_correct_password_must_be_provided_to_delete_account",
+      "tests_feature_profiletest_profiletest_test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged",
+      "tests_feature_profiletest_profiletest_test_profile_information_can_be_updated",
+      "tests_feature_profiletest_profiletest_test_profile_page_is_displayed",
+      "tests_feature_profiletest_profiletest_test_user_can_delete_their_account",
+      "tests_feature_profiletest_profiletest_test_user_profile_photo_url_is_resolved_from_storage_and_defaults_when_missing"
+    ],
+    "24": [
+      "app_http_controllers_penaltyquizcontroller",
+      "app_http_controllers_penaltyquizcontroller_closure_1",
+      "app_http_controllers_penaltyquizcontroller_closure_2",
+      "app_notifications_studentquizsubmissionnotification_studentquizsubmissionnotification",
+      "app_notifications_studentquizsubmissionnotification_studentquizsubmissionnotification_construct",
+      "app_notifications_studentquizsubmissionnotification_studentquizsubmissionnotification_toarray",
+      "app_notifications_studentquizsubmissionnotification_studentquizsubmissionnotification_via"
+    ],
+    "25": [
+      "app_view_components_applayout",
+      "app_view_components_applayout_applayout",
+      "app_view_components_applayout_applayout_render",
+      "app_view_components_guestlayout",
+      "app_view_components_guestlayout_guestlayout",
+      "app_view_components_guestlayout_guestlayout_render",
+      "illuminate_view_component"
+    ],
+    "26": [
+      "composer_allow_plugins_pestphp_pest_plugin",
+      "composer_allow_plugins_php_http_discovery",
+      "composer_config",
+      "composer_config_allow_plugins",
+      "composer_config_optimize_autoloader",
+      "composer_config_preferred_install",
+      "composer_config_sort_packages"
+    ],
+    "27": [
+      "database_migrations_0001_01_01_000000_create_users_table",
+      "database_migrations_0001_01_01_000000_create_users_table_closure_1",
+      "database_migrations_0001_01_01_000000_create_users_table_closure_2",
+      "database_migrations_0001_01_01_000000_create_users_table_closure_3",
+      "database_migrations_0001_01_01_000000_create_users_table_down",
+      "database_migrations_0001_01_01_000000_create_users_table_up"
+    ],
+    "28": [
+      "database_migrations_0001_01_01_000002_create_jobs_table",
+      "database_migrations_0001_01_01_000002_create_jobs_table_closure_1",
+      "database_migrations_0001_01_01_000002_create_jobs_table_closure_2",
+      "database_migrations_0001_01_01_000002_create_jobs_table_closure_3",
+      "database_migrations_0001_01_01_000002_create_jobs_table_down",
+      "database_migrations_0001_01_01_000002_create_jobs_table_up"
+    ],
+    "29": [
+      "app_http_controllers_recordviolationcontroller",
+      "app_http_controllers_recordviolationcontroller_closure_1",
+      "app_http_controllers_recordviolationcontroller_closure_2",
+      "app_http_controllers_recordviolationcontroller_recordviolationcontroller",
+      "app_http_controllers_recordviolationcontroller_recordviolationcontroller_create"
+    ],
+    "30": [
+      "composer_autoload",
+      "composer_autoload_psr_4",
+      "composer_psr_4_app",
+      "composer_psr_4_database_factories",
+      "composer_psr_4_database_seeders"
+    ],
+    "31": [
+      "composer_require",
+      "composer_require_laravel_framework",
+      "composer_require_laravel_tinker",
+      "composer_require_livewire_livewire",
+      "composer_require_php"
+    ],
+    "32": [
+      "config_logging",
+      "monolog_handler_nullhandler",
+      "monolog_handler_streamhandler",
+      "monolog_handler_syslogudphandler",
+      "monolog_processor_psrlogmessageprocessor"
+    ],
+    "33": [
+      "database_migrations_0001_01_01_000001_create_cache_table",
+      "database_migrations_0001_01_01_000001_create_cache_table_closure_1",
+      "database_migrations_0001_01_01_000001_create_cache_table_closure_2",
+      "database_migrations_0001_01_01_000001_create_cache_table_down",
+      "database_migrations_0001_01_01_000001_create_cache_table_up"
+    ],
+    "34": [
+      "database_migrations_2026_08_16_092823_add_is_admin_to_users_table",
+      "database_migrations_2026_08_16_092823_add_is_admin_to_users_table_closure_1",
+      "database_migrations_2026_08_16_092823_add_is_admin_to_users_table_closure_2",
+      "database_migrations_2026_08_16_092823_add_is_admin_to_users_table_down",
+      "database_migrations_2026_08_16_092823_add_is_admin_to_users_table_up"
+    ],
+    "35": [
+      "database_migrations_2026_08_20_000001_add_profile_picture_to_users_table",
+      "database_migrations_2026_08_20_000001_add_profile_picture_to_users_table_closure_1",
+      "database_migrations_2026_08_20_000001_add_profile_picture_to_users_table_closure_2",
+      "database_migrations_2026_08_20_000001_add_profile_picture_to_users_table_down",
+      "database_migrations_2026_08_20_000001_add_profile_picture_to_users_table_up"
+    ],
+    "36": [
+      "database_migrations_2026_09_20_000005_add_admin_review_to_quiz_attempts_table",
+      "database_migrations_2026_09_20_000005_add_admin_review_to_quiz_attempts_table_closure_1",
+      "database_migrations_2026_09_20_000005_add_admin_review_to_quiz_attempts_table_closure_2",
+      "database_migrations_2026_09_20_000005_add_admin_review_to_quiz_attempts_table_down",
+      "database_migrations_2026_09_20_000005_add_admin_review_to_quiz_attempts_table_up"
+    ],
+    "37": [
+      "database_migrations_2026_10_18_075740_add_offense_fields_to_violations_table",
+      "database_migrations_2026_10_18_075740_add_offense_fields_to_violations_table_closure_1",
+      "database_migrations_2026_10_18_075740_add_offense_fields_to_violations_table_closure_2",
+      "database_migrations_2026_10_18_075740_add_offense_fields_to_violations_table_down",
+      "database_migrations_2026_10_18_075740_add_offense_fields_to_violations_table_up"
+    ],
+    "38": [
+      "database_migrations_2026_10_19_000001_add_case_management_fields_to_violations_table",
+      "database_migrations_2026_10_19_000001_add_case_management_fields_to_violations_table_closure_1",
+      "database_migrations_2026_10_19_000001_add_case_management_fields_to_violations_table_closure_2",
+      "database_migrations_2026_10_19_000001_add_case_management_fields_to_violations_table_down",
+      "database_migrations_2026_10_19_000001_add_case_management_fields_to_violations_table_up"
+    ],
+    "39": [
+      "tests_feature_auth_passwordconfirmationtest",
+      "tests_feature_auth_passwordconfirmationtest_passwordconfirmationtest",
+      "tests_feature_auth_passwordconfirmationtest_passwordconfirmationtest_test_confirm_password_screen_can_be_rendered",
+      "tests_feature_auth_passwordconfirmationtest_passwordconfirmationtest_test_password_can_be_confirmed",
+      "tests_feature_auth_passwordconfirmationtest_passwordconfirmationtest_test_password_is_not_confirmed_with_invalid_password"
+    ],
+    "40": [
+      "app_http_controllers_consequencecontroller",
+      "app_http_controllers_consequencecontroller_consequencecontroller",
+      "app_http_controllers_consequencecontroller_consequencecontroller_approve",
+      "app_http_controllers_consequencecontroller_consequencecontroller_index"
+    ],
+    "41": [
+      "database_migrations_2026_09_20_000002_create_quizzes_table",
+      "database_migrations_2026_09_20_000002_create_quizzes_table_closure_1",
+      "database_migrations_2026_09_20_000002_create_quizzes_table_down",
+      "database_migrations_2026_09_20_000002_create_quizzes_table_up"
+    ],
+    "42": [
+      "database_migrations_2026_09_20_000004_create_quiz_attempts_table",
+      "database_migrations_2026_09_20_000004_create_quiz_attempts_table_closure_1",
+      "database_migrations_2026_09_20_000004_create_quiz_attempts_table_down",
+      "database_migrations_2026_09_20_000004_create_quiz_attempts_table_up"
+    ],
+    "43": [
+      "phpunit_framework_testcase",
+      "tests_unit_exampletest",
+      "tests_unit_exampletest_exampletest",
+      "tests_unit_exampletest_exampletest_test_that_true_is_true"
+    ],
+    "44": [
+      "application",
+      "argvinput",
+      "artisan"
+    ],
+    "45": [
+      "composer_autoload_dev",
+      "composer_autoload_dev_psr_4",
+      "composer_psr_4_tests"
+    ],
+    "46": [
+      "composer_extra",
+      "composer_extra_laravel",
+      "composer_laravel_dont_discover"
+    ],
+    "47": [
+      "resources_views_violations_index_blade",
+      "resources_views_violations_index_blade_php_layouts_student",
+      "violations_partials_code_cell"
+    ],
+    "48": [
+      "components_admin_sidebar",
+      "resources_views_layouts_admin_blade"
+    ],
+    "49": [
+      "components_sidebar",
+      "resources_views_layouts_student_blade"
+    ],
+    "50": [
+      "layouts_navigation",
+      "resources_views_layouts_app_blade"
+    ],
+    "51": [
+      "layouts_student",
+      "resources_views_dashboard_blade"
+    ],
+    "52": [
+      "resources_views_admin_appeal_reports_blade",
+      "resources_views_admin_appeal_reports_blade_php_layouts_admin"
+    ],
+    "53": [
+      "resources_views_admin_appeals_blade",
+      "resources_views_admin_appeals_blade_php_layouts_admin"
+    ],
+    "54": [
+      "resources_views_admin_apply_consequences_blade",
+      "resources_views_admin_apply_consequences_blade_php_layouts_admin"
+    ],
+    "55": [
+      "resources_views_admin_codeofdiscpline_codeofdiscipline_blade",
+      "resources_views_admin_codeofdiscpline_codeofdiscipline_blade_php_layouts_admin"
+    ],
+    "56": [
+      "resources_views_admin_dashboard_blade",
+      "resources_views_admin_dashboard_blade_php_layouts_admin"
+    ],
+    "57": [
+      "resources_views_admin_notifications_blade",
+      "resources_views_admin_notifications_blade_php_layouts_admin"
+    ],
+    "58": [
+      "resources_views_admin_recent_violations_blade",
+      "resources_views_admin_recent_violations_blade_php_layouts_admin"
+    ],
+    "59": [
+      "resources_views_admin_report_blade",
+      "resources_views_admin_report_blade_php_layouts_admin"
+    ],
+    "60": [
+      "resources_views_admin_violation_monitoring_blade",
+      "resources_views_admin_violation_monitoring_blade_php_layouts_admin"
+    ],
+    "61": [
+      "resources_views_admin_violations_history_blade",
+      "resources_views_admin_violations_history_blade_php_layouts_admin"
+    ],
+    "62": [
+      "resources_views_admin_violations_index_blade",
+      "resources_views_admin_violations_index_blade_php_layouts_admin"
+    ],
+    "63": [
+      "resources_views_code_of_discipline_blade",
+      "resources_views_code_of_discipline_blade_php_layouts_student"
+    ],
+    "64": [
+      "resources_views_report_blade",
+      "resources_views_report_blade_php_layouts_student"
+    ],
+    "65": [
+      "resources_views_student_penalty_quiz_blade",
+      "resources_views_student_penalty_quiz_blade_php_layouts_student"
+    ],
+    "66": [
+      "config_app"
+    ],
+    "67": [
+      "config_filesystems"
+    ],
+    "68": [
+      "config_mail"
+    ],
+    "69": [
+      "config_offenses"
+    ],
+    "70": [
+      "config_queue"
+    ],
+    "71": [
+      "config_services"
+    ],
+    "72": [
+      "postcss_config"
+    ],
+    "73": [
+      "resources_views_auth_admin_login_blade"
+    ],
+    "74": [
+      "resources_views_auth_confirm_password_blade"
+    ],
+    "75": [
+      "resources_views_auth_forgot_password_blade"
+    ],
+    "76": [
+      "resources_views_auth_login_blade"
+    ],
+    "77": [
+      "resources_views_auth_register_blade"
+    ],
+    "78": [
+      "resources_views_auth_reset_password_blade"
+    ],
+    "79": [
+      "resources_views_auth_verify_email_blade"
+    ],
+    "80": [
+      "resources_views_components_admin_sidebar_blade"
+    ],
+    "81": [
+      "resources_views_components_application_logo_blade"
+    ],
+    "82": [
+      "resources_views_components_auth_session_status_blade"
+    ],
+    "83": [
+      "resources_views_components_danger_button_blade"
+    ],
+    "84": [
+      "resources_views_components_dropdown_blade"
+    ],
+    "85": [
+      "resources_views_components_dropdown_link_blade"
+    ],
+    "86": [
+      "resources_views_components_input_error_blade"
+    ],
+    "87": [
+      "resources_views_components_input_label_blade"
+    ],
+    "88": [
+      "resources_views_components_livewire_register_form_blade"
+    ],
+    "89": [
+      "resources_views_components_modal_blade"
+    ],
+    "90": [
+      "resources_views_components_nav_link_blade"
+    ],
+    "91": [
+      "resources_views_components_primary_button_blade"
+    ],
+    "92": [
+      "resources_views_components_responsive_nav_link_blade"
+    ],
+    "93": [
+      "resources_views_components_secondary_button_blade"
+    ],
+    "94": [
+      "resources_views_components_sidebar_blade"
+    ],
+    "95": [
+      "resources_views_components_text_input_blade"
+    ],
+    "96": [
+      "resources_views_layouts_guest_blade"
+    ],
+    "97": [
+      "resources_views_layouts_navigation_blade"
+    ],
+    "98": [
+      "resources_views_profile_edit_blade"
+    ],
+    "99": [
+      "resources_views_profile_partials_delete_user_form_blade"
+    ],
+    "100": [
+      "resources_views_profile_partials_update_password_form_blade"
+    ],
+    "101": [
+      "resources_views_profile_partials_update_profile_information_form_blade"
+    ],
+    "102": [
+      "resources_views_violations_partials_code_cell_blade"
+    ],
+    "103": [
+      "resources_views_welcome_blade"
+    ]
+  },
+  "cohesion": {
+    "0": 0.0576592082616179,
+    "1": 0.06086956521739131,
+    "2": 0.06736353077816493,
+    "3": 0.06628787878787878,
+    "4": 0.08602150537634409,
+    "5": 0.07936507936507936,
+    "6": 0.11695906432748537,
+    "7": 0.16339869281045752,
+    "8": 0.15384615384615385,
+    "9": 0.23636363636363636,
+    "10": 0.3090909090909091,
+    "11": 0.2727272727272727,
+    "12": 0.2,
+    "13": 0.2777777777777778,
+    "14": 0.2222222222222222,
+    "15": 0.2222222222222222,
+    "16": 0.2222222222222222,
+    "17": 0.25,
+    "18": 0.2777777777777778,
+    "19": 0.2222222222222222,
+    "20": 0.2857142857142857,
+    "21": 0.25,
+    "22": 0.25,
+    "23": 0.25,
+    "24": 0.3333333333333333,
+    "25": 0.38095238095238093,
+    "26": 0.2857142857142857,
+    "27": 0.3333333333333333,
+    "28": 0.3333333333333333,
+    "29": 0.4,
+    "30": 0.4,
+    "31": 0.4,
+    "32": 0.4,
+    "33": 0.4,
+    "34": 0.4,
+    "35": 0.4,
+    "36": 0.4,
+    "37": 0.4,
+    "38": 0.4,
+    "39": 0.4,
+    "40": 0.5,
+    "41": 0.5,
+    "42": 0.5,
+    "43": 0.6666666666666666,
+    "44": 0.6666666666666666,
+    "45": 0.6666666666666666,
+    "46": 0.6666666666666666,
+    "47": 0.6666666666666666,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0,
+    "63": 1.0,
+    "64": 1.0,
+    "65": 1.0,
+    "66": 1.0,
+    "67": 1.0,
+    "68": 1.0,
+    "69": 1.0,
+    "70": 1.0,
+    "71": 1.0,
+    "72": 1.0,
+    "73": 1.0,
+    "74": 1.0,
+    "75": 1.0,
+    "76": 1.0,
+    "77": 1.0,
+    "78": 1.0,
+    "79": 1.0,
+    "80": 1.0,
+    "81": 1.0,
+    "82": 1.0,
+    "83": 1.0,
+    "84": 1.0,
+    "85": 1.0,
+    "86": 1.0,
+    "87": 1.0,
+    "88": 1.0,
+    "89": 1.0,
+    "90": 1.0,
+    "91": 1.0,
+    "92": 1.0,
+    "93": 1.0,
+    "94": 1.0,
+    "95": 1.0,
+    "96": 1.0,
+    "97": 1.0,
+    "98": 1.0,
+    "99": 1.0,
+    "100": 1.0,
+    "101": 1.0,
+    "102": 1.0,
+    "103": 1.0
+  },
+  "gods": [
+    {
+      "id": "app_models_violation_violation",
+      "label": "Violation",
+      "degree": 37
+    },
+    {
+      "id": "app_http_controllers_controller_controller",
+      "label": "Controller",
+      "degree": 31
+    },
+    {
+      "id": "app_models_user_user",
+      "label": "User",
+      "degree": 25
+    },
+    {
+      "id": "tests_feature_studentviolationpagetest_studentviolationpagetest",
+      "label": "StudentViolationPageTest",
+      "degree": 21
+    },
+    {
+      "id": "tests_testcase_testcase",
+      "label": "TestCase",
+      "degree": 16
+    },
+    {
+      "id": "app_notifications_violationstatusupdated_violationstatusupdated",
+      "label": "ViolationStatusUpdated",
+      "degree": 16
+    },
+    {
+      "id": "app_http_controllers_violationcontroller_violationcontroller",
+      "label": "ViolationController",
+      "degree": 15
+    },
+    {
+      "id": "app_models_quizattempt_quizattempt",
+      "label": "QuizAttempt",
+      "degree": 9
+    },
+    {
+      "id": "app_http_requests_auth_loginrequest_loginrequest",
+      "label": "LoginRequest",
+      "degree": 9
+    },
+    {
+      "id": "app_models_quiz_quiz",
+      "label": "Quiz",
+      "degree": 9
+    }
+  ],
+  "surprises": [
+    {
+      "source": "{closure#1}()",
+      "target": "User",
+      "source_files": [
+        "app/Http/Controllers/Auth/NewPasswordController.php",
+        "app/Models/User.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "bridges separate communities; peripheral node `{closure#1}()` unexpectedly reaches hub `User`"
+    },
+    {
+      "source": "AdminController",
+      "target": "Controller",
+      "source_files": [
+        "app/Http/Controllers/AdminController.php",
+        "app/Http/Controllers/Controller.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "inherits",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "ConsequenceController",
+      "target": "Controller",
+      "source_files": [
+        "app/Http/Controllers/ConsequenceController.php",
+        "app/Http/Controllers/Controller.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "inherits",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "RecordViolationController",
+      "target": "Controller",
+      "source_files": [
+        "app/Http/Controllers/RecordViolationController.php",
+        "app/Http/Controllers/Controller.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "inherits",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "StudentViolationController",
+      "target": "Controller",
+      "source_files": [
+        "app/Http/Controllers/StudentViolationController.php",
+        "app/Http/Controllers/Controller.php"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "inherits",
+      "why": "bridges separate communities"
+    }
+  ],
+  "tokens": {
+    "input": 0,
+    "output": 0
+  }
+}

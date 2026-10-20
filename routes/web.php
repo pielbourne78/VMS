@@ -26,7 +26,9 @@ Route::get('/violation-monitoring', [StudentViolationController::class, 'index']
 Route::middleware(['auth', 'admin', 'verified'])->prefix('admin')->name('admin.violations.')->group(function () {
     Route::get('/violations', [ViolationController::class, 'index'])->name('index');
     Route::post('/violations', [ViolationController::class, 'store'])->name('store');
+    Route::post('/violations/bulk-action', [ViolationController::class, 'bulkAction'])->name('bulk-action');
     Route::get('/violations/student/{user}', [ViolationController::class, 'history'])->name('history');
+    Route::patch('/violations/{violation}/escalate', [ViolationController::class, 'escalate'])->name('escalate');
     Route::patch('/violations/{violation}', [ViolationController::class, 'update'])->name('update');
     Route::delete('/violations/{violation}', [ViolationController::class, 'destroy'])->name('destroy');
 });
@@ -74,17 +76,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
-Route::get('/dashboard', function () {
-    if (auth()->user()->is_admin) {
-        return redirect()->route('admin.dashboard');
-    }
-
-    $violations = \App\Models\Violation::where('user_id', auth()->id())
-        ->orderByDesc('occurred_at')
-        ->get();
-
-    return view('dashboard', compact('violations'));
-})->middleware(['auth', 'verified', 'student'])->name('dashboard');
+Route::get('/dashboard', [StudentViolationController::class, 'dashboard'])
+    ->middleware(['auth', 'verified', 'student'])
+    ->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'student'])->group(function () {
     Route::get('/violations/{violation}/penalty-quiz', [\App\Http\Controllers\PenaltyQuizController::class, 'show'])

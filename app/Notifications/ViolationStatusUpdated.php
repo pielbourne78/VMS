@@ -26,6 +26,10 @@ class ViolationStatusUpdated extends Notification
             'message' => $this->data['message'] ?? 'A violation status was updated.',
             'url' => $this->data['url'] ?? null,
             'type' => $this->data['type'] ?? 'violation_status',
+            'severity' => $this->data['severity'] ?? 'info',
+            'sanction' => $this->data['sanction'] ?? null,
+            'case_code' => $this->data['case_code'] ?? null,
+            'violation_id' => $this->data['violation_id'] ?? null,
             'created_at' => now()->toDateTimeString(),
         ];
     }

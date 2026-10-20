@@ -302,6 +302,60 @@ class StudentViolationPageTest extends TestCase
             ->assertSee('Penalty Quiz');
     }
 
+    public function test_student_dashboard_only_shows_sanction_warning_notifications(): void
+    {
+        $student = User::factory()->create([
+            'role' => 'student',
+            'email' => 'student-warning@example.com',
+            'name' => 'Warning Student',
+        ]);
+
+        Notification::send($student, new ViolationStatusUpdated([
+            'title' => 'Sanction Warning',
+            'message' => 'Warning: sanctions charged — D - Non-readmission',
+            'url' => route('report'),
+            'type' => 'migration_warning',
+            'sanction' => 'D - Non-readmission',
+        ]));
+
+        Notification::send($student, new ViolationStatusUpdated([
+            'title' => 'Consequence Applied',
+            'message' => 'A consequence was applied to your case.',
+            'url' => route('student.penalty.quiz', 1),
+            'type' => 'consequence_applied',
+            'sanction' => 'D - Non-readmission',
+        ]));
+
+        $this->actingAs($student)
+            ->get('/dashboard')
+            ->assertOk()
+            ->assertSee('Sanction Warning')
+            ->assertSee('D - Non-readmission')
+            ->assertDontSee('Consequence Applied');
+    }
+
+    public function test_student_dashboard_handles_legacy_migration_warning_without_sanction_field(): void
+    {
+        $student = User::factory()->create([
+            'role' => 'student',
+            'email' => 'legacy-warning@example.com',
+            'name' => 'Legacy Warning Student',
+        ]);
+
+        Notification::send($student, new ViolationStatusUpdated([
+            'title' => 'Warning',
+            'message' => 'A migration sanction warning has been issued for this case.',
+            'url' => route('report'),
+            'type' => 'migration_warning',
+        ]));
+
+        $this->actingAs($student)
+            ->get('/dashboard')
+            ->assertOk()
+            ->assertSee('Warning')
+            ->assertSee('A migration sanction warning has been issued for this case.');
+    }
+
     public function test_student_notification_can_be_marked_as_read(): void
     {
         $student = User::factory()->create([

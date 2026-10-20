@@ -2,35 +2,45 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\DisciplineDashboardService;
 use Illuminate\Http\Request;
 
 class StudentViolationController extends Controller
 {
-    public function index(Request $request)
-{
-    $student = auth()->user();
+    public function index(Request $request, DisciplineDashboardService $service)
+    {
+        $student = auth()->user();
 
-    if (!$student) {
-        abort(401);
+        if (!$student) {
+            abort(401);
+        }
+
+        $data = $service->forStudent($student);
+
+        return view('violations.index', [
+            'activeCases' => $data['activeCases'],
+            'resolvedCases' => $data['resolvedCases'],
+            'pendingCases' => $data['pendingCases'],
+            'totalViolations' => $data['totalViolations'],
+            'summary' => $data['summary'],
+        ]);
     }
 
-    $violations = $student->violations()
-        ->orderByDesc('occurred_at')
-        ->get();
+    public function dashboard(DisciplineDashboardService $service)
+    {
+        $student = auth()->user();
 
-    // Correct filtering based on your actual status values
-    $activeCases = $violations->whereNotIn('status', ['consequence_applied', 'resolved']); // still open / not yet approved
-    $pendingCases = $violations->where('status', 'consequence_applied'); // awaiting quiz or under review
-    $resolvedCases = $violations->where('status', 'resolved');
-    $totalViolations = $violations;
+        if (!$student) {
+            abort(401);
+        }
 
-    return view('violations.index', compact(
-        'activeCases',
-        'resolvedCases',
-        'pendingCases',
-        'totalViolations'
-    ));
-}
+        $data = $service->forStudent($student);
+
+        return view('dashboard', [
+            'violations' => $data['violations'],
+            'summary' => $data['summary'],
+        ]);
+    }
 
     public function report()
     {

@@ -37,6 +37,47 @@
             background: linear-gradient(90deg, var(--grc-red) 0%, var(--grc-red-dark) 100%);
         }
 
+        .brand-overlay {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            min-width: 220px;
+            padding: 0.5rem 0.85rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        }
+
+        .brand-overlay img {
+            width: 2.8rem;
+            height: 2.8rem;
+            border-radius: 9999px;
+            object-fit: cover;
+            background: #fff;
+            padding: 0.2rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        .brand-overlay-title {
+            line-height: 1.05;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-size: 0.62rem;
+        }
+
+        .header-nav a {
+            padding: 0.5rem 1.2rem;
+            border-radius: 9999px;
+            transition: all 0.2s ease;
+        }
+
+        .header-nav a:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
         .stat-btn-gradient {
             background: linear-gradient(90deg, var(--grc-red) 0%, #E32B3E 100%);
         }
@@ -56,17 +97,6 @@
         .card-hover:hover {
             transform: translateY(-2px);
             box-shadow: 0 16px 30px rgba(15, 23, 42, 0.08);
-        }
-
-        .animate-reveal {
-            opacity: 0;
-            transform: translateY(12px);
-            transition: opacity 0.45s ease, transform 0.45s ease;
-        }
-
-        .animate-reveal.is-visible {
-            opacity: 1;
-            transform: translateY(0);
         }
 
         @media (max-width: 1024px) {
@@ -98,153 +128,176 @@
 </head>
 
 <body class="antialiased min-h-screen overflow-x-hidden">
+    @php
+        $currentUser = Auth::check() ? Auth::user() : null;
+        $userName = $currentUser?->name ?? 'Guest';
+        $userPhoto = $currentUser?->profile_photo_url ?? 'https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png';
+        $notificationsEnabled = \Illuminate\Support\Facades\Schema::hasTable('notifications') && $currentUser;
+        $allNotifications = $notificationsEnabled ? $currentUser->notifications()->latest()->limit(10)->get() : collect();
+        $notifications = $allNotifications->filter(function ($notification) {
+            $data = $notification->data ?? [];
+            $type = $data['type'] ?? null;
+            $title = $data['title'] ?? '';
+            $message = $data['message'] ?? '';
 
-    <div class="dashboard-shell flex min-h-screen">
+            if (in_array($type, ['migration_warning', 'sanction_warning'], true)) {
+                return true;
+            }
 
-        <!-- Reusable Sidebar Component -->
-        @include('components.sidebar')
+            return str_contains(strtolower((string) $title), 'sanction warning')
+                || str_contains(strtolower((string) $message), 'sanctions charged')
+                || str_contains(strtolower((string) $message), 'sanction warning');
+        });
+        $unreadCount = $notifications->whereNull('read_at')->count();
+    @endphp
 
-        <!-- ================= Main Content ================= -->
-        <div class="flex-1 flex flex-col bg-white">
+    <div class="dashboard-shell relative min-h-screen">
+        <header
+            class="header-gradient text-white px-6 py-4 shadow-md flex items-center justify-between z-20 flex-shrink-0">
+            <!-- Logo and College Name -->
+            <div class="flex items-center gap-4">
+                <button id="sidebarOpenBtn" onclick="toggleSidebar()"
+                    class="text-white text-2xl focus:outline-none hover:opacity-80 transition cursor-pointer rounded-full bg-white/10 p-2">
+                    ☰
+                </button>
+                <img src="{{ asset('images/logo.jpg') }}" alt="GRC Logo"
+                    class="h-12 w-12 object-contain bg-white rounded-full p-1 shadow-lg ring-2 ring-white/50">
+                <div>
+                    <h1 class="text-xs font-bold uppercase tracking-wider opacity-90 leading-tight">Global</h1>
+                    <h2 class="text-sm font-extrabold uppercase tracking-tight leading-tight">Reciprocal Colleges</h2>
+                </div>
+            </div>
 
-            <!-- Header Navigation -->
-            <header
-                class="header-gradient text-white px-8 py-5 shadow-lg flex items-center justify-between border-b-4 border-grc-red flex-shrink-0">
-                <nav class="flex items-center gap-3 text-base font-semibold tracking-tight header-nav">
-                    <button id="sidebarOpenBtn" onclick="toggleSidebar()"
-                        class="text-white text-2xl focus:outline-none hover:opacity-80 transition cursor-pointer pr-2 rounded-full bg-white/10 p-2">
-                        ☰
+            <nav
+                class="hidden md:flex flex-1 items-center justify-center flex-wrap gap-2 text-base font-bold tracking-tight header-nav">
+                <a href="{{ route('dashboard') }}"
+                    class="{{ request()->routeIs('dashboard') ? 'stat-btn-gradient text-white shadow-inner' : 'hover:text-red-200' }} tracking-wide uppercase">
+                    Dashboard
+                </a>
+                <a href="{{ route('violation.monitoring') }}"
+                    class="{{ request()->routeIs('violation.monitoring') ? 'stat-btn-gradient text-white shadow-inner' : 'hover:text-red-200' }} tracking-wide uppercase">
+                    Violation Monitoring
+                </a>
+                <a href="{{ route('report') }}"
+                    class="{{ request()->routeIs('report') ? 'stat-btn-gradient text-white shadow-inner' : 'hover:text-red-200' }} tracking-wide uppercase">
+                    Report
+                </a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <span class="text-white font-bold text-sm tracking-wide uppercase hidden xl:inline">
+                    {{ $userName }}
+                </span>
+
+                <div class="relative">
+                    <button id="notifBellButton" type="button"
+                        class="bg-red-900/40 p-2.5 rounded-full cursor-pointer hover:bg-red-900/70 transition shadow-inner focus:outline-none flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                            </path>
+                        </svg>
+                        @if($unreadCount > 0)
+                            <span
+                                class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold bg-red-500 text-white rounded-full border-2 border-white">{{ $unreadCount }}</span>
+                        @endif
                     </button>
-                    <a href="{{ route('dashboard') }}"
-                        class="{{ request()->routeIs('dashboard') ? 'stat-btn-gradient text-white px-5 py-2.5 rounded-full shadow-inner' : 'hover:bg-white/10 hover:px-5 hover:py-2.5 hover:rounded-full transition-all' }} tracking-wide">
-                        DASHBOARD
-                    </a>
-                    <a href="{{ route('violation.monitoring') }}"
-                        class="{{ request()->routeIs('violation.monitoring') ? 'stat-btn-gradient text-white px-5 py-2.5 rounded-full shadow-inner' : 'hover:bg-white/10 hover:px-5 hover:py-2.5 hover:rounded-full transition-all' }} tracking-wide">
-                        VIOLATION MONITORING
-                    </a>
-                    <a href="{{ route('report') }}"
-                        class="{{ request()->routeIs('report') ? 'stat-btn-gradient text-white px-5 py-2.5 rounded-full shadow-inner' : 'hover:bg-white/10 hover:px-5 hover:py-2.5 hover:rounded-full transition-all' }} tracking-wide">
-                        REPORT
-                    </a>
-                </nav>
-                <div class="flex items-center gap-5">
-                    <!-- Student Name -->
-                    <span class="text-white font-bold text-sm tracking-wide uppercase hidden sm:inline">
-                        {{ Auth::user()->name }}
-                    </span>
 
-                    <!-- Notification Bell Wrapper -->
-                    <div class="relative">
-                        <button id="notifBellButton" type="button"
-                            class="bg-red-900/40 p-2.5 rounded-full cursor-pointer hover:bg-red-900/70 transition shadow-inner focus:outline-none flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
-                                </path>
-                            </svg>
-                            @php($notificationsEnabled = \Illuminate\Support\Facades\Schema::hasTable('notifications'))
-                            @php($unreadCount = $notificationsEnabled ? Auth::user()->unreadNotifications()->count() : 0)
-                            @if($unreadCount > 0)
-                                <span
-                                    class="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold bg-red-500 text-white rounded-full border-2 border-white">{{ $unreadCount }}</span>
-                            @endif
-                        </button>
-
-                        <!-- Notification Dropdown Menu -->
-                        <div id="notifDropdown"
-                            class="hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-gray-200 z-50 text-gray-800 overflow-hidden">
-                            <div
-                                class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
-                                <h4 class="text-sm font-extrabold text-grc-red uppercase tracking-wider">Notifications
-                                </h4>
-                                <span class="text-xs bg-red-100 text-grc-red font-bold px-2 py-0.5 rounded-full">
-                                    {{ $unreadCount }}
-                                </span>
-                            </div>
-                            <div class="max-h-64 overflow-y-auto divide-y divide-gray-100">
-                                @php($notifications = $notificationsEnabled ? Auth::user()->notifications()->latest()->limit(10)->get() : collect())
-                                @if($notifications->isNotEmpty())
-                                @foreach($notifications as $notification)
-                                @php($data = $notification->data ?? [])
-                                    <a href="{{ $data['url'] ?? '#' }}" data-notification-id="{{ $notification->id }}"
-                                        class="block p-3.5 hover:bg-gray-50 transition {{ is_null($notification->read_at) ? 'bg-red-50/60' : 'bg-white' }}"
-                                        @if(!empty($data['url']))
-                                        onclick="markNotificationRead('{{ $notification->id }}', this);" @else
-                                            onclick="markNotificationRead('{{ $notification->id }}', this); return false;"
-                                        @endif>
-                                        <div class="flex items-start justify-between gap-3">
-                                            <div>
-                                                <p class="text-xs font-bold text-gray-800 uppercase">
-                                                    {{ $data['title'] ?? 'Notification' }}</p>
-                                                <p class="text-[11px] text-gray-500 mt-0.5">
-                                                    {{ $data['message'] ?? 'You have a new update.' }}</p>
-                                            </div>
-                                            @if(is_null($notification->read_at))
-                                                <span class="w-2.5 h-2.5 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></span>
-                                            @endif
-                                        </div>
-                                    </a>
-                                    @endforeach
-                                @else
-                                <div class="p-6 text-center text-gray-400 text-xs">
-                                    🔔 No new notifications available.
-                                </div>
-                                @endif
-                            </div>
+                    <div id="notifDropdown"
+                        class="hidden absolute right-0 mt-3 w-80 bg-white rounded-2xl shadow-xl border border-gray-200 z-50 text-gray-800 overflow-hidden">
+                        <div class="px-4 py-3 bg-gray-50 border-b border-gray-100 flex justify-between items-center">
+                            <h4 class="text-sm font-extrabold text-grc-red uppercase tracking-wider">Notifications
+                            </h4>
+                            <span
+                                class="text-xs bg-red-100 text-grc-red font-bold px-2 py-0.5 rounded-full">{{ $unreadCount }}</span>
                         </div>
-                    </div>
-
-                    <!-- Profile Dropdown -->
-                    <div class="relative">
-                        <button id="profileMenuButton" type="button"
-                            class="flex items-center gap-3 bg-white text-grc-red px-4 py-1.5 rounded-full font-bold cursor-pointer shadow-md hover:bg-gray-50 transition focus:outline-none">
-                            <img src="{{ Auth::user()->profile_photo_url }}" alt="Profile"
-                                class="w-8 h-8 rounded-full border-2 border-grc-red object-cover"
-                                onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png';">
-                            <span class="tracking-tight text-sm">PROFILE</span>
-                            <svg id="profileMenuChevron" class="w-4 h-4 transition-transform" fill="none"
-                                stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-
-                        <!-- Dropdown Menu -->
-                        <div id="profileDropdown"
-                            class="hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-gray-200 z-50 text-gray-800 overflow-hidden">
-                            <a href="{{ route('profile.edit') }}"
-                                class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition text-sm font-semibold">
-                                <svg class="w-5 h-5 text-grc-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                    </path>
-                                </svg>
-                                Edit Profile
-                            </a>
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit"
-                                    class="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition text-sm font-semibold text-grc-red border-t border-gray-100">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                                        </path>
-                                    </svg>
-                                    Log Out
-                                </button>
-                            </form>
+                        <div class="max-h-64 overflow-y-auto divide-y divide-gray-100">
+                            @if($notifications->isNotEmpty())
+                            @foreach($notifications as $notification)
+                            @php($data = $notification->data ?? [])
+                                <a href="{{ $data['url'] ?? '#' }}" data-notification-id="{{ $notification->id }}"
+                                    class="block p-3.5 hover:bg-gray-50 transition {{ is_null($notification->read_at) ? 'bg-red-50/60' : 'bg-white' }}"
+                                    @if(!empty($data['url']))
+                                    onclick="markNotificationRead('{{ $notification->id }}', this);" @else
+                                    onclick="markNotificationRead('{{ $notification->id }}', this); return false;" @endif>
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div>
+                                            <p class="text-xs font-bold text-gray-800 uppercase">
+                                                {{ $data['title'] ?? 'Notification' }}
+                                            </p>
+                                            <p class="text-[11px] text-gray-500 mt-0.5">
+                                                {{ $data['message'] ?? 'You have a new update.' }}
+                                            </p>
+                                        </div>
+                                        @if(is_null($notification->read_at))
+                                            <span class="w-2.5 h-2.5 rounded-full bg-red-500 mt-1.5 flex-shrink-0"></span>
+                                        @endif
+                                    </div>
+                                </a>
+                                @endforeach
+                            @else
+                            <div class="p-6 text-center text-gray-400 text-xs">🔔 No new notifications available.
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
-            </header>
+
+                <div class="relative">
+                    <button id="profileMenuButton" type="button"
+                        class="flex items-center gap-3 bg-white text-grc-red px-4 py-1.5 rounded-full font-bold cursor-pointer shadow-md hover:bg-gray-50 transition focus:outline-none">
+                        <img src="{{ $userPhoto }}" alt="Profile"
+                            class="w-8 h-8 rounded-full border-2 border-grc-red object-cover"
+                            onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/carlvilla/resources/main/student-avatar.png';">
+                        <span class="tracking-tight text-sm">PROFILE</span>
+                        <svg id="profileMenuChevron" class="w-4 h-4 transition-transform" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </button>
+
+                    <div id="profileDropdown"
+                        class="hidden absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-gray-200 z-50 text-gray-800 overflow-hidden">
+                        <a href="{{ route('profile.edit') }}"
+                            class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition text-sm font-semibold">
+                            <svg class="w-5 h-5 text-grc-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                </path>
+                            </svg>
+                            Edit Profile
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="w-full flex items-center gap-3 px-4 py-3 hover:bg-red-50 transition text-sm font-semibold text-grc-red border-t border-gray-100">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                    </path>
+                                </svg>
+                                Log Out
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </header>
+
+    <div class="flex min-h-screen">
+        @include('components.sidebar')
+
+        <div class="flex-1 flex flex-col bg-white">
             @if(session('error'))
-                <div class="mx-8 mt-4 rounded-lg bg-red-100 border border-red-300 text-red-800 px-4 py-3 text-sm font-semibold">
+                <div
+                    class="mx-8 mt-4 rounded-lg bg-red-100 border border-red-300 text-red-800 px-4 py-3 text-sm font-semibold">
                     {{ session('error') }}
                 </div>
             @endif
             @if(session('success'))
-                <div class="mx-8 mt-4 rounded-lg bg-green-100 border border-green-300 text-green-800 px-4 py-3 text-sm font-semibold">
+                <div
+                    class="mx-8 mt-4 rounded-lg bg-green-100 border border-green-300 text-green-800 px-4 py-3 text-sm font-semibold">
                     {{ session('success') }}
                 </div>
             @endif
@@ -253,27 +306,10 @@
 
         </div>
     </div>
+</div>
 
     <!-- Shared Scripts -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const revealItems = document.querySelectorAll('[data-reveal]');
-            if (revealItems.length && 'IntersectionObserver' in window) {
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('is-visible');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.12 });
-
-                revealItems.forEach((item) => observer.observe(item));
-            } else {
-                revealItems.forEach((item) => item.classList.add('is-visible'));
-            }
-        });
-
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const openBtn = document.getElementById('sidebarOpenBtn');

@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Services\DisciplineDashboardService;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function index(DisciplineDashboardService $service)
     {
-        return view('admin.dashboard');
+        $data = $service->forAdmin();
+
+        return view('admin.dashboard', [
+            'stats' => $data['stats'],
+            'violations' => $data['violations'],
+            'recent' => $data['recent'],
+        ]);
     }
 }

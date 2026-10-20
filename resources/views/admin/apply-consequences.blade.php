@@ -3,73 +3,158 @@
 @section('title', 'Apply Consequences')
 
 @section('content')
-    <h2 class="text-2xl font-black text-gray-800 tracking-tight mb-6 uppercase">CONSEQUENCES</h2>
+    @php
+        $selectedViolation = $violations->first();
+    @endphp
+
+    <div class="mx-auto w-full max-w-[1600px]">
+        <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+                <p class="text-xs font-black uppercase tracking-[0.28em] text-red-700">Case Workflow</p>
+                <h2 class="mt-2 text-3xl font-black tracking-tight text-gray-900">Consequence Review Queue</h2>
+            </div>
+            <div class="rounded-full bg-red-700 px-4 py-2 text-sm font-black text-white shadow-sm">
+                {{ $violations->count() }} pending case{{ $violations->count() === 1 ? '' : 's' }}
+            </div>
+        </div>
 
     @if(session('success'))
-        <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-lg font-semibold text-sm max-w-4xl">
+        <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-bold text-green-800 shadow-sm">
             {{ session('success') }}
         </div>
     @endif
 
-    <div class="bg-blue-50/60 border-4 border-red-700 rounded-xl shadow-[0_12px_28px_rgba(191,30,46,0.1)] max-w-5xl overflow-hidden">
-        <div class="max-h-[500px] overflow-y-auto admin-consequences-scroll">
-            <table class="w-full text-left border-collapse min-w-[760px]">
-                <thead class="sticky top-0 z-10">
-                    <tr class="border-b-2 border-red-700 text-gray-800 bg-blue-100/80">
-                        <th class="py-3 px-6 text-base font-extrabold">Student name</th>
-                        <th class="py-3 px-6 text-base font-extrabold">Violation type</th>
-                        <th class="py-3 px-6 text-base font-extrabold">Status</th>
-                        <th class="py-3 px-6 text-base font-extrabold text-center">Action</th>
+    @if($selectedViolation)
+        @php
+            $selectedStatus = $selectedViolation->status ?? 'pending';
+            $selectedStatusLabel = $selectedStatus === 'consequence_applied' ? 'Consequence Applied' : 'Pending';
+            $selectedBadgeClass = $selectedStatus === 'consequence_applied'
+                ? 'bg-blue-100 text-blue-800 ring-blue-200'
+                : 'bg-amber-100 text-amber-800 ring-amber-200';
+        @endphp
+
+        <div class="mb-6 rounded-2xl border border-gray-200 bg-white p-5 shadow-[0_12px_28px_rgba(0,0,0,0.05)]">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                    <p class="text-[11px] font-black uppercase tracking-[0.25em] text-gray-500">Selected case</p>
+                    <h3 class="mt-2 text-2xl font-black text-gray-900">
+                        {{ $selectedViolation->student?->full_name ?? $selectedViolation->student?->name ?? 'Student' }}
+                    </h3>
+                </div>
+                <span class="inline-flex items-center rounded-full px-3 py-1 text-xs font-black uppercase tracking-wide ring-1 {{ $selectedBadgeClass }}">
+                    {{ $selectedStatusLabel }}
+                </span>
+            </div>
+
+            <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                <div class="rounded-xl bg-gray-50 p-3">
+                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Violation code</p>
+                    <p class="mt-2 text-base font-extrabold text-gray-900">{{ $selectedViolation->violation_code ?? $selectedViolation->offense_code ?? 'N/A' }}</p>
+                </div>
+                <div class="rounded-xl bg-gray-50 p-3">
+                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Sanction</p>
+                    <p class="mt-2 text-base font-extrabold text-gray-900">{{ $selectedViolation->sanction_label ?? 'Not assigned yet' }}</p>
+                </div>
+                <div class="rounded-xl bg-gray-50 p-3">
+                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Violation</p>
+                    <p class="mt-2 text-base font-extrabold text-gray-900">{{ $selectedViolation->violation_type ?? $selectedViolation->description ?? 'N/A' }}</p>
+                </div>
+                <div class="rounded-xl bg-gray-50 p-3">
+                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Next step</p>
+                    <p class="mt-2 text-base font-extrabold text-red-700">
+                        {{ $selectedStatus === 'consequence_applied' ? 'Student must complete the penalty quiz.' : 'Apply consequence to unlock the student workflow.' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_18px_40px_rgba(15,23,42,0.08)]">
+        <div class="max-h-[calc(100vh-260px)] overflow-auto admin-consequences-scroll">
+            <table class="min-w-[1100px] w-full border-collapse text-left">
+                <thead class="sticky top-0 z-10 bg-[#1d2d3d] text-white">
+                    <tr>
+                        <th class="px-5 py-4 text-xs font-black uppercase tracking-[0.2em]">Student</th>
+                        <th class="px-5 py-4 text-xs font-black uppercase tracking-[0.2em]">Violation code</th>
+                        <th class="px-5 py-4 text-xs font-black uppercase tracking-[0.2em]">Sanction</th>
+                        <th class="px-5 py-4 text-xs font-black uppercase tracking-[0.2em]">Status</th>
+                        <th class="px-5 py-4 text-xs font-black uppercase tracking-[0.2em] text-right">Action</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-blue-200">
-                @forelse($violations as $violation)
-                    <tr class="hover:bg-blue-100/40">
-                        <td class="py-3 px-6 font-bold text-gray-800 text-sm">
-                            {{ $violation->student->full_name ?? $violation->student->name ?? 'Student Name' }}
-                        </td>
-                        <td class="py-3 px-6 font-bold text-gray-700 uppercase text-sm">
-                            {{ $violation->violation_type ?? $violation->description ?? 'N/A' }}
-                        </td>
-                        <td class="py-3 px-6 font-bold text-gray-700 uppercase text-sm">
-                            {{ $violation->status }}
-                        </td>
-                        <td class="py-3 px-6 text-center">
-                            <form action="{{ route('admin.violations.approve', $violation->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('PATCH')
-                                <button type="submit"
-                                    class="bg-lime-500 hover:bg-lime-600 text-black font-extrabold px-5 py-1 rounded-full text-xs shadow transition">
-                                    Approve
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="py-8 text-center text-gray-500 font-bold">
-                            No pending violations found.
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    @forelse($violations as $violation)
+                        @php
+                            $status = $violation->status ?? 'pending';
+                            $statusLabel = $status === 'consequence_applied' ? 'Consequence Applied' : 'Pending';
+                            $statusClasses = $status === 'consequence_applied'
+                                ? 'bg-blue-100 text-blue-800 ring-blue-200'
+                                : 'bg-amber-100 text-amber-800 ring-amber-200';
+                        @endphp
+                        <tr class="align-top hover:bg-red-50/60">
+                            <td class="px-5 py-4">
+                                <div class="font-black text-gray-900">{{ $violation->student?->full_name ?? $violation->student?->name ?? 'Student' }}</div>
+                                <div class="mt-1 text-xs text-gray-500">{{ $violation->student?->student_id ?? 'Student ID N/A' }}</div>
+                            </td>
+                            <td class="px-5 py-4">
+                                <div class="font-bold text-red-700">{{ $violation->violation_code ?? $violation->offense_code ?? 'N/A' }}</div>
+                                <div class="mt-1 text-xs text-gray-600">{{ $violation->violation_type ?? $violation->description ?? 'No description' }}</div>
+                            </td>
+                            <td class="px-5 py-4">
+                                <div class="font-bold text-gray-900">{{ $violation->sanction_label ?? 'Not assigned yet' }}</div>
+                                @if(!empty($violation->beyond_path))
+                                    <div class="mt-1 text-[11px] font-bold uppercase tracking-wide text-red-700">Beyond sanctioned path</div>
+                                @endif
+                            </td>
+                            <td class="px-5 py-4">
+                                <span class="inline-flex items-center rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-wide ring-1 {{ $statusClasses }}">
+                                    {{ $statusLabel }}
+                                </span>
+                            </td>
+                            <td class="px-5 py-4 text-right">
+                                <form action="{{ route('admin.violations.approve', $violation->id) }}" method="POST" class="inline-block">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit"
+                                        class="rounded-full bg-red-700 px-5 py-2 text-xs font-black uppercase tracking-wide text-white shadow-sm transition hover:bg-red-800">
+                                        Apply Consequence
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                <div class="text-lg font-black text-gray-700">No pending violations found.</div>
+                                <p class="mt-2 text-sm">All recorded cases are currently clear or already have consequences applied.</p>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
             </table>
         </div>
     </div>
 
     <style>
+        .admin-consequences-scroll {
+            max-height: calc(100vh - 260px);
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 #f8fafc;
+            scrollbar-gutter: stable;
+        }
+
         .admin-consequences-scroll::-webkit-scrollbar {
             width: 10px;
+            height: 10px;
         }
 
         .admin-consequences-scroll::-webkit-scrollbar-track {
-            background: #eef2ff;
+            background: #f8fafc;
         }
 
         .admin-consequences-scroll::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 9999px;
-            border: 2px solid #eef2ff;
+            border: 2px solid #f8fafc;
         }
 
         .admin-consequences-scroll::-webkit-scrollbar-thumb:hover {
