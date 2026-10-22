@@ -73,28 +73,25 @@
             </div>
 
             <div class="divide-y divide-gray-200">
-                @forelse($violations ?? [] as $violation)
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 px-6 py-4 items-center">
-                        <div>
-                            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Student</p>
-                            <p class="mt-1 font-bold text-gray-900">{{ $violation->student->full_name ?? $violation->student->name ?? 'N/A' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Violation</p>
-                            <p class="mt-1 font-bold text-gray-800">{{ $violation->violation_type ?? 'N/A' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Status</p>
-                            <span class="mt-1 inline-flex rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide
-                                {{ $violation->status === 'resolved' ? 'bg-green-100 text-green-700' : ($violation->review_level === 'escalated' ? 'bg-purple-100 text-purple-700' : 'bg-yellow-100 text-yellow-700') }}">
-                                {{ $violation->review_level === 'escalated' ? 'ESCALATED' : ($violation->status === 'consequence_applied' ? 'PENDING' : ($violation->status === 'pending' ? 'ACTIVE CASE' : strtoupper($violation->status))) }}
-                            </span>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Case owner</p>
-                            <p class="mt-1 font-bold text-gray-800">{{ $violation->caseOwner?->full_name ?? $violation->recordedBy?->full_name ?? 'Unassigned' }}</p>
-                        </div>
-                    </div>
+    @forelse($violations ?? [] as $violation)
+        <div class="grid grid-cols-12 items-center gap-4 px-6 py-4">
+            <div class="col-span-4">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Student</p>
+                <p class="mt-1 font-bold text-gray-900">{{ $violation->student->full_name ?? $violation->student->name ?? 'N/A' }}</p>
+            </div>
+            <div class="col-span-5">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Violation</p>
+                <p class="mt-1 font-bold text-gray-800">{{ $violation->violation_type ?? 'N/A' }}</p>
+            </div>
+            <div class="col-span-3 text-right">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Status</p>
+                <span class="mt-1 inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide
+                    {{ $violation->status === 'resolved' ? 'bg-green-100 text-green-700' : ($violation->review_level === 'escalated' ? 'bg-purple-100 text-purple-700' : 'bg-yellow-100 text-yellow-700') }}">
+                    {{ $violation->review_level === 'escalated' ? 'ESCALATED' : ($violation->status === 'consequence_applied' ? 'PENDING' : ($violation->status === 'pending' ? 'ACTIVE CASE' : strtoupper($violation->status))) }}
+                </span>
+            </div>
+        </div>
+                    
                 @empty
                     <div class="px-6 py-16 text-center text-gray-400 font-bold uppercase tracking-wider text-sm">
                         No violation reports found.

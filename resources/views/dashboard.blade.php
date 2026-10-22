@@ -103,7 +103,7 @@
                                     @elseif($status === 'consequence_applied')
                                         <a href="{{ route('student.penalty.quiz', $violation) }}"
                                             class="inline-flex items-center justify-center rounded-full bg-red-600 px-6 py-2 text-sm font-black uppercase tracking-wide text-white shadow hover:bg-red-700 transition">
-                                            Pending
+                                            Explain
                                         </a>
                                     @else
                                         <button type="button"
