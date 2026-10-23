@@ -69,9 +69,9 @@ public function store(Request $request)
        return $request->validate([
            'user_id' => ['required', 'exists:users,id'],
            'offense_code' => ['required', Rule::exists('offenses', 'code')->where('is_active', true)],
-           'occurred_at' => ['required', 'date', 'before_or_equal:now'],
+           'occurred_at' => ['required', 'date'],
            'location' => ['required', 'string', 'max:255', Rule::in($this->getLocations())],
-           'description' => ['required', 'string', 'min:5', 'max:1000'],
+           'description' => ['required', 'string', 'min:3', 'max:1000'],
        ]);
    }
 

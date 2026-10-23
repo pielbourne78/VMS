@@ -299,6 +299,37 @@ class StudentViolationPageTest extends TestCase
             ->assertSee('D - Non-readmission');
     }
 
+    public function test_admin_can_submit_violation_with_valid_demo_datetime(): void
+    {
+        $admin = User::factory()->create([
+            'is_admin' => true,
+            'email' => 'admin-demo-date@example.com',
+            'name' => 'Admin Demo Date User',
+        ]);
+
+        $student = User::factory()->create([
+            'role' => 'student',
+            'email' => 'student-demo-date@example.com',
+            'name' => 'Student Demo Date User',
+        ]);
+
+        $this->actingAs($admin)
+            ->post(route('admin.violations.record.store'), [
+                'user_id' => $student->id,
+                'offense_code' => 'MI1',
+                'occurred_at' => now()->addHour()->toDateTimeLocalString(),
+                'location' => 'Building A',
+                'description' => 'Demo submission with valid timestamp.',
+            ])
+            ->assertRedirect(route('admin.violation.monitoring'))
+            ->assertSessionHas('success');
+
+        $this->assertDatabaseHas('violations', [
+            'user_id' => $student->id,
+            'offense_code' => 'MI1',
+        ]);
+    }
+
     public function test_admin_can_mark_violation_as_consequence_applied(): void
     {
         $admin = User::factory()->create([

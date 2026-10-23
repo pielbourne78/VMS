@@ -96,13 +96,20 @@ class PenaltyQuizController extends Controller
 
     protected function notifyAdminsOfSubmission(): void
     {
-        User::where('is_admin', true)->get()->each(function ($admin) {
+        /** @var iterable<User> $admins */
+        $admins = User::where('is_admin', true)->get();
+
+        foreach ($admins as $admin) {
+            if (!$admin instanceof User) {
+                continue;
+            }
+
             $admin->notify(new StudentQuizSubmissionNotification([
                 'title' => 'Quiz submission received',
                 'message' => auth()->user()->full_name . ' submitted a penalty quiz for review.',
                 'url' => route('admin.appeals'),
                 'type' => 'student_quiz_submission',
             ]));
-        });
+        }
     }
 }

@@ -10,11 +10,11 @@ use Illuminate\Support\Facades\Schema;
 
 class ViolationController extends Controller
 {
-    public function getOffenseOrdinalAttribute(): ?string
+    public static function formatOffenseOrdinal(int $offenseNumber): ?string
     {
-        $n = $this->offense_number;
+        $n = $offenseNumber;
 
-        if (!$n) {
+        if ($n <= 0) {
             return null;
         }
 
@@ -24,6 +24,7 @@ class ViolationController extends Controller
 
         return $n . (['th', 'st', 'nd', 'rd', 'th', 'th', 'th', 'th', 'th', 'th'][$n % 10]);
     }
+
     public function index(Request $request)
     {
         if ($this->isStudentSummaryMode($request)) {
@@ -393,6 +394,19 @@ class ViolationController extends Controller
         return redirect()
             ->route('admin.violation.monitoring')
             ->with('success', 'Violation recorded successfully!');
+    }
+
+    protected function getLocations(): array
+    {
+        return [
+            'Building A',
+            'Building B',
+            'Canteen',
+            'Library',
+            'Parking Area',
+            'Gymnasium',
+            'Classroom',
+        ];
     }
 
     protected function validateViolationInput(Request $request): array
