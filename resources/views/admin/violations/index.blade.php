@@ -36,6 +36,9 @@
 
         {{-- ===================== LEFT: TABLE ===================== --}}
         <div class="flex-1 min-w-0 flex flex-col bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+            <div class="border-b border-gray-200 bg-red-50 px-4 py-3">
+                <h3 class="text-sm font-black uppercase tracking-[0.2em] text-red-700">Case management</h3>
+            </div>
             
             {{-- Scrollable table only --}}
             <div class="flex-1 overflow-y-auto overflow-x-auto admin-scrollable-table">
@@ -99,7 +102,7 @@
                                         @if ($violation->student)
                                             <a href="{{ route('admin.violations.history', $violation->student->id) }}"
                                                class="inline-flex items-center justify-center bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded-full transition whitespace-nowrap">
-                                                View History
+                                                Review case
                                             </a>
                                         @else
                                             <span class="text-xs text-gray-400 font-bold">No Student</span>

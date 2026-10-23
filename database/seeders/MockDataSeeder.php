@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Violation;
+use App\Notifications\StudentQuizSubmissionNotification;
+use App\Notifications\ViolationStatusUpdated;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -118,13 +121,15 @@ class MockDataSeeder extends Seeder
                         'issued_by' => $admin->id,
                         'violation_type' => $violation['type'],
                         'offense_code' => $offenseCode,
-                        'offense_category' => in_array($offenseCode[0], ['M'], true) && str_starts_with($offenseCode, 'MA') ? 'major' : 'minor',
+                        'offense_category' => str_starts_with($offenseCode, 'MA') ? 'major' : 'minor',
                         'offense_number' => $offenseNumber,
                         'sanction_code' => $sanction['letter'],
                         'sanction_label' => $sanction['label'],
                         'beyond_path' => $sanction['beyond'],
                         'description' => $violation['description'],
                         'status' => $violation['status'],
+                        'review_level' => 'normal',
+                        'resolved_at' => $violation['status'] === 'resolved' ? now()->subDays(($index * 2) + 1) : null,
                         'occurred_at' => now()->subDays(($index * 3) + $n + 1),
                     ]
                 );
@@ -141,7 +146,7 @@ class MockDataSeeder extends Seeder
                             'quiz_id' => $quiz->id,
                             'user_id' => $student->id,
                             'answers' => [
-                                'reasoning' => 'I understand the rule and will follow campus guidelines moving forward.',
+                                'reasoning' => 'I understand the rule and will follow campus guidelines to avoid future violations.',
                             ],
                             'score' => 85,
                             'total_questions' => 1,
@@ -153,6 +158,109 @@ class MockDataSeeder extends Seeder
                     }
                 }
             }
+        }
+
+        $this->seedAppealDashboardNotifications($admin, $students);
+    }
+
+    protected function seedAppealDashboardNotifications(User $admin, array $students): void
+    {
+        $cases = [
+            [
+                'student' => $students[0]['full_name'],
+                'title' => 'Penalty quiz submitted',
+                'message' => 'Maria Isabel Dela Cruz submitted a penalty quiz for review.',
+                'type' => 'student_quiz_submission',
+                'notificationType' => StudentQuizSubmissionNotification::class,
+                'read_at' => null,
+                'created_at' => now()->subMinutes(20),
+                'url' => route('admin.appeals'),
+            ],
+            [
+                'student' => $students[1]['full_name'],
+                'title' => 'Penalty quiz submitted',
+                'message' => 'Juan Carlos Santos submitted a penalty quiz for review.',
+                'type' => 'student_quiz_submission',
+                'notificationType' => StudentQuizSubmissionNotification::class,
+                'read_at' => now()->subHours(2),
+                'created_at' => now()->subHours(4),
+                'url' => route('admin.appeals'),
+            ],
+            [
+                'student' => $students[2]['full_name'],
+                'title' => 'Penalty quiz submitted',
+                'message' => 'Andrea Marie Ramos submitted a penalty quiz for review.',
+                'type' => 'student_quiz_submission',
+                'notificationType' => StudentQuizSubmissionNotification::class,
+                'read_at' => null,
+                'created_at' => now()->subDay(),
+                'url' => route('admin.appeals'),
+            ],
+            [
+                'student' => $students[3]['full_name'],
+                'title' => 'Reasoning Approved',
+                'message' => 'Christian Paolo Reyes reasoning was approved and the violation case is resolved.',
+                'type' => 'appeal_decision',
+                'notificationType' => ViolationStatusUpdated::class,
+                'read_at' => now()->subHours(6),
+                'created_at' => now()->subHours(7),
+                'url' => route('report'),
+                'approved' => true,
+            ],
+            [
+                'student' => $students[4]['full_name'],
+                'title' => 'Reasoning Approved',
+                'message' => 'Angelica Joy Garcia reasoning was approved and the violation case is resolved.',
+                'type' => 'appeal_decision',
+                'notificationType' => ViolationStatusUpdated::class,
+                'read_at' => null,
+                'created_at' => now()->subHours(3),
+                'url' => route('report'),
+                'approved' => true,
+            ],
+            [
+                'student' => $students[5]['full_name'],
+                'title' => 'Reasoning Review Pending',
+                'message' => 'Mark Daniel Cruz reasoning is still under review and the case remains active.',
+                'type' => 'appeal_decision',
+                'notificationType' => ViolationStatusUpdated::class,
+                'read_at' => null,
+                'created_at' => now()->subHours(9),
+                'url' => route('report'),
+                'approved' => false,
+            ],
+            [
+                'student' => $students[6]['full_name'],
+                'title' => 'Reasoning Review Pending',
+                'message' => 'Samantha Grace Mendoza reasoning is still under review and the case remains active.',
+                'type' => 'appeal_decision',
+                'notificationType' => ViolationStatusUpdated::class,
+                'read_at' => now()->subDays(2),
+                'created_at' => now()->subDays(3),
+                'url' => route('report'),
+                'approved' => false,
+            ],
+        ];
+
+        foreach ($cases as $case) {
+            DB::table('notifications')->insert([
+                'id' => (string) Str::uuid(),
+                'type' => $case['notificationType'],
+                'notifiable_type' => User::class,
+                'notifiable_id' => $admin->id,
+                'data' => json_encode([
+                    'title' => $case['title'],
+                    'message' => $case['message'],
+                    'url' => $case['url'],
+                    'type' => $case['type'],
+                    'student' => $case['student'],
+                    'approved' => $case['approved'] ?? null,
+                    'created_at' => $case['created_at']->toDateTimeString(),
+                ]),
+                'read_at' => $case['read_at'] ? $case['read_at']->toDateTimeString() : null,
+                'created_at' => $case['created_at']->toDateTimeString(),
+                'updated_at' => now()->toDateTimeString(),
+            ]);
         }
     }
 }

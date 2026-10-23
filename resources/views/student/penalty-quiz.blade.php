@@ -46,7 +46,7 @@
                         </div>
 
                         <div class="mb-8">
-                            <label class="mb-3 block text-[22px] font-bold text-white">Reasoning:</label>
+                            <label class="mb-3 block text-[22px] font-bold text-white">Write your Explanation:</label>
                             <textarea name="question_{{ $question->id }}" rows="4"
                                 class="w-full rounded-[18px] border-0 border-b-2 border-white/80 bg-transparent px-0 py-2 text-[18px] text-white placeholder:text-white/80 focus:outline-none focus:ring-0"
                                 placeholder="" required>{{ old('question_' . $question->id) }}</textarea>
@@ -61,7 +61,7 @@
                         </a>
                         <button type="submit"
                             class="min-w-[180px] rounded-full bg-[#f2d9d9] px-8 py-4 text-[18px] font-black uppercase tracking-[0.08em] text-[#7a1d24] shadow-md hover:opacity-90">
-                            Next
+                            SUBMIT
                         </button>
                     </div>
                 </form>

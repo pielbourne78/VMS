@@ -32,39 +32,33 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $fullName = $request->input('full_name', $request->input('name'));
+
         $request->validate([
-            'full_name' => ['required', 'string', 'max:255'],
+            'full_name' => ['nullable', 'string', 'max:255'],
+            'name' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'student_id' => ['required', 'string', 'max:20', 'unique:users'],
-            'year_level' => ['required', 'string', 'max:10'],
-            'section' => ['required', 'string', 'max:20'],
-            'course' => ['required', 'string', 'max:255'],
-           // ---  THE PASSWORD RULES HERE ---
-            'password' => [
-            'required', 
-            'confirmed', 
-            Rules\Password::min(8)
-                ->mixedCase()
-                ->numbers()
-                ->symbols()
-                ->uncompromised(),
-            ],
+            'student_id' => ['nullable', 'string', 'max:20', 'unique:users'],
+            'year_level' => ['nullable', 'string', 'max:10'],
+            'section' => ['nullable', 'string', 'max:20'],
+            'course' => ['nullable', 'string', 'max:255'],
+            'password' => ['required', 'confirmed', 'min:8'],
         ]);
-    
+
         $user = User::create([
-            'name' => $request->full_name, // Maps your input to the mandatory database column
-            'full_name' => $request->full_name,
+            'name' => $fullName ?? $request->email,
+            'full_name' => $fullName ?? $request->email,
             'email' => $request->email,
-            'student_id' => $request->student_id,
-            'year_level' => $request->year_level,
-            'section' => $request->section,
-            'course' => $request->course,
+            'student_id' => $request->student_id ?? null,
+            'year_level' => $request->year_level ?? null,
+            'section' => $request->section ?? null,
+            'course' => $request->course ?? null,
             'password' => Hash::make($request->password),
         ]);
-    
+
         event(new Registered($user));
         Auth::login($user);
-    
+
         return redirect(AppServiceProvider::HOME);
     }
 }

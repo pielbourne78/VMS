@@ -4,9 +4,10 @@
 
 @section('content')
     @php
-        $pendingCount = $attempts->where('admin_approved', null)->count();
-        $approvedCount = $attempts->where('admin_approved', true)->count();
-        $declinedCount = $attempts->where('admin_approved', false)->count();
+        $pendingCount = $summary['pending'] ?? 0;
+        $approvedCount = $summary['approved'] ?? 0;
+        $declinedCount = $summary['disapproved'] ?? 0;
+        $totalAppealsCount = $summary['total'] ?? $attempts->count();
     @endphp
 
     <div class="mx-auto w-full max-w-7xl space-y-6">
@@ -31,7 +32,7 @@
         <div class="grid gap-4 md:grid-cols-4">
             <div class="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
                 <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Total appeals</p>
-                <p class="mt-2 text-3xl font-black text-gray-900">{{ $attempts->count() }}</p>
+                <p class="mt-2 text-3xl font-black text-gray-900">{{ $totalAppealsCount }}</p>
             </div>
             <div class="rounded-2xl border border-yellow-200 bg-yellow-50 p-5 shadow-sm">
                 <p class="text-[10px] uppercase tracking-[0.2em] text-yellow-700">Pending</p>
@@ -54,6 +55,21 @@
                     <span class="text-xs font-bold uppercase tracking-[0.2em] text-red-700">Approved cases move to appeal reports</span>
                 </div>
             </div>
+
+            <form method="GET" action="{{ route('admin.appeals') }}" class="border-b border-gray-200 bg-gray-50 px-5 py-4">
+                <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <label for="search" class="w-full md:max-w-md">
+                        <span class="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Search student</span>
+                        <input id="search" type="search" name="search" value="{{ old('search', $search) }}" placeholder="Search by name, student ID, or email..." oninput="this.form.requestSubmit()" class="w-full rounded-xl border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-700 placeholder:text-gray-400 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200">
+                    </label>
+
+                    @if($search !== '')
+                        <a href="{{ route('admin.appeals') }}" class="inline-flex items-center justify-center rounded-full border border-gray-300 bg-white px-4 py-2 text-xs font-bold uppercase tracking-wide text-gray-700 transition hover:bg-gray-100">
+                            Clear filter
+                        </a>
+                    @endif
+                </div>
+            </form>
 
             <div class="divide-y divide-gray-200">
                 @forelse($attempts as $attempt)
@@ -116,7 +132,7 @@
                             <div class="space-y-4">
                                 <div class="rounded-2xl border border-gray-200 bg-gray-50 p-3">
                                     <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Decision controls</p>
-                                    <form method="POST" action="{{ route('admin.appeals.review', $attempt) }}" class="mt-3 space-y-3">
+                                    <form method="POST" action="{{ route('admin.appeals.review', $attempt->id) }}" class="mt-3 space-y-3">
                                         @csrf
                                         @method('PATCH')
 
@@ -125,11 +141,11 @@
                                             placeholder="Add decision note before approval or disapproval...">{{ old('admin_note', $attempt->admin_note ?? '') }}</textarea>
 
                                         <div class="flex flex-wrap gap-2">
-                                            <button type="submit" formaction="{{ route('admin.appeals.approve', $attempt) }}" name="approved" value="1"
+                                            <button type="submit" formaction="{{ route('admin.appeals.approve', $attempt->id) }}" name="approved" value="1"
                                                 class="rounded-full bg-green-600 px-4 py-2 text-[11px] font-black uppercase tracking-wide text-white transition hover:bg-green-700">
                                                 Approve
                                             </button>
-                                            <button type="submit" formaction="{{ route('admin.appeals.decline', $attempt) }}" name="approved" value="0"
+                                            <button type="submit" formaction="{{ route('admin.appeals.decline', $attempt->id) }}" name="approved" value="0"
                                                 class="rounded-full bg-red-600 px-4 py-2 text-[11px] font-black uppercase tracking-wide text-white transition hover:bg-red-700">
                                                 Decline
                                             </button>

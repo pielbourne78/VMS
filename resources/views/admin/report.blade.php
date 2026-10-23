@@ -45,17 +45,14 @@
                 <p class="text-[10px] uppercase tracking-[0.2em] text-green-700">Resolved this week</p>
                 <p class="mt-2 text-3xl font-black text-green-600">{{ $report['resolved_this_week'] }}</p>
             </div>
-            <div class="bg-purple-50 border border-purple-200 rounded-2xl p-5 shadow-sm">
-                <p class="text-[10px] uppercase tracking-[0.2em] text-purple-700">Escalated</p>
-                <p class="mt-2 text-3xl font-black text-purple-600">{{ $report['escalated_cases'] }}</p>
-            </div>
-        </div>
-
-        <div class="grid gap-4 md:grid-cols-3">
             <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
                 <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Major cases</p>
                 <p class="mt-2 text-3xl font-black text-red-600">{{ $report['major_cases'] }}</p>
             </div>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-3">
+            
             <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm">
                 <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">Minor cases</p>
                 <p class="mt-2 text-3xl font-black text-yellow-600">{{ $report['minor_cases'] }}</p>

@@ -25,8 +25,18 @@ class ConsequenceController extends Controller
     /**
      * Approve a violation, marking it as resolved.
      */
-    public function approve(Violation $violation): RedirectResponse
+    public function approve(Request $request, Violation $violation): RedirectResponse
     {
+        $request->validate([
+            'reason' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        if ($violation->status !== 'pending') {
+            return back()->withErrors([
+                'status' => 'Only open pending violations can be approved for consequence action.',
+            ]);
+        }
+
         $violation->update(['status' => 'consequence_applied']);
 
         if ($violation->student) {

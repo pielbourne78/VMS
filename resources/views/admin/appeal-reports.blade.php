@@ -4,33 +4,19 @@
 
 @section('content')
     @php
-        $statusFromNotification = function ($notification) {
-            $data = $notification->data ?? [];
-            $title = strtolower((string) ($data['title'] ?? ''));
-            $message = strtolower((string) ($data['message'] ?? ''));
+        $summary = $reportSummary ?? [
+            'total' => 0,
+            'pending' => 0,
+            'approved' => 0,
+            'declined' => 0,
+            'unread' => 0,
+        ];
 
-            if (str_contains($title, 'approved') || str_contains($message, 'approved')) {
-                return 'approved';
-            }
-
-            if (str_contains($title, 'not approved') || str_contains($message, 'not approved')
-                || str_contains($title, 'declined') || str_contains($message, 'declined')) {
-                return 'declined';
-            }
-
-            if (str_contains($title, 'pending') || str_contains($message, 'pending')
-                || str_contains($title, 'received') || str_contains($title, 'review')) {
-                return 'pending';
-            }
-
-            return ($data['type'] ?? null) === 'appeal_decision' ? 'resolved' : 'pending';
-        };
-
-        $totalReports = $notifications->total() ?? 0;
-        $pendingCount = $notifications->filter(fn ($notification) => $statusFromNotification($notification) === 'pending')->count();
-        $approvedCount = $notifications->filter(fn ($notification) => $statusFromNotification($notification) === 'approved')->count();
-        $declinedCount = $notifications->filter(fn ($notification) => $statusFromNotification($notification) === 'declined')->count();
-        $unreadCount = $notifications->filter(fn ($notification) => is_null($notification->read_at))->count();
+        $totalReports = $summary['total'] ?? 0;
+        $pendingCount = $summary['pending'] ?? 0;
+        $approvedCount = $summary['approved'] ?? 0;
+        $declinedCount = $summary['declined'] ?? 0;
+        $unreadCount = $summary['unread'] ?? 0;
     @endphp
 
     <div class="w-full space-y-6">
@@ -115,7 +101,21 @@
                     $data = $notification->data ?? [];
                     $type = $data['type'] ?? 'appeal_report';
                     $typeLabel = strtoupper(str_replace('_', ' ', $type));
-                    $recordStatus = $statusFromNotification($notification);
+                    $titleText = strtolower((string) ($data['title'] ?? ''));
+                    $messageText = strtolower((string) ($data['message'] ?? ''));
+
+                    if (str_contains($titleText, 'not approved') || str_contains($messageText, 'not approved')
+                        || str_contains($titleText, 'declined') || str_contains($messageText, 'declined')) {
+                        $recordStatus = 'declined';
+                    } elseif (str_contains($titleText, 'approved') || str_contains($messageText, 'approved')) {
+                        $recordStatus = 'approved';
+                    } elseif (str_contains($titleText, 'pending') || str_contains($messageText, 'pending')
+                        || str_contains($titleText, 'received') || str_contains($titleText, 'review')) {
+                        $recordStatus = 'pending';
+                    } else {
+                        $recordStatus = ($data['type'] ?? null) === 'appeal_decision' ? 'resolved' : 'pending';
+                    }
+
                     $statusText = match ($recordStatus) {
                         'approved' => 'Approved',
                         'declined' => 'Disapproved',
@@ -139,10 +139,10 @@
                             <span class="inline-flex rounded-full bg-red-100 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-red-700">
                                 {{ $typeLabel }}
                             </span>
-                            <span class="inline-flex rounded-full {{ $statusBadgeClass }} px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em]">
+                            <span data-status-badge class="inline-flex rounded-full {{ $statusBadgeClass }} px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em]">
                                 {{ $statusText }}
                             </span>
-                            <span class="inline-flex rounded-full {{ $readBadgeClass }} px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em]">
+                            <span data-read-badge class="inline-flex rounded-full {{ $readBadgeClass }} px-2 py-1 text-[10px] font-black uppercase tracking-[0.18em]">
                                 {{ is_null($notification->read_at) ? 'Unread' : 'Read' }}
                             </span>
                         </div>

@@ -38,9 +38,10 @@ class UserFactory extends Factory
             'year_level' => fake()->randomElement(['1st Year', '2nd Year', '3rd Year', '4th Year']),
             'section' => fake()->randomElement(['101', '201', '301']),
             'role' => 'student',
+            'email_verified_at' => now(),
             // Add a unique random suffix so emails never clash
             'email' => strtolower(Str::slug($fName . '.' . $lName, '.')) . '_' . fake()->unique()->randomNumber(3) . '@grc.edu.ph',
-            'password' => Hash::make('password123'),
+            'password' => Hash::make('password'),
         ];
     }
 

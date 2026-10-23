@@ -13,50 +13,45 @@ use Illuminate\View\View;
 class PenaltyQuizController extends Controller
 {
     public function show(Violation $violation): View|RedirectResponse
-{
-    if (!auth()->check()) {
-        return redirect()->route('login');
+    {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
+        if ($this->userDoesNotOwnViolation($violation)) {
+            abort(403);
+        }
+
+        if (!$this->violationIsAwaitingQuiz($violation)) {
+            return redirect()->route('dashboard')->with('error', 'This violation is not currently awaiting a penalty quiz.');
+        }
+
+        $quiz = Quiz::ensureForViolation($violation);
+
+        return view('student.penalty-quiz', compact('violation', 'quiz'));
     }
-
-    if (auth()->id() !== $violation->user_id) {
-        abort(403);
-    }
-
-    // Allow both statuses that should show the quiz
-    if (!in_array($violation->status, ['pending', 'consequence_applied'], true)) {
-        return redirect()->route('dashboard')->with('error', 'This violation is not currently awaiting a penalty quiz.');
-    }
-
-    $quiz = Quiz::ensureForViolation($violation);
-
-    return view('student.penalty-quiz', compact('violation', 'quiz'));
-}
 
     public function submit(Request $request, Violation $violation): RedirectResponse
     {
-        if (auth()->id() !== $violation->user_id) {
+        if ($this->userDoesNotOwnViolation($violation)) {
             abort(403);
         }
 
         $quiz = Quiz::ensureForViolation($violation);
         $questions = $quiz->questions()->get();
 
-        $score = 0;
-        $answers = [];
-
+        $rules = [];
         foreach ($questions as $question) {
-            $key = 'question_' . $question->id;
-            $selected = trim((string) ($request->input($key) ?? ''));
-            $answers[$question->id] = $selected;
-
-            if ($selected !== '') {
-                $score += (int) $question->points;
-            }
+            $rules['question_' . $question->id] = ['required', 'string', 'min:10', 'max:2000'];
         }
 
+        $validated = $request->validate($rules);
+        $answers = $this->extractSubmissionAnswers($request, $questions, $validated);
+
+        $score = $this->calculateSubmissionScore($questions, $answers);
         $totalQuestions = $questions->count();
         $percentage = $totalQuestions > 0 ? ($score / $totalQuestions) * 100 : 0;
-        $passed = $totalQuestions > 0 && collect($answers)->every(fn($answer) => trim((string) $answer) !== '');
+        $passed = $totalQuestions > 0 && collect($answers)->every(fn ($answer) => trim((string) $answer) !== '');
 
         $quiz->attempts()->create([
             'user_id' => auth()->id(),
@@ -66,6 +61,41 @@ class PenaltyQuizController extends Controller
             'passed' => $passed,
         ]);
 
+        $this->notifyAdminsOfSubmission();
+        $violation->update(['status' => 'consequence_applied']);
+
+        return redirect()->route('report')->with('success', 'Your reasoning has been submitted. The admin will review it and update the case status.');
+    }
+
+    protected function userDoesNotOwnViolation(Violation $violation): bool
+    {
+        return auth()->id() !== $violation->user_id;
+    }
+
+    protected function violationIsAwaitingQuiz(Violation $violation): bool
+    {
+        return in_array($violation->status, ['pending', 'consequence_applied'], true);
+    }
+
+    protected function extractSubmissionAnswers(Request $request, $questions, array $validated = []): array
+    {
+        return $questions->mapWithKeys(function ($question) use ($request, $validated) {
+            $key = 'question_' . $question->id;
+            $value = trim((string) ($validated[$key] ?? $request->input($key, '')));
+
+            return [$question->id => $value];
+        })->all();
+    }
+
+    protected function calculateSubmissionScore($questions, array $answers): int
+    {
+        return collect($questions)
+            ->filter(fn ($question) => trim((string) ($answers[$question->id] ?? '')) !== '')
+            ->sum(fn ($question) => (int) $question->points);
+    }
+
+    protected function notifyAdminsOfSubmission(): void
+    {
         User::where('is_admin', true)->get()->each(function ($admin) {
             $admin->notify(new StudentQuizSubmissionNotification([
                 'title' => 'Quiz submission received',
@@ -74,9 +104,5 @@ class PenaltyQuizController extends Controller
                 'type' => 'student_quiz_submission',
             ]));
         });
-
-        $violation->update(['status' => 'consequence_applied']);
-
-        return redirect()->route('report')->with('success', 'Your reasoning has been submitted. The admin will review it and update the case status.');
     }
 }

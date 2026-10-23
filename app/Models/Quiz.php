@@ -47,15 +47,39 @@ class Quiz extends Model
             $quiz->buildDefaultQuestions();
         }
 
+        $quiz->normalizeLegacyPrompts();
+
         return $quiz->fresh(['questions']);
+    }
+
+    public function normalizeLegacyPrompts(): void
+    {
+        $replacementPrompt = $this->buildReasoningPrompt();
+
+        $this->questions()->get()->each(function ($question) use ($replacementPrompt) {
+            if ($this->shouldReplacePrompt((string) $question->prompt)) {
+                $question->update(['prompt' => $replacementPrompt]);
+            }
+        });
+    }
+
+    protected function shouldReplacePrompt(string $prompt): bool
+    {
+        return self::hasLegacyPromptPhrase($prompt);
+    }
+
+    protected static function hasLegacyPromptPhrase(string $prompt): bool
+    {
+        $normalizedPrompt = strtolower($prompt);
+
+        return str_contains($normalizedPrompt, 'moving forward')
+            || str_contains($normalizedPrompt, 'going forward');
     }
 
     public function buildDefaultQuestions(): void
     {
-        $prompt = $this->buildReasoningPrompt();
-
         $this->questions()->create([
-            'prompt' => $prompt,
+            'prompt' => $this->buildReasoningPrompt(),
             'options' => [],
             'correct_option' => 'reasoning-submission-required',
             'points' => 1,
@@ -66,22 +90,21 @@ class Quiz extends Model
     {
         $type = strtolower((string) ($this->violation?->violation_type ?? ''));
 
-        if (str_contains($type, 'uniform') || str_contains($type, 'dress') || str_contains($type, 'appearance')) {
-            return 'Describe the circumstances that led to you not wearing the proper uniform today.';
+        $templates = [
+            ['matches' => ['uniform', 'dress', 'appearance'], 'prompt' => 'Describe the circumstances that led to you not wearing the proper uniform today.'],
+            ['matches' => ['late', 'arrival', 'tardiness'], 'prompt' => 'Describe the circumstances that led to your late arrival and explain how you will follow campus attendance rules and avoid future violations.'],
+            ['matches' => ['smok', 'vandal', 'cheat', 'discipline'], 'prompt' => 'Describe the situation surrounding this violation, explain your understanding of the rule, and state how you will prevent this from happening again.'],
+            ['matches' => ['noise', 'behavior', 'conduct'], 'prompt' => 'Describe the circumstances behind this conduct violation and explain how you will correct your behavior to follow campus standards.'],
+        ];
+
+        foreach ($templates as $template) {
+            foreach ($template['matches'] as $keyword) {
+                if (str_contains($type, $keyword)) {
+                    return $template['prompt'];
+                }
+            }
         }
 
-        if (str_contains($type, 'late') || str_contains($type, 'arrival') || str_contains($type, 'tardiness')) {
-            return 'Describe the circumstances that led to your late arrival and explain how you will comply with campus time rules moving forward.';
-        }
-
-        if (str_contains($type, 'smok') || str_contains($type, 'vandal') || str_contains($type, 'cheat') || str_contains($type, 'discipline')) {
-            return 'Describe the situation surrounding this violation, explain your understanding of the rule, and state how you will prevent this from happening again.';
-        }
-
-        if (str_contains($type, 'noise') || str_contains($type, 'behavior') || str_contains($type, 'conduct')) {
-            return 'Describe the circumstances behind this conduct violation and explain how you will correct your behavior to follow campus standards.';
-        }
-
-        return 'Describe the circumstances surrounding this violation and explain how you understand the rule and will comply going forward.';
+        return 'Describe the circumstances surrounding this violation and explain how you understand the rule and how you will comply with campus policies to avoid future violations.';
     }
 }

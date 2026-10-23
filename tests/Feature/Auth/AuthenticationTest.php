@@ -57,6 +57,33 @@ class AuthenticationTest extends TestCase
         $response->assertOk();
     }
 
+    public function test_admin_appeal_reports_page_shows_mock_records_when_notifications_are_empty(): void
+    {
+        $admin = User::factory()->create([
+            'is_admin' => true,
+        ]);
+
+        $response = $this->actingAs($admin)->get('/admin/appeal-reports');
+
+        $response->assertOk();
+        $response->assertSee('Quiz submission received');
+        $response->assertSee('Reasoning Approved');
+    }
+
+    public function test_admin_appeals_page_shows_mock_records_when_queue_is_empty(): void
+    {
+        $admin = User::factory()->create([
+            'is_admin' => true,
+        ]);
+
+        $response = $this->actingAs($admin)->get('/admin/appeals');
+
+        $response->assertOk();
+        $response->assertSee('Angel Villafranca');
+        $response->assertSee('Rebecca Santos');
+        $response->assertSee('Daniel Cruz');
+    }
+
     public function test_users_can_not_authenticate_with_invalid_password(): void
     {
         $user = User::factory()->create();

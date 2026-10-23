@@ -34,20 +34,9 @@ class NewPasswordController extends Controller
         $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => [
-                'required',
-                'confirmed',
-                PasswordRule::min(8)
-                    ->mixedCase()
-                    ->numbers()
-                    ->symbols()
-                    ->uncompromised(), // Checks if password has appeared in data leaks
-            ],
+            'password' => ['required', 'confirmed', 'min:8'],
         ], [
             'password.min' => 'Password must be at least 8 characters long.',
-            'password.mixedCase' => 'Password must include uppercase and lowercase letters.',
-            'password.numbers' => 'Password must include at least one number.',
-            'password.symbols' => 'Password must include at least one special character.',
             'password.confirmed' => 'The password confirmation does not match.',
         ]);
 

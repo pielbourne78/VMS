@@ -62,7 +62,7 @@
                 <div class="rounded-xl bg-gray-50 p-3">
                     <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">Next step</p>
                     <p class="mt-2 text-base font-extrabold text-red-700">
-                        {{ $selectedStatus === 'consequence_applied' ? 'Student must complete the penalty quiz.' : 'Apply consequence to unlock the student workflow.' }}
+                        {{ $selectedStatus === 'consequence_applied' ? 'Student must complete the penalty quiz.' : 'Apply consequence to unlock the student reasoning.' }}
                     </p>
                 </div>
             </div>

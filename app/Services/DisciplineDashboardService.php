@@ -50,40 +50,61 @@ class DisciplineDashboardService
         ];
 
         foreach ($violations as $violation) {
-            $status = strtolower((string) ($violation->status ?? 'pending'));
-            $category = strtolower((string) ($violation->offense_category ?? ''));
-
             $summary['total']++;
 
-            if ($status === 'pending') {
+            $status = $this->normalizeValue($violation->status ?? 'pending');
+            $category = $this->normalizeValue($violation->offense_category ?? '');
+
+            if ($this->isStatus($status, 'pending')) {
                 $summary['active']++;
             }
 
-            if ($status === 'consequence_applied') {
+            if ($this->isStatus($status, 'consequence_applied')) {
                 $summary['pending']++;
             }
 
-            if ($status === 'resolved') {
+            if ($this->isStatus($status, 'resolved')) {
                 $summary['resolved']++;
             }
 
-            if ($status === 'dismissed') {
+            if ($this->isStatus($status, 'dismissed')) {
                 $summary['dismissed']++;
             }
 
-            if ($category === 'major') {
+            if ($this->isCategory($category, 'major')) {
                 $summary['major']++;
             }
 
-            if ($category === 'minor') {
+            if ($this->isCategory($category, 'minor')) {
                 $summary['minor']++;
             }
 
-            if ($violation->review_level === 'escalated' || !is_null($violation->escalated_at)) {
+            if ($this->isEscalated($violation)) {
                 $summary['escalated']++;
             }
         }
 
         return $summary;
+    }
+
+    protected function normalizeValue(?string $value): string
+    {
+        return strtolower((string) $value);
+    }
+
+    protected function isStatus(string $status, string $expected): bool
+    {
+        return $status === $expected;
+    }
+
+    protected function isCategory(string $category, string $expected): bool
+    {
+        return $category === $expected;
+    }
+
+    protected function isEscalated($violation): bool
+    {
+        return $this->normalizeValue($violation->review_level ?? '') === 'escalated'
+            || !is_null($violation->escalated_at);
     }
 }
