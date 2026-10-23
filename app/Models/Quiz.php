@@ -6,6 +6,31 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property int $violation_id
+ * @property string $title
+ * @property string|null $description
+ * @property int $passing_score
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuizAttempt> $attempts
+ * @property-read int|null $attempts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\QuizQuestion> $questions
+ * @property-read int|null $questions_count
+ * @property-read \App\Models\Violation|null $violation
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Quiz newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Quiz newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Quiz query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Quiz whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Quiz whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Quiz whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Quiz wherePassingScore($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Quiz whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Quiz whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Quiz whereViolationId($value)
+ * @mixin \Eloquent
+ */
 class Quiz extends Model
 {
     protected $fillable = [

@@ -6,6 +6,78 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property int $id
+ * @property string $violation_code
+ * @property int $user_id
+ * @property int $issued_by
+ * @property string $violation_type
+ * @property string|null $offense_code
+ * @property string|null $offense_category
+ * @property int|null $offense_number
+ * @property string|null $sanction_code
+ * @property string|null $sanction_label
+ * @property int $beyond_path
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon $occurred_at
+ * @property string $status
+ * @property string|null $resolution_notes
+ * @property int|null $resolved_by
+ * @property \Illuminate\Support\Carbon|null $resolved_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property int|null $case_owner_id
+ * @property int|null $recorded_by
+ * @property int|null $last_updated_by
+ * @property string|null $escalated_at
+ * @property string|null $escalation_reason
+ * @property string $review_level
+ * @property-read \App\Models\User|null $caseOwner
+ * @property-read string $display_status
+ * @property-read string $display_status_class
+ * @property-read string|null $next_action_route
+ * @property-read string|null $offense_ordinal
+ * @property-read \App\Models\User $issuedBy
+ * @property-read \App\Models\User|null $lastUpdatedBy
+ * @property-read \App\Models\Quiz|null $quiz
+ * @property-read \App\Models\User|null $recordedBy
+ * @property-read \App\Models\User|null $resolvedBy
+ * @property-read \App\Models\User $student
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereBeyondPath($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereCaseOwnerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereEscalatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereEscalationReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereIssuedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereLastUpdatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereOccurredAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereOffenseCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereOffenseCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereOffenseNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereRecordedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereResolutionNotes($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereResolvedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereResolvedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereReviewLevel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereSanctionCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereSanctionLabel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereViolationCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation whereViolationType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation withTrashed(bool $withTrashed = true)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Violation withoutTrashed()
+ * @mixin \Eloquent
+ */
 class Violation extends Model
 {
     use HasFactory, SoftDeletes;
